@@ -1,0 +1,14 @@
+{
+  "name": "uner_programacioniii_tfi_grupoas",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">\r   <h1>Trabajo Final Integrador</h3>\r   <h1>Grupo \"AS\"</h3>\r </div>",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "grupoAs",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
