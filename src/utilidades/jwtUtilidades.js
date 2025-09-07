@@ -1,22 +1,25 @@
 const jwt = require('jsonwebtoken');
 
-const generarToken = (usuario) => {
+const JWT_SECRET = process.env.JWT_SECRET;
+
+const generarToken = (datosUsuario) => {
     return jwt.sign(
         {
-            id: usuario.usuario_id,
-            usuario: usuario.nombre_usuario,
-            tipo: usuario.tipo_usuario
+            id: datosUsuario.usuario_id,
+            usuario: datosUsuario.nombre_usuario,
+            tipo: datosUsuario.tipo_usuario,
+            nombre: datosUsuario.nombre
         },
-        process.env.JWT_SECRET,
+        JWT_SECRET,
         { expiresIn: '8h' }
     );
 };
 
 const verificarToken = (token) => {
     try {
-        return jwt.verify(token, process.env.JWT_SECRET);
+        return jwt.verify(token, JWT_SECRET);
     } catch (error) {
-        throw new Error('Token inválido');
+        throw new Error('Token inválido o expirado');
     }
 };
 

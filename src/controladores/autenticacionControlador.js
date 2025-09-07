@@ -5,6 +5,10 @@ const { verificarContrasenia } = require('../utilidades/contraseniaUtilidades');
 const autenticacionControlador = {
     async iniciarSesion(req, res) {
         try {
+            console.log('✅ Llegó al controlador de login');
+            console.log('📦 Body recibido:', req.body);
+            console.log('🔑 Headers:', req.headers['content-type']);
+
             const { nombre_usuario, contrasenia } = req.body;
 
             // Validar campos obligatorios
@@ -24,9 +28,14 @@ const autenticacionControlador = {
                     mensaje: 'Credenciales inválidas'
                 });
             }
+            console.log('🔐 Contraseña recibida:', contrasenia);
+            console.log('🔐 Contraseña en BD:', usuario.contrasenia);
+            //console.log('🔐 Contraseña encriptada input:', encriptarContrasenia(contrasenia));
+            
 
             // Verificar contraseña
             const contraseniaValida = verificarContrasenia(contrasenia, usuario.contrasenia);
+            console.log('✅ Contraseña válida:', contraseniaValida);
             
             if (!contraseniaValida) {
                 return res.status(401).json({
@@ -34,6 +43,8 @@ const autenticacionControlador = {
                     mensaje: 'Credenciales inválidas'
                 });
             }
+
+            
 
             // Generar token
             const token = generarToken(usuario);
@@ -65,5 +76,7 @@ const autenticacionControlador = {
         }
     }
 };
+
+
 
 module.exports = autenticacionControlador;
