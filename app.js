@@ -1,11 +1,17 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require('express');
+const { salonesTodos } = require('./configuracion/baseDeDatos');
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+const app = express();
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+app.get('/api/salones', async (req, res) => {
+    try {
+        const salones = await salonesTodos();
+        res.json(salones);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.listen(3000, () => {
+    console.log('API escuchando en puerto 3000');
+});

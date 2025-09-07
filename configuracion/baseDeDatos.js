@@ -1,17 +1,24 @@
-const mysql = require('mysql2');
-
+const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE
-});
+async function salonesTodos() {
+    try {
+        const connection = await mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            database: process.env.DB_DATABASE
+        });
 
-connection.connect((err) => {
-    if (err) throw err;
-    console.log('Connected to MySQL database');
-});
+        const sqlQuery = 'SELECT * FROM salones';
+        const [rows] = await connection.execute(sqlQuery);
+        return rows;
+        //console.log('Resultados de consulta', rows);
+        
+        await connection.end();
+        
+    } catch (err) {
+        console.error('Error de conexion', err);
+    }
+}
 
-module.exports = connection;
+module.exports = { salonesTodos };
