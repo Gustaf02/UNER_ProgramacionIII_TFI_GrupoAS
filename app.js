@@ -1,12 +1,13 @@
 const express = require('express');
 //const { salonesTodos } = require('./src/baseDeDatos/baseDeDatos');
-const autenticacionRuta = require('./src/rutas/auntenticacionRuta')
+const autenticacionRuta = require('./src/rutas/autenticacionRuta')
 const salonesRuta = require('./src/rutas/salonesRuta')
 
 require('dotenv').config();
 
 const app = express();
 // Rutas
+app.use('/api/autenticacion', autenticacionRuta);
 app.use('/api/salones', salonesRuta);
 
 // Ruta de prueba
