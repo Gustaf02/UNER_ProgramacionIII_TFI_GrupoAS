@@ -1,11 +1,11 @@
-const { getConnection, releaseConnection } = require('../baseDeDatos/baseDeDatos');
+const { obtenerConexion, liberarConexion } = require('../baseDeDatos/baseDeDatos');
 
-const salonesModel = {
+const salonesModelo = {
     // Obtener todos los salones activos
     async getAll() {
         let connection;
         try {
-            connection = await getConnection();
+            connection = await obtenerConexion();
             const [rows] = await connection.execute(
                 'SELECT * FROM salones WHERE activo = 1 ORDER BY titulo'
             );
@@ -13,7 +13,7 @@ const salonesModel = {
         } catch (error) {
             throw new Error(`Error obteniendo salones: ${error.message}`);
         } finally {
-            releaseConnection(connection);
+            liberarConexion(connection);
         }
     },
 
@@ -21,7 +21,7 @@ const salonesModel = {
     async getById(salonId) {
         let connection;
         try {
-            connection = await getConnection();
+            connection = await obtenerConexion();
             const [rows] = await connection.execute(
                 'SELECT * FROM salones WHERE salon_id = ? AND activo = 1',
                 [salonId]
@@ -30,9 +30,9 @@ const salonesModel = {
         } catch (error) {
             throw new Error(`Error obteniendo salón: ${error.message}`);
         } finally {
-            releaseConnection(connection);
+            liberarConexion(connection);
         }
     }
 };
 
-module.exports = salonesModel;
+module.exports = salonesModelo;

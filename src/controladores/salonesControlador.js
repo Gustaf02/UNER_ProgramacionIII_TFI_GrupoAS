@@ -1,10 +1,10 @@
-const salonesModel = require('../modelos/salonesModelo');
+const salonesModelo = require('../modelos/salonesModelo');
 
-const salonesController = {
+const salonesControlador = {
     // Obtener todos los salones
     async getAll(req, res) {
         try {
-            const salones = await salonesModel.getAll();
+            const salones = await salonesModelo.getAll();
             res.json({
                 success: true,
                 data: salones,
@@ -23,7 +23,7 @@ const salonesController = {
     async getById(req, res) {
         try {
             const { id } = req.params;
-            const salon = await salonesModel.getById(id);
+            const salon = await salonesModelo.getById(id);
             
             if (!salon) {
                 return res.status(404).json({
@@ -47,4 +47,4 @@ const salonesController = {
     }
 };
 
-module.exports = salonesController;
+module.exports = salonesControlador;
