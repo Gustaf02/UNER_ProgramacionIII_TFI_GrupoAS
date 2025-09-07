@@ -1,17 +1,25 @@
 const express = require('express');
-const { salonesTodos } = require('./configuracion/baseDeDatos');
+//const { salonesTodos } = require('./src/baseDeDatos/baseDeDatos');
+const autenticacionRuta = require('./src/rutas/auntenticacionRuta')
+const salonesRuta = require('./src/rutas/salonesRuta')
+
+require('dotenv').config();
 
 const app = express();
+// Rutas
+app.use('/api/salones', salonesRuta);
 
-app.get('/api/salones', async (req, res) => {
-    try {
-        const salones = await salonesTodos();
-        res.json(salones);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+// Ruta de prueba
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'API de Salones de Fiestas funcionando',
+        endpoints: {
+            salones: '/api/salones',
+            salon_especifico: '/api/salones/:id'
+        }
+    });
 });
 
 app.listen(3000, () => {
-    console.log('API escuchando en puerto 3000');
+    console.log('Servidor escuchando en puerto 3000');
 });
