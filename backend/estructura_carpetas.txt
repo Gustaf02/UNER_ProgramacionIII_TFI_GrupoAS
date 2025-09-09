@@ -1,0 +1,38 @@
+/src
+  /controllers
+    authController.js      # Lógica de autenticación
+    salonesController.js   # Operaciones con salones
+    serviciosController.js # Operaciones con servicios
+    turnosController.js    # Operaciones con turnos
+    reservasController.js  # Operaciones con reservas
+    usuariosController.js  # Operaciones con usuarios
+
+  /models
+    salonesModel.js        # Consultas SQL de salones
+    serviciosModel.js      # Consultas SQL de servicios
+    turnosModel.js         # Consultas SQL de turnos
+    reservasModel.js       # Consultas SQL de reservas
+    usuariosModel.js       # Consultas SQL de usuarios
+
+  /routes
+    authRoutes.js          # Rutas de autenticación
+    salonesRoutes.js       # Rutas de salones
+    serviciosRoutes.js     # Rutas de servicios
+    turnosRoutes.js        # Rutas de turnos
+    reservasRoutes.js      # Rutas de reservas
+    usuariosRoutes.js      # Rutas de usuarios
+    index.js               # Unificación de todas las rutas
+
+  /middlewares
+    authMiddleware.js      # Verificación de token JWT
+    rolesMiddleware.js     # Validación de roles de usuario
+    validationMiddleware.js # Validación de datos de entrada
+
+  /config
+    database.js            # Configuración de conexión a BD
+    cloudinary.js          # Configuración para subida de imágenes
+
+  /utils
+    jwtUtils.js            # Funciones para JWT
+    passwordUtils.js       # Encriptación de contraseñas
+    responseUtils.js       # Formato de respuestas API

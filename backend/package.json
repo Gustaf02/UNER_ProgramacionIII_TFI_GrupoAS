@@ -1,0 +1,21 @@
+{
+  "name": "uner_programacioniii_tfi_grupoas",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">\r   <h1>Trabajo Final Integrador</h3>\r   <h1>Grupo \"AS\"</h3>\r </div>",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "grupoAs",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.14.4"
+  }
+}
