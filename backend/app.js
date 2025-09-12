@@ -7,7 +7,16 @@ const salonesRuta = require('./src/rutas/salonesRuta')
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+
+
+// Configuración de CORS
+const corsOptions = {
+  origin: 'http://localhost:5173', // Tu URL de frontend
+  credentials: true, // Permitir credenciales
+  optionsSuccessStatus: 200 // Para navegadores más antiguos
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json()); // Para parsear JSON
 app.use(express.urlencoded({ extended: true })); // Para formularios
