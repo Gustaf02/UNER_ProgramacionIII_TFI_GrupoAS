@@ -9,154 +9,211 @@ export const UsuarioProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
-
   // Limpiar autenticación
   const clearAuth = () => {
     localStorage.removeItem('avatar');
     localStorage.removeItem('usuarioData');
-    localStorage.removeItem('compra')
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('compra');
     setUsuario(null);
     setIsAuthenticated(false);
     setError(null);
   };
 
   // Función que se ejecuta al inicio
-const initializeAuth = () => {
-  const userData = localStorage.getItem('usuarioData');
-  if (userData) {
-    setUsuario(JSON.parse(userData));
-    setIsAuthenticated(true);
-  }
-};
-
-// Ejecutar al montar el contexto
-useEffect(() => {
-  initializeAuth();
-}, []);
-
-  // Login mejorado según dummyjson API
-  const login = useCallback(async (credentials) => {
-  try {
-    setIsLoading(true);
-    setError(null);
+  const initializeAuth = () => {
+    const userData = localStorage.getItem('usuarioData');
+    const token = localStorage.getItem('authToken');
     
-    // Validación de credenciales
-    if (!credentials?.username || !credentials?.password) {
-      throw new Error('usuario y password requeridos');
+    if (userData && token) {
+      try {
+        const parsedData = JSON.parse(userData);
+        setUsuario(parsedData);
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        clearAuth();
+      }
     }
+  };
 
-    const response = await fetch('https://dummyjson.com/auth/login', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: credentials.username,
-        password: credentials.password,
-      
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      // Extraer mensaje de error de la respuesta
-      const errorMsg = data.message || 'Authentication failed';
-      throw new Error(errorMsg);
-    }
-
-    // Estructura de datos según respuesta de DummyJSON
-    const usuarioData = {
-      id: data.id,
-      username: data.username,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      gender: data.gender,
-      image: data.image,
-    };
-
-    // Guardar en estado y almacenamiento local
-    setUsuario(usuarioData);
-    setIsAuthenticated(true);
-    localStorage.setItem('avatar', data.image);
-    localStorage.setItem('usuarioData', JSON.stringify(usuarioData));
-
-    return { success: true, usuario: usuarioData };
-  } catch (err) {
-    setError(err.message);
-    console.error('Login error:', err);
-    throw err; // Re-lanzar el error para manejo en el componente
-  } finally {
+  // Ejecutar al montar el contexto
+  useEffect(() => {
+    initializeAuth();
     setIsLoading(false);
-  }
-}, []);
+  }, []);
 
-// Función de alerta modificada que devuelve una Promise
-const mostrarAlertaLogout = () => {
-  return Swal.fire({
-    title: "¿Estás seguro de cerrar sesión?",
-    text: "Serás redirigido al inicio de sesión",
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonText: "Sí, cerrar sesión",
-    cancelButtonText: "Cancelar",
-    reverseButtons: true,
-    customClass: {
-      popup: 'bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700',
-      title: 'text-lg font-semibold text-gray-900 dark:text-white',
-      htmlContainer: 'text-gray-700 dark:text-gray-300',
-      confirmButton: 'px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200',
-      cancelButton: 'px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200 mr-3',
-    },
-    buttonsStyling: false
-  });
-};
-
-// Función de logout principal
-const logout = useCallback(async () => {
-  const result = await mostrarAlertaLogout();
-  
-  if (result.isConfirmed) {
+  // Login con debugging completo
+  const login = useCallback(async (credenciales) => {
     try {
-      // Ejecutar la limpieza de autenticación
-      await clearAuth();
+      setIsLoading(true);
+      setError(null);
       
-      // Mostrar confirmación
+      console.log('🔍 Credenciales recibidas en contexto:', credenciales);
+      
+      // Validación de credenciales
+      if (!credenciales?.nombre_usuario || !credenciales?.contrasenia) {
+        throw new Error('Usuario y contraseña requeridos');
+      }
+
+      const requestBody = JSON.stringify({
+        nombre_usuario: credenciales.nombre_usuario,
+        contrasenia: credenciales.contrasenia
+      });
+
+      console.log('📤 Request body:', requestBody);
+
+      const response = await fetch('http://localhost:3000/api/autenticacion/login', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Importante para cookies/sessions
+        body: requestBody
+      });
+
+      console.log('📊 Status de respuesta:', response.status);
+      console.log('📊 Response ok:', response.ok);
+      
+      const data = await response.json();
+      console.log('📦 Respuesta completa del servidor:', data);
+      console.log('✅ Exito:', data.exito);
+      console.log('📝 Mensaje:', data.mensaje);
+      console.log('💾 Datos:', data.datos);
+
+      if (!response.ok) {
+        const errorMsg = data.mensaje || data.error || `Error ${response.status} en el servidor`;
+        throw new Error(errorMsg);
+      }
+
+      if (!data.exito) {
+        throw new Error(data.mensaje || 'Error en la autenticación');
+      }
+
+      // Si la respuesta es exitosa pero no tiene datos.datos, puede que la estructura sea diferente
+      let userDataFromApi;
+      let token;
+
+      if (data.datos) {
+        // Estructura esperada: {exito: true, mensaje: "...", datos: {usuario: {...}, token: "..."}}
+        userDataFromApi = data.datos.usuario;
+        token = data.datos.token;
+      } else if (data.usuario) {
+        // Otra posible estructura: {exito: true, mensaje: "...", usuario: {...}, token: "..."}
+        userDataFromApi = data.usuario;
+        token = data.token;
+      } else {
+        // Estructura directa: {exito: true, mensaje: "...", usuario_id: 1, nombre: "...", etc.}
+        userDataFromApi = data;
+        token = data.token;
+      }
+
+      console.log('👤 Datos de usuario extraídos:', userDataFromApi);
+      console.log('🔑 Token extraído:', token);
+
+      // Estructura los datos correctamente
+      const usuarioData = {
+        id: userDataFromApi.usuario_id || userDataFromApi.id,
+        username: userDataFromApi.nombre_usuario || userDataFromApi.username,
+        nombre: userDataFromApi.nombre,
+        apellido: userDataFromApi.apellido,
+        tipo_usuario: userDataFromApi.tipo_usuario,
+        token: token
+      };
+
+      console.log('🎯 Datos de usuario finales:', usuarioData);
+
+      // Validar datos esenciales
+      if (!usuarioData.id || !usuarioData.username) {
+        throw new Error('Datos de usuario incompletos en la respuesta');
+      }
+
+      // Guardar en estado y almacenamiento local
+      setUsuario(usuarioData);
+      setIsAuthenticated(true);
+      localStorage.setItem('usuarioData', JSON.stringify(usuarioData));
+      
+      if (token) {
+        localStorage.setItem('authToken', token);
+      }
+
       await Swal.fire({
-        title: "Sesión cerrada",
-        text: "Has salido correctamente del sistema",
+        title: "¡Bienvenido!",
+        text: data.mensaje || "Inicio de sesión exitoso",
         icon: "success",
         timer: 2000,
-        showConfirmButton: false,
-        customClass: {
-          popup: 'bg-white dark:bg-gray-800 rounded-lg shadow-xl',
-          title: 'text-lg font-semibold text-green-600 dark:text-green-400',
-        }
+        showConfirmButton: false
+      });
+
+      return { 
+        success: true, 
+        usuario: usuarioData, 
+        message: data.mensaje 
+      };
+
+    } catch (err) {
+      const errorMessage = err.message || 'Error en el servidor';
+      setError(errorMessage);
+      console.error('❌ Login error completo:', err);
+      console.error('❌ Error message:', err.message);
+      console.error('❌ Error stack:', err.stack);
+      
+      await Swal.fire({
+        title: "Error",
+        text: errorMessage,
+        icon: "error",
+        confirmButtonText: "Entendido"
       });
       
-      // Redirigir después de cerrar sesión
-      window.location.href = '/login';
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-      Swal.fire({
-        title: "Error",
-        text: "No se pudo cerrar la sesión correctamente",
-        icon: "error"
-      });
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
-  } else {
-    // Si cancela, mostrar mensaje opcional
-    await Swal.fire({
-      title: "Cancelado",
-      text: "Tu sesión sigue activa",
-      icon: "info",
-      timer: 2000,
-      showConfirmButton: false
+  }, []);
+
+  // Función de alerta modificada que devuelve una Promise
+  const mostrarAlertaLogout = () => {
+    return Swal.fire({
+      title: "¿Estás seguro de cerrar sesión?",
+      text: "Serás redirigido al inicio de sesión",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, cerrar sesión",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true
     });
-  }
-}, []);
+  };
+
+  // Función de logout principal
+  const logout = useCallback(async () => {
+    const result = await mostrarAlertaLogout();
+    
+    if (result.isConfirmed) {
+      try {
+        // Ejecutar la limpieza de autenticación
+        clearAuth();
+        
+        // Mostrar confirmación
+        await Swal.fire({
+          title: "Sesión cerrada",
+          text: "Has salido correctamente del sistema",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false
+        });
+        
+        // Redirigir después de cerrar sesión
+        window.location.href = '/login';
+      } catch (error) {
+        console.error("Error al cerrar sesión:", error);
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo cerrar la sesión correctamente",
+          icon: "error"
+        });
+      }
+    }
+  }, []);
 
   // Valor del contexto
   const value = {
@@ -166,9 +223,12 @@ const logout = useCallback(async () => {
     error,
     login,
     logout,
-    // Opcional: función para refrescar token
-    refreshToken: async () => {
-      // Implementación para refrescar token
+    clearAuth,
+    // Función para actualizar datos del usuario
+    actualizarUsuario: (nuevosDatos) => {
+      const updatedUser = { ...usuario, ...nuevosDatos };
+      setUsuario(updatedUser);
+      localStorage.setItem('usuarioData', JSON.stringify(updatedUser));
     }
   };
 
@@ -184,7 +244,7 @@ export const useUsuario = () => {
   const context = useContext(UsuarioContexto);
   
   if (!context) {
-    throw new Error('useUsuario must be used within an UsuarioProvider');
+    throw new Error('useUsuario debe ser usado dentro de un UsuarioProvider');
   }
   
   return context;

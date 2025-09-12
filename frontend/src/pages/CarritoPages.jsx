@@ -1,0 +1,22 @@
+//import React, { useState } from 'react'
+import Carrito from "../componentes/Carrito";
+import Footer from "../componentes/Footer";
+import Header from "../componentes/Header";
+import { useSalones } from "../contexto/SalonesContexto";
+
+const CarritoPages = () => {
+  const { carrito } = useSalones()
+  console.log(carrito);
+
+  return (
+    <>
+      <Header />
+        <Carrito carritoItems={carrito} />
+      <Footer/>
+
+    </>     
+    
+  );
+};
+
+export default CarritoPages;
