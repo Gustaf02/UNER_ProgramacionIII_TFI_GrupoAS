@@ -68,7 +68,7 @@ export const UsuarioProvider = ({ children }) => {
         headers: { 
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Importante para cookies/sessions
+        credentials: 'include',
         body: requestBody
       });
 
