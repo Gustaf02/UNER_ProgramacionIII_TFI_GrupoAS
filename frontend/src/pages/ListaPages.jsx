@@ -3,7 +3,7 @@
 import Header from "../componentes/Header";
 //import Footer from "../components/Footer";
 import { useSalones } from "../contexto/SalonesContexto";
-import { useAdmin } from "../contexto/AdminContex";
+//import { useAdmin } from "../contexto/AdminContex";
 import ListaSalones from "../componentes/ListaSalones";
 
 
