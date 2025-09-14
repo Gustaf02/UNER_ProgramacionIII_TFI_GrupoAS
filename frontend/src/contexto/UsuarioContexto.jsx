@@ -144,12 +144,14 @@ export const UsuarioProvider = ({ children }) => {
         timer: 2000,
         showConfirmButton: false
       });
+      window.location.href = '/login';
 
       return { 
         success: true, 
         usuario: usuarioData, 
         message: data.mensaje 
       };
+      
 
     } catch (err) {
       const errorMessage = err.message || 'Error en el servidor';

@@ -8,8 +8,7 @@ import ListaSalones from "../componentes/ListaSalones";
 
 
 const ListaPages = () => {
-  const { productos } = useAdmin()
-  const { handleAgregarCarrito, LOADER_URL, loading } = useSalones()
+  const { LOADER_URL, loading } = useSalones()
 
   return (
     <>

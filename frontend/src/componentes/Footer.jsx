@@ -10,14 +10,10 @@ const Footer = () => {
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Navegacion</h3>
                 <ul className="space-y-2">
   {[
-    { name: 'Inicio', path: '/' },
-    { name: 'Productos', path: '/productos' },
-    { name: 'Contacto', path: '/contacto' },
-    { name: 'Usuarios de prueba', path: '/usuarios' },  
+    { name: 'Home', path: '/' },
+    { name: 'Salones', path: '/salones' },
     { name: 'Login', path: '/login' },
-    // { name: 'Administracion', path: '/administracion' },
-    // { name: 'Documentacion', path: '/documentacion' },
-    { name: 'Carrito', path: '/carrito' }
+
   ].map((item) => (
     <li key={item.name}>
       <Link 
@@ -31,33 +27,7 @@ const Footer = () => {
 </ul>
         </div>
 
-        {/* Columna 2 */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Ayuda</h3>
-          <ul className="space-y-2">
-            {['Centro de ayuda', 'Estado del pedido', 'Devoluciones', 'Contacto'].map((item) => (
-              <li key={item}>
-                <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">
-                  {item}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
 
-        {/* Columna 3 */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Legal</h3>
-          <ul className="space-y-2">
-            {['Términos y condiciones', 'Política de privacidad', 'Aviso legal', 'Cookies'].map((item) => (
-              <li key={item}>
-                <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">
-                  {item}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
 
         {/* Columna 4 - Contacto */}
         <div>
@@ -67,7 +37,7 @@ const Footer = () => {
               <FaHeadset className="text-yellow-500 dark:text-yellow-400" />
               <span className="text-gray-600 dark:text-gray-400">Soporte</span>
             </div>
-            <p className="text-gray-600 dark:text-gray-400">contacto@e-shopshoes.com</p>
+            <p className="text-gray-600 dark:text-gray-400"></p>
             <div className="flex space-x-4">
               {[FaFacebook, FaTwitter, FaInstagram, FaLinkedin].map((Icon, index) => (
                 <a key={index} href="#" className="text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">
