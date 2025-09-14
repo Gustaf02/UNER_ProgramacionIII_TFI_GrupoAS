@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "<div align=\"center\">\r   <h1>Trabajo Final Integrador</h3>\r   <h1>Grupo \"AS\"</h3>\r </div>",
   "main": "app.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "node": "node --watch app.js"
   },
   "author": "grupoAs",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "i": "^0.3.7",
+    "mysql2": "^3.14.5"
   }
 }
