@@ -1,11 +1,12 @@
 import express from 'express';
 import salonesRutas from './Rutas/salonesRutas.js';
-import manejadorErrores from './middlewares/manejadorErrores.js'
+import { manejadorErrores } from './middlewares/manejadorErrores.js';
+import dotenv from 'dotenv';
 
+dotenv.config(); // carga el .env 
 
 const app = express();
 app.use(express.json());    //habilita el middleware que convierte automáticamente el cuerpo de las solicitudes HTTP en formato JSON en un objeto JavaScript accesible desde req.body
-process.loadEnvFile();  //cargo el .env
 
 //levanto server
 app.listen(process.env.PUERTO, () => {
