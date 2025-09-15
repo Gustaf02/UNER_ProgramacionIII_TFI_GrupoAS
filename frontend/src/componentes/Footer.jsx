@@ -1,74 +1,25 @@
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaCreditCard, FaShieldAlt, FaHeadset } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaGithub } from "react-icons/fa";
+
 const Footer = () => {
   return (
-    <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
-      {/* Sección superior */}
-      <div className="container mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-8">
-        {/* Columna 1 */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Navegacion</h3>
-                <ul className="space-y-2">
-  {[
-    { name: 'Home', path: '/' },
-    { name: 'Salones', path: '/salones' },
-    { name: 'Login', path: '/login' },
-
-  ].map((item) => (
-    <li key={item.name}>
-      <Link 
-        to={item.path} 
-        className="text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors"
-      >
-        {item.name}
-      </Link>
-    </li>
-  ))}
-</ul>
-        </div>
-
-
-
-        {/* Columna 4 - Contacto */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Contacto</h3>
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <FaHeadset className="text-yellow-500 dark:text-yellow-400" />
-              <span className="text-gray-600 dark:text-gray-400">Soporte</span>
-            </div>
-            <p className="text-gray-600 dark:text-gray-400"></p>
-            <div className="flex space-x-4">
-              {[FaFacebook, FaTwitter, FaInstagram, FaLinkedin].map((Icon, index) => (
-                <a key={index} href="#" className="text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">
-                  <Icon size={20} />
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Sección de pagos y seguridad */}
-      <div className="bg-gray-100 dark:bg-gray-800 py-6">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="flex items-center space-x-4">
-              <FaCreditCard className="text-gray-700 dark:text-gray-300" />
-              <span className="text-sm text-gray-600 dark:text-gray-400">Métodos de pago seguros</span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <FaShieldAlt className="text-gray-700 dark:text-gray-300" />
-              <span className="text-sm text-gray-600 dark:text-gray-400">Compra protegida</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Copyright */}
-      <div className="bg-gray-50 dark:bg-gray-900 py-4">
-        <div className="container mx-auto px-4 text-center text-gray-600 dark:text-gray-400 text-sm">
-          © {new Date().getFullYear()} E-Shoes Shop. Todos los derechos reservados.
+    <footer className="bg-gray-900 text-white py-6 mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <h3 className="text-lg font-medium text-gray-300">Contacto</h3>
+          
+          <a
+            href="https://github.com/Gustaf02/UNER_ProgramacionIII_TFI_GrupoAS.git"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center space-x-2 bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition-colors duration-200 transform hover:-translate-y-0.5"
+          >
+            <FaGithub className="w-6 h-6" />
+            <span className="text-sm font-medium">Ver en GitHub</span>
+          </a>
+          
+          <p className="text-xs text-gray-400 mt-4">
+            © {new Date().getFullYear()} Salones Programación III - Todos los derechos reservados
+          </p>
         </div>
       </div>
     </footer>

@@ -42,7 +42,9 @@ const salonesControlador = {
                 success: false,
                 message: 'Error al obtener el salón',
                 error: error.message
+                
             });
+            console.log(error.message);
         }
     }
 };

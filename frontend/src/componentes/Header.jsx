@@ -1,11 +1,135 @@
 import { useState } from "react";
 import { useUsuario } from "../contexto/UsuarioContexto";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const { usuario, logout, isAuthenticated } = useUsuario();
+
+  // Función para renderizar la navegación según el tipo de usuario
+  const renderNavigation = () => {
+    if (!isAuthenticated || !usuario) return null;
+
+    switch (usuario.tipo_usuario) {
+      case 1: // Admin - Acceso completo
+        return (
+          <>
+            <NavLink 
+              to="/salones" 
+              className={({ isActive }) => 
+                `px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  isActive 
+                    ? "bg-blue-700 text-white" 
+                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                }`
+              }
+            >
+              Salones
+            </NavLink>
+            <NavLink 
+              to="/servicios" 
+              className={({ isActive }) => 
+                `px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  isActive 
+                    ? "bg-blue-700 text-white" 
+                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                }`
+              }
+            >
+              Servicios
+            </NavLink>
+            <NavLink 
+              to="/reservas" 
+              className={({ isActive }) => 
+                `px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  isActive 
+                    ? "bg-blue-700 text-white" 
+                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                }`
+              }
+            >
+              Reservas
+            </NavLink>
+            <NavLink 
+              to="/usuarios" 
+              className={({ isActive }) => 
+                `px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  isActive 
+                    ? "bg-blue-700 text-white" 
+                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                }`
+              }
+            >
+              Usuarios
+            </NavLink>
+          </>
+        );
+      
+      case 2: // Usuario con acceso a salones y usuarios
+        return (
+          <>
+            <NavLink 
+              to="/salones" 
+              className={({ isActive }) => 
+                `px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  isActive 
+                    ? "bg-blue-700 text-white" 
+                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                }`
+              }
+            >
+              Salones
+            </NavLink>
+            <NavLink 
+              to="/usuarios" 
+              className={({ isActive }) => 
+                `px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  isActive 
+                    ? "bg-blue-700 text-white" 
+                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                }`
+              }
+            >
+              Usuarios
+            </NavLink>
+          </>
+        );
+      
+      case 3: // Usuario con acceso solo a salones y reservas
+        return (
+          <>
+            <NavLink 
+              to="/salones" 
+              className={({ isActive }) => 
+                `px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  isActive 
+                    ? "bg-blue-700 text-white" 
+                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                }`
+              }
+            >
+              Salones
+            </NavLink>
+            <NavLink 
+              to="/reservas" 
+              className={({ isActive }) => 
+                `px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  isActive 
+                    ? "bg-blue-700 text-white" 
+                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                }`
+              }
+            >
+              Reservas
+            </NavLink>
+          </>
+        );
+      
+      default:
+        return null;
+    }
+  };
 
   return (
     <header className="bg-gray-900 text-white shadow-lg sticky top-0 z-50">
@@ -19,6 +143,13 @@ const Header = () => {
               </h1>
             </div>
           </div>
+
+          {/* Navegación - Solo se muestra si hay usuario autenticado */}
+          {isAuthenticated && usuario && (
+            <nav className="hidden md:flex space-x-4">
+              {renderNavigation()}
+            </nav>
+          )}
 
           {/* Área de usuario */}
           <div className="flex items-center space-x-4">
@@ -64,7 +195,7 @@ const Header = () => {
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
                     <button
                       onClick={() => {
-                        navigate("/");
+                        navigate("/perfil");
                         setIsDropdownOpen(false);
                       }}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
