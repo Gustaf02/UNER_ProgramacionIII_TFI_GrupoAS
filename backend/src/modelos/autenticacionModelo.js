@@ -19,6 +19,27 @@ const autenticacionModelo = {
         } finally {
             if (conexion) liberarConexion(conexion);
         }
+    },
+    async crearUsuario(usuarioDatos) {
+        let conexion;
+        try {
+            conexion = await obtenerConexion();
+            const { nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, activo } = usuarioDatos;
+
+            const [resultado] = await conexion.execute(
+                `INSERT INTO usuarios 
+             (nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, activo) 
+             VALUES (?, ?, ?, ?, ?, ?)`,
+                [nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, activo]
+            );
+
+            return resultado.insertId;
+        } catch (error) {
+            console.error('Error en crearUsuario:', error);
+            throw new Error('Error al crear usuario en la base de datos');
+        } finally {
+            if (conexion) liberarConexion(conexion);
+        }
     }
 };
 

@@ -205,7 +205,7 @@ export const UsuarioProvider = ({ children }) => {
         });
         
         // Redirigir después de cerrar sesión
-        window.location.href = '/login';
+        window.location.href = '/';
       } catch (error) {
         console.error("Error al cerrar sesión:", error);
         Swal.fire({
@@ -217,7 +217,85 @@ export const UsuarioProvider = ({ children }) => {
     }
   }, []);
 
-  // Valor del contexto
+  // Función para crear usuarios (nueva implementación)
+  const crearUsuario = useCallback(async (datosUsuario) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      console.log('🔍 Datos para crear usuario:', datosUsuario);
+      
+      // Validación básica
+      if (!datosUsuario?.nombre || !datosUsuario?.apellido || 
+          !datosUsuario?.nombre_usuario || !datosUsuario?.contrasenia) {
+        throw new Error('Todos los campos obligatorios son requeridos');
+      }
+
+      const token = localStorage.getItem('authToken');
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+
+      // Si hay un token (usuario autenticado), lo agregamos a los headers
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const response = await fetch('http://localhost:3000/api/autenticacion/registro', {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(datosUsuario)
+      });
+
+      console.log('📊 Status de respuesta creación:', response.status);
+      
+      const data = await response.json();
+      console.log('📦 Respuesta creación usuario:', data);
+
+      if (!response.ok) {
+        const errorMsg = data.mensaje || data.error || `Error ${response.status} en el servidor`;
+        throw new Error(errorMsg);
+      }
+
+      if (!data.exito) {
+        throw new Error(data.mensaje || 'Error al crear el usuario');
+      }
+
+      await Swal.fire({
+        title: "¡Usuario creado!",
+        text: data.mensaje || "Usuario creado exitosamente",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false
+      });
+        window.location.href = '/login';
+
+      return { 
+        success: true, 
+        message: data.mensaje,
+        usuario_id: data.datos?.usuario_id 
+      };
+    
+
+    } catch (err) {
+      const errorMessage = err.message || 'Error en el servidor';
+      setError(errorMessage);
+      console.error('❌ Error creación usuario:', err);
+      
+      await Swal.fire({
+        title: "Error",
+        text: errorMessage,
+        icon: "error",
+        confirmButtonText: "Entendido"
+      });
+      
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Valor del contexto (agregar crearUsuario)
   const value = {
     usuario,
     isAuthenticated,
@@ -225,8 +303,8 @@ export const UsuarioProvider = ({ children }) => {
     error,
     login,
     logout,
+    crearUsuario, // ← Nueva función agregada
     clearAuth,
-    // Función para actualizar datos del usuario
     actualizarUsuario: (nuevosDatos) => {
       const updatedUser = { ...usuario, ...nuevosDatos };
       setUsuario(updatedUser);
@@ -241,7 +319,7 @@ export const UsuarioProvider = ({ children }) => {
   );
 };
 
-// Hook personalizado
+// Hook personalizado (sin cambios)
 export const useUsuario = () => {
   const context = useContext(UsuarioContexto);
   
