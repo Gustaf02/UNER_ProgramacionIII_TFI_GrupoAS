@@ -76,12 +76,12 @@ const Home = () => {
         </div>
 
         <div className="mt-8 text-center">
-          <p className="text-sm text-gray-600">
+          {/* <p className="text-sm text-gray-600">
             Repositorio{" "}
             <a href="#" className="text-blue-500 hover:underline">
               GitHub
             </a>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

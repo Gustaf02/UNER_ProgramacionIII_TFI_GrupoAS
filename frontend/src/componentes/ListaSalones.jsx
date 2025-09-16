@@ -110,7 +110,7 @@ const ListaSalones = () => {
 
                   {/* Action Button */}
                   <button className="w-full mt-6 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-200 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl">
-                    Solicitar información
+                    Reservar
                   </button>
                 </div>
               </div>

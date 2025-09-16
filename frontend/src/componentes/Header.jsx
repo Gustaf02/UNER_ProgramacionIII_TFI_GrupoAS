@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUsuario } from "../contexto/UsuarioContexto";
 import { useNavigate, NavLink } from "react-router-dom";
+import Logo from "./Logo";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -136,12 +137,17 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo y título */}
+          <Logo/>
           <div className="flex items-center">
             <div className="flex-shrink-0 cursor-pointer" onClick={() => navigate("/")}>
               <h1 className="text-xl font-bold text-white bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                Salones Programación III
+                Programación III
               </h1>
+         
             </div>
+                 {/* <p className="text-xs text-gray-400 mt-4">
+            © {new Date().getFullYear()}
+          </p> */}
           </div>
 
           {/* Navegación - Solo se muestra si hay usuario autenticado */}

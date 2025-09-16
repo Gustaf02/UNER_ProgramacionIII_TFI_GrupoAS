@@ -5,7 +5,7 @@ const Footer = () => {
     <footer className="bg-gray-900 text-white py-6 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center space-y-4">
-          <h3 className="text-lg font-medium text-gray-300">Contacto</h3>
+          <h3 className="text-lg font-medium text-gray-300"></h3>
           
           <a
             href="https://github.com/Gustaf02/UNER_ProgramacionIII_TFI_GrupoAS.git"
@@ -18,7 +18,7 @@ const Footer = () => {
           </a>
           
           <p className="text-xs text-gray-400 mt-4">
-            © {new Date().getFullYear()} Salones Programación III - Todos los derechos reservados
+            © {new Date().getFullYear()} Salones Programación III
           </p>
         </div>
       </div>
