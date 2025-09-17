@@ -3,6 +3,7 @@ const cors = require('cors');
 //const { salonesTodos } = require('./src/baseDeDatos/baseDeDatos');
 const autenticacionRuta = require('./src/rutas/autenticacionRuta')
 const salonesRuta = require('./src/rutas/salonesRuta')
+const usuariosRuta = require('./src/rutas/usuariosRuta');
 
 require('dotenv').config();
 
@@ -23,9 +24,11 @@ app.use(express.urlencoded({ extended: true })); // Para formularios
 
 // Rutas
 app.use('/api/autenticacion', autenticacionRuta);
+app.use('/api/usuarios', usuariosRuta);
 app.use('/api/salones', salonesRuta);
 console.log('Ruta de autenticacion cargada:', !!autenticacionRuta);
-// Ruta de prueba
+
+
 app.get('/', (req, res) => {
     res.json({ 
         message: 'API de Salones de Fiestas funcionando',

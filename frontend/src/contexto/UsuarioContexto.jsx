@@ -144,7 +144,7 @@ export const UsuarioProvider = ({ children }) => {
         timer: 2000,
         showConfirmButton: false
       });
-      window.location.href = '/login';
+      window.location.href = '/perfil';
 
       return { 
         success: true, 
