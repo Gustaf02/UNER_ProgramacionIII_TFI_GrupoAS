@@ -40,7 +40,7 @@ const UsuarioPerfil = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 px-4">
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
         {/* Header con gradiente */}
         <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white">

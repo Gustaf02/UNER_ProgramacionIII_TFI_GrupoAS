@@ -76,14 +76,14 @@ const RegistroUsuario = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 px-4">
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          {esAdmin ? 'Crear Nuevo Usuario' : 'Registrarse'}
+          {esAdmin ? 'Crear Nuevo Usuario' : 'Registrate'}
         </h2>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
-                Nombre: *
+                {/* Nombre: * */}
               </label>
               <input
                 type="text"
@@ -91,7 +91,7 @@ const RegistroUsuario = () => {
                 name="nombre"
                 value={datosUsuario.nombre}
                 onChange={handleChange}
-                placeholder="Ingrese su nombre"
+                placeholder="* Ingrese su nombre"
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
@@ -99,7 +99,7 @@ const RegistroUsuario = () => {
 
             <div className="space-y-2">
               <label htmlFor="apellido" className="block text-sm font-medium text-gray-700">
-                Apellido: *
+                {/* Apellido: * */}
               </label>
               <input
                 type="text"
@@ -107,7 +107,7 @@ const RegistroUsuario = () => {
                 name="apellido"
                 value={datosUsuario.apellido}
                 onChange={handleChange}
-                placeholder="Ingrese su apellido"
+                placeholder="* Ingrese su apellido"
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
@@ -116,7 +116,7 @@ const RegistroUsuario = () => {
 
           <div className="space-y-2">
             <label htmlFor="nombre_usuario" className="block text-sm font-medium text-gray-700">
-              Nombre de Usuario: *
+              {/* Nombre de Usuario: * */}
             </label>
             <input
               type="text"
@@ -124,7 +124,7 @@ const RegistroUsuario = () => {
               name="nombre_usuario"
               value={datosUsuario.nombre_usuario}
               onChange={handleChange}
-              placeholder="Elija un nombre de usuario"
+              placeholder="* Elija un nombre de usuario"
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
@@ -132,7 +132,7 @@ const RegistroUsuario = () => {
 
           <div className="space-y-2">
             <label htmlFor="celular" className="block text-sm font-medium text-gray-700">
-              Celular:
+              {/* Celular: */}
             </label>
             <input
               type="tel"
@@ -140,7 +140,7 @@ const RegistroUsuario = () => {
               name="celular"
               value={datosUsuario.celular}
               onChange={handleChange}
-              placeholder="Opcional"
+              placeholder="Numero de telefono"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
           </div>
@@ -166,7 +166,7 @@ const RegistroUsuario = () => {
 
           <div className="space-y-2">
             <label htmlFor="contrasenia" className="block text-sm font-medium text-gray-700">
-              Contraseña: *
+              {/* Contraseña: * */}
             </label>
             <div className="relative">
               <input
@@ -175,7 +175,7 @@ const RegistroUsuario = () => {
                 name="contrasenia"
                 value={datosUsuario.contrasenia}
                 onChange={handleChange}
-                placeholder="Mínimo 6 caracteres"
+                placeholder="* Contraseña minimo 6 caracteres"
                 required
                 minLength={6}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent pr-10"
@@ -192,7 +192,7 @@ const RegistroUsuario = () => {
 
           <div className="space-y-2">
             <label htmlFor="confirmar_contrasenia" className="block text-sm font-medium text-gray-700">
-              Confirmar Contraseña: *
+              {/* Confirmar Contraseña: * */}
             </label>
             <div className="relative">
               <input
@@ -201,7 +201,7 @@ const RegistroUsuario = () => {
                 name="confirmar_contrasenia"
                 value={datosUsuario.confirmar_contrasenia}
                 onChange={handleChange}
-                placeholder="Repita su contraseña"
+                placeholder="* Repita su contraseña"
                 required
                 minLength={6}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent pr-10"

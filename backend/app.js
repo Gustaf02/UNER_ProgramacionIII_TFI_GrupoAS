@@ -33,8 +33,13 @@ app.get('/', (req, res) => {
     res.json({ 
         message: 'API de Salones de Fiestas funcionando',
         endpoints: {
+            crear_usuario: "/api/autenticacion/registro",
+            login: "/api/autenticacion/login",
+            usuarios: "/api/usuarios/",
+            usuario_id: "/api/usuarios/:id",
+            usuarios_tipo: "/api/usuarios/tipo/:tipo",
             salones: '/api/salones',
-            salon_especifico: '/api/salones/:id'
+            salon_especifico: '/api/salones/:id',
         }
     });
 });

@@ -26,7 +26,7 @@ const Home = () => {
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            API salones
+            Cliente web API salones
           </h1>
         </div>
 
