@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const salonesController = require('../controladores/salonesControlador');
+const salonesControlador = require('../controladores/salonesControlador');
+const autorizar = require('../middlewares/autorizarMiddleware')
+const { verificarAutenticacion } = require('../middlewares/autenticacionMiddleware')
 
 // Rutas públicas (acceso sin autenticación)
-router.get('/', salonesController.obtenerTodos);          // Browse (Listar)
-router.get('/:id', salonesController.obtenerPorId);       // Read (Leer uno)
-router.post('/', salonesController.crear);                // Add (Crear)
-router.put('/:id', salonesController.actualizar);         // Edit (Actualizar)
-router.patch('/:id', salonesController.actualizar);       // Edit (Actualizar parcial - alternativa)
-router.delete('/:id', salonesController.desactivar);      // Delete (Desactivar)
+router.get('/', verificarAutenticacion, autorizar([1, 2, 3]), salonesControlador.obtenerTodos);          
+router.get('/:id', verificarAutenticacion, autorizar([1, 2, 3]), salonesControlador.obtenerPorId);       
+router.post('/', verificarAutenticacion, autorizar([1, 2]) ,salonesControlador.crear);               
+router.put('/:id', verificarAutenticacion, autorizar([1, 2]), salonesControlador.actualizar);         
+router.patch('/:id', verificarAutenticacion, autorizar([1, 2]), salonesControlador.actualizar);       
+router.delete('/:id', verificarAutenticacion, autorizar([1]), salonesControlador.desactivar);      
 
 module.exports = router;
