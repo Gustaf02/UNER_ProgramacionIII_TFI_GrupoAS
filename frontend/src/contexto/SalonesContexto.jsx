@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext } from "react";
 
 const API_URL = "http://localhost:3000/api/salones/";
 
@@ -19,61 +19,62 @@ const SalonesContext = createContext();
 export const SalonesProvider = ({ children }) => {
   // Estado para los salones disponibles
   const [salones, setSalones] = useState([]);
-  
+
   // Estado de carga
   const [loading, setLoading] = useState(true);
-  
+
   // Manejo de errores
   const [error, setError] = useState(null);
 
   // URL para el loader de carga
-  const LOADER_URL = "https://upload.wikimedia.org/wikipedia/commons/d/de/Ajax-loader.gif";
+  const LOADER_URL =
+    "https://upload.wikimedia.org/wikipedia/commons/d/de/Ajax-loader.gif";
 
   /**
    * Efecto para cargar datos al montar el componente
    */
   useEffect(() => {
     const fetchSalones = async () => {
-  try {
-    setLoading(true);
-    setError(null);
+      try {
+        setLoading(true);
+        setError(null);
 
-    // Obtener el token del almacenamiento (localStorage, sessionStorage, etc.)
-    const token = localStorage.getItem('authToken'); // o sessionStorage.getItem('authToken')
-    
-    // Configurar headers con el token
-    const headers = {
-      'Content-Type': 'application/json',
+        // Obtener el token del almacenamiento (localStorage, sessionStorage, etc.)
+        const token = localStorage.getItem("authToken"); 
+
+        // Configurar headers con el token
+        const headers = {
+          "Content-Type": "application/json",
+        };
+
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
+        }
+
+        // Fetch de salones desde tu API con headers
+        const response = await fetch(API_URL, {
+          headers: headers,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error en API de salones: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const salonesArray = data.success ? data.data : data;
+        const salonesConImagen = salonesArray.map((salon) => ({
+          ...salon,
+          imagen: "https://via.placeholder.com/300x200?text=Salón",
+        }));
+
+        setSalones(salonesConImagen);
+      } catch (err) {
+        console.error("Error cargando salones:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     };
-    
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    // Fetch de salones desde tu API con headers
-    const response = await fetch(API_URL, {
-      headers: headers
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Error en API de salones: ${response.status}`);
-    }
-
-    const data = await response.json();
-    const salonesArray = data.success ? data.data : data;
-    const salonesConImagen = salonesArray.map(salon => ({
-      ...salon,
-      imagen: "https://via.placeholder.com/300x200?text=Salón"
-    }));
-
-    setSalones(salonesConImagen);
-  } catch (err) {
-    console.error("Error cargando salones:", err);
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
 
     fetchSalones();
   }, []);
@@ -91,7 +92,13 @@ export const SalonesProvider = ({ children }) => {
    * @param {Object} nuevoSalon - Salón a agregar
    */
   const agregarSalon = (nuevoSalon) => {
-    setSalones(prev => [...prev, { ...nuevoSalon, imagen: "https://via.placeholder.com/300x200?text=Salón" }]);
+    setSalones((prev) => [
+      ...prev,
+      {
+        ...nuevoSalon,
+        imagen: "https://via.placeholder.com/300x200?text=Salón",
+      },
+    ]);
   };
 
   /**
@@ -99,7 +106,7 @@ export const SalonesProvider = ({ children }) => {
    * @param {number} salonId - ID del salón a eliminar
    */
   const eliminarSalon = (salonId) => {
-    setSalones(prev => prev.filter(salon => salon.salon_id !== salonId));
+    setSalones((prev) => prev.filter((salon) => salon.salon_id !== salonId));
   };
 
   /**
@@ -108,11 +115,9 @@ export const SalonesProvider = ({ children }) => {
    * @param {Object} datosActualizados - Nuevos datos del salón
    */
   const actualizarSalon = (salonId, datosActualizados) => {
-    setSalones(prev => 
-      prev.map(salon => 
-        salon.salon_id === salonId 
-          ? { ...salon, ...datosActualizados } 
-          : salon
+    setSalones((prev) =>
+      prev.map((salon) =>
+        salon.salon_id === salonId ? { ...salon, ...datosActualizados } : salon
       )
     );
   };
@@ -131,9 +136,7 @@ export const SalonesProvider = ({ children }) => {
   };
 
   return (
-    <SalonesContext.Provider value={value}>
-      {children}
-    </SalonesContext.Provider>
+    <SalonesContext.Provider value={value}>{children}</SalonesContext.Provider>
   );
 };
 
@@ -144,7 +147,7 @@ export const SalonesProvider = ({ children }) => {
 export const useSalones = () => {
   const context = useContext(SalonesContext);
   if (!context) {
-    throw new Error('useSalones debe ser usado dentro de un SalonesProvider');
+    throw new Error("useSalones debe ser usado dentro de un SalonesProvider");
   }
   return context;
 };
