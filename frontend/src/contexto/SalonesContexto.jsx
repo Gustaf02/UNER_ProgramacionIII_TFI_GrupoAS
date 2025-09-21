@@ -34,36 +34,46 @@ export const SalonesProvider = ({ children }) => {
    */
   useEffect(() => {
     const fetchSalones = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+  try {
+    setLoading(true);
+    setError(null);
 
-        // Fetch de salones desde tu API
-        const response = await fetch(API_URL);
-        
-        if (!response.ok) {
-          throw new Error(`Error en API de salones: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        // Verificar si la respuesta tiene la estructura esperada
-        const salonesArray = data.success ? data.data : data;
-
-        // Agregar imagen por defecto a cada salón
-        const salonesConImagen = salonesArray.map(salon => ({
-          ...salon,
-          imagen: "https://via.placeholder.com/300x200?text=Salón"
-        }));
-
-        setSalones(salonesConImagen);
-      } catch (err) {
-        console.error("Error cargando salones:", err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+    // Obtener el token del almacenamiento (localStorage, sessionStorage, etc.)
+    const token = localStorage.getItem('authToken'); // o sessionStorage.getItem('authToken')
+    
+    // Configurar headers con el token
+    const headers = {
+      'Content-Type': 'application/json',
     };
+    
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    // Fetch de salones desde tu API con headers
+    const response = await fetch(API_URL, {
+      headers: headers
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error en API de salones: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const salonesArray = data.success ? data.data : data;
+    const salonesConImagen = salonesArray.map(salon => ({
+      ...salon,
+      imagen: "https://via.placeholder.com/300x200?text=Salón"
+    }));
+
+    setSalones(salonesConImagen);
+  } catch (err) {
+    console.error("Error cargando salones:", err);
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
     fetchSalones();
   }, []);
