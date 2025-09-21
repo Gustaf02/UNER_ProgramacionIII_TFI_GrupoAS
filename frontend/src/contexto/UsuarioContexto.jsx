@@ -111,7 +111,7 @@ export const UsuarioProvider = ({ children }) => {
       console.log('👤 Datos de usuario extraídos:', userDataFromApi);
       console.log('🔑 Token extraído:', token);
 
-      // Estructura los datos correctamente
+      // Estructura los datos 
       const usuarioData = {
         id: userDataFromApi.usuario_id || userDataFromApi.id,
         username: userDataFromApi.nombre_usuario || userDataFromApi.username,
@@ -144,7 +144,7 @@ export const UsuarioProvider = ({ children }) => {
         timer: 2000,
         showConfirmButton: false
       });
-      window.location.href = '/perfil';
+      window.location.href = '/login';
 
       return { 
         success: true, 
