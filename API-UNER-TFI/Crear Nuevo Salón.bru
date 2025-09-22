@@ -1,0 +1,27 @@
+meta {
+  name: Crear Nuevo Salón
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/salones
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "titulo": "Salón de Fiestas de Verano",
+      "direccion": "Calle Urquiza 123",
+      "latitud": -34.6037,
+      "longitud": -58.3816,
+      "capacidad": 150,
+      "importe": 125000
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+}
