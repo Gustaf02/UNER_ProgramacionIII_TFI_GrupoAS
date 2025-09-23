@@ -92,11 +92,13 @@ export const actualizarSalon = async (req, res, next) => {
   }
 };
 
+// Este código haría un borrado físico, eliminando el registro de la base de datos
 export const eliminarSalon = async (req, res, next) => {
   try {
     const { salon_id } = req.params;
 
-    const sql = "UPDATE salones SET activo = 0 WHERE salon_id = ?";
+    // La consulta de borrado permanente
+    const sql = "DELETE FROM salones WHERE salon_id = ?";
 
     const [resultado] = await conexion.query(sql, [salon_id]);
 
@@ -110,4 +112,4 @@ export const eliminarSalon = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
+  };

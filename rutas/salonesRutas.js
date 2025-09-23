@@ -9,13 +9,13 @@ import {
 
 const router = Router();
 
-// BROWSE - Salones
+// BROWSE - Obtener salones
 router.get("/", obtenerSalones);
 
-// READ - Un salón por ID
+// READ - Ver un salón por ID
 router.get("/:salon_id", obtenerSalonPorId);
 
-// ADD - Nuevo salón
+// ADD - Agregar un muevo salón
 router.post("/", crearSalon);
 
 // EDIT - Actualizar un salón por ID

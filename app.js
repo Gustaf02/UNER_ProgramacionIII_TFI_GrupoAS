@@ -1,5 +1,5 @@
 import express from "express";
-import salonesRutas from "./Rutas/salonesRutas.js";
+import salonesRutas from './rutas/salonesRutas.js';
 import { manejadorErrores } from "./middlewares/manejadorErrores.js";
 import dotenv from "dotenv";
 
