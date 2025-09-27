@@ -28,7 +28,7 @@ export default class SalonesControlador {
             const salon_id = req.params.salon_id;
             const salon = await this.salonesServicio.obtenerPorId(salon_id);
             
-            if (!salon){
+            if (salon.length === 0){
                 return res.status(404).json({
                     'ok':false, 
                     mensaje: 'salon no encontrado'
@@ -66,45 +66,43 @@ export default class SalonesControlador {
                 mensaje: 'Salon creado con exito'
             });
         
-            }catch(error){
-                console.log('Error en POST /salones',error);
-                next(error);
+        }catch(error){
+            console.log('Error en POST /salones',error);
+            next(error);
+        }
+    }
+
+    modificar = async(req, res, next) => {
+        try{
+            const salon_id = req.params.salon_id;
+            const salon = await this.salonesServicio.obtenerPorId(salon_id);
+            
+            if (salon.length === 0){
+                return res.status(400).json({
+                    'ok':false, 
+                    mensaje: 'salon no encontrado'
+                });
             }
-        }
-}
 
-export const modificarSalon = async (req, res, next) => {
-    try{
-        const salon_id = req.params.salon_id;
-        const sql = 'SELECT * FROM salones WHERE activo = 1 AND salon_id = ?';
-        const [resultado] = await conexion.execute(sql, [salon_id]);
+            const {titulo, direccion, capacidad, importe} = req.body;
 
-        if (resultado.length === 0){
-            return res.status(404).json({'ok':false, mensaje: 'salon no existe'});
-        }
-
-        if(!req.body.titulo || !req.body.direccion || !req.body.capacidad || !req.body.importe){
-            return res.status(404).json({
-                'ok':false, 
-                mensaje: 'faltan campos requeridos'
+            if(!req.body.titulo || !req.body.direccion || !req.body.capacidad || !req.body.importe){
+                return res.status(404).json({
+                    'ok':false, 
+                    mensaje: 'faltan campos requeridos'
+                });
+            }
+            const salonDatos = {titulo, direccion, capacidad, importe, salon_id};
+            const salonModificado = await this.salonesServicio.modificar(salonDatos);
+            res.status(200).json({
+                estado: true,
+                mensaje: 'Salon modificado'
             });
+
+        }catch(error){
+            console.log('Error en PUT /salones',error);
+            next(error);
         }
-
-        const {titulo,direccion, capacidad, importe} = req.body;
-        const valores = [titulo, direccion, capacidad, importe, salon_id];
-        const sql2 = 'UPDATE salones SET titulo = ?, direccion = ?, capacidad = ?, importe = ? WHERE salon_id = ?';
-
-        const [resultados] = await conexion.execute(sql2, valores);
-        console.log(resultados);
-
-        res.status(200).json({
-            estado: true,
-            mensaje: 'Salon modificado'
-        })
-
-    } catch(error){
-        console.log('Error en PUT /salones',error);
-        next(error);
     }
 }
 

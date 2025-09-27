@@ -13,4 +13,7 @@ export class SalonesServicio {
     crear = (salonDatos) => {
         return this.salones.crear(salonDatos);
     }
+    modificar = (salonDatos) => {
+        return this.salones.modificar(salonDatos);
+    }
 }

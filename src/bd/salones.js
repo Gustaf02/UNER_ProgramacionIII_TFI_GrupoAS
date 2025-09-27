@@ -19,4 +19,10 @@ export default class Salones {
         const sql = 'INSERT INTO salones (titulo, direccion, capacidad, importe) VALUES (?,?,?,?)';
         const [resultado] = await conexion.execute(sql, [titulo, direccion, capacidad, importe]);
     }
+
+    modificar = async(salonDatos) => {
+        const {titulo, direccion, capacidad, importe, salon_id} = salonDatos;
+        const sql = 'UPDATE salones SET titulo = ?, direccion = ?, capacidad = ?, importe = ? WHERE salon_id = ?';
+        const [resultado] = await conexion.execute(sql, [titulo, direccion, capacidad, importe, salon_id]);
+    }
 }
