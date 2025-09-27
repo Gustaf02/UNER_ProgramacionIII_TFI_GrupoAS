@@ -16,4 +16,7 @@ export class SalonesServicio {
     modificar = (salonDatos) => {
         return this.salones.modificar(salonDatos);
     }
+    eliminar = (salon_id) => {
+        return this.salones.eliminar(salon_id);
+    }
 }

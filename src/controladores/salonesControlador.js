@@ -57,8 +57,7 @@ export default class SalonesControlador {
                     mensaje: 'faltan campos requeridos'
                 });
             }
-        
-        
+
             const salonDatos = {titulo, direccion, capacidad, importe};
             const salonCreado = await this.salonesServicio.crear(salonDatos);
             res.status(201).json({
@@ -78,7 +77,7 @@ export default class SalonesControlador {
             const salon = await this.salonesServicio.obtenerPorId(salon_id);
             
             if (salon.length === 0){
-                return res.status(400).json({
+                return res.status(404).json({
                     'ok':false, 
                     mensaje: 'salon no encontrado'
                 });
@@ -104,33 +103,29 @@ export default class SalonesControlador {
             next(error);
         }
     }
-}
 
-export const eliminarSalon = async (req, res, next) => {
-    try{
-        const salon_id = req.params.salon_id;
-        const sql = 'SELECT * FROM salones WHERE activo = 1 AND salon_id = ?';
-        const [resultado] = await conexion.execute(sql, [salon_id]);
-
-        if (resultado.length === 0){
-            return res.status(404).json({
-                'ok':false, 
-                mensaje: 'salon no existe'
+    eliminar = async(req, res, next) => {
+        try{
+            const salon_id = req.params.salon_id;
+            const salon = await this.salonesServicio.obtenerPorId(salon_id);
+            
+            if (salon.length === 0){
+                return res.status(404).json({
+                    'ok':false, 
+                    mensaje: 'salon no encontrado'
+                });
+            }
+            
+            const eliminado = await this.salonesServicio.eliminar(salon_id);
+            res.status(200).json({
+                estado: true,
+                mensaje: 'Salon eliminado'
             });
+
+        }catch(error){
+            console.log('Error en DELETE /salones/:salon_id',error);
+            next(error);
         }
-
-        const sql2 = 'UPDATE salones SET activo = 0 WHERE salon_id = ?';
-
-        const [resultados] = await conexion.execute(sql2, [salon_id]);
-        console.log(resultados);
-
-        res.status(200).json({
-            estado: true,
-            mensaje: 'Salon eliminado'
-        })
-
-    } catch(error){
-        console.log('Error en DELETE /salones/:salon_id',error);
-        next(error);
     }
 }
+

@@ -13,6 +13,6 @@ router.post('/', salonesControlador.crear);
 
 router.put('/:salon_id', salonesControlador.modificar);
 
-// router.delete('/:salon_id', eliminarSalon);
+router.delete('/:salon_id', salonesControlador.eliminar);
 
 export { router };

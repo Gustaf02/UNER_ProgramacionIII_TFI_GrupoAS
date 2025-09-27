@@ -25,4 +25,9 @@ export default class Salones {
         const sql = 'UPDATE salones SET titulo = ?, direccion = ?, capacidad = ?, importe = ? WHERE salon_id = ?';
         const [resultado] = await conexion.execute(sql, [titulo, direccion, capacidad, importe, salon_id]);
     }
+
+    eliminar = async(salon_id) => {
+        const sql = 'UPDATE salones SET activo = 0 WHERE salon_id = ?';
+        const [resultado] = await conexion.execute(sql, [salon_id]);
+    }
 }
