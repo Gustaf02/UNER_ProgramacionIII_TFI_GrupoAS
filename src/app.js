@@ -1,6 +1,5 @@
 import express from 'express';
-import salonesRutas from './Rutas/salonesRutas.js';
-import { manejadorErrores } from './middlewares/manejadorErrores.js';
+import { router as v1SalonesRutas} from './v1/rutas/salonesRutas.js';
 import dotenv from 'dotenv';
 
 dotenv.config(); // carga el .env 
@@ -14,12 +13,10 @@ app.listen(process.env.PUERTO, () => {
 });
 
 //rutas
-app.use('/salones',salonesRutas);
+app.use('/api/v1/salones', v1SalonesRutas);
 
 //ruta de estado
 app.get('/estado', (req, res) => {
     res.json({'ok':true});
 });
 
-//middleware para centralizar los errores
-app.use(manejadorErrores);

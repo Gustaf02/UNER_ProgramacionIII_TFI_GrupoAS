@@ -2,11 +2,11 @@
   "name": "uner_programacioniii_tfi_grupoas",
   "version": "1.0.0",
   "description": "<div align=\"center\">\r   <h1>Trabajo Final Integrador</h3>\r   <h1>Grupo \"AS\"</h3>\r </div>",
-  "main": "app.js",
+  "main": "src/app.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "node": "node --watch app.js"
+    "des": "node --watch src/app.js"
   },
   "author": "grupoAs",
   "license": "ISC",

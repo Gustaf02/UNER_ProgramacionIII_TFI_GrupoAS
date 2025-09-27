@@ -1,15 +1,34 @@
-import { conexion } from '../bd/conexion.js'
+import { SalonesServicio } from '../servicios/salonesServicio.js'
 
-export const obtenerSalones = async (req, res, next) => {
-    try{
-        const sql = 'SELECT * FROM salones WHERE activo = 1';
-        const [resultados] = await conexion.query(sql);
-        res.json({'ok':true, salones: resultados});
-    } catch (error){
-        console.log('Error en GET /salones', error);
-        next(error);
+
+export default class SalonesControlador {
+    constructor(){
+        this.salonesServicio = new SalonesServicio();
     }
-};
+    obtenerTodos = async (req, res) => {
+        try{
+            const salones = await this.salonesServicio.obtenerTodos();
+            res.json({
+                'ok':true, 
+                salones: salones
+            });
+
+        } catch (error){
+            console.log('Error en GET /salones', error);
+            next(error);
+        }
+    }
+}
+// export const obtenerSalones = async (req, res, next) => {
+//     try{
+//         const sql = 'SELECT * FROM salones WHERE activo = 1';
+//         const [resultados] = await conexion.query(sql);
+//         res.json({'ok':true, salones: resultados});
+//     } catch (error){
+//         console.log('Error en GET /salones', error);
+//         next(error);
+//     }
+// };
 
 export const obtenerSalonPorId = async (req, res, next) => {
     try {
