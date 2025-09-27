@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', salonesControlador.obtenerTodos);
 
-// router.get('/:salon_id', obtenerSalonPorId);
+router.get('/:salon_id', salonesControlador.obtenerPorId);
 
 // router.post('/', crearSalon);
 

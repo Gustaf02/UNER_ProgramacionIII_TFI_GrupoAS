@@ -7,4 +7,7 @@ export class SalonesServicio {
     obtenerTodos = () => {
         return this.salones.obtenerTodos();
     }
+    obtenerPorId = (salon_id) => {
+        return this.salones.obtenerPorId(salon_id);
+    }
 }
