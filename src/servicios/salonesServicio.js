@@ -10,4 +10,7 @@ export class SalonesServicio {
     obtenerPorId = (salon_id) => {
         return this.salones.obtenerPorId(salon_id);
     }
+    crear = (salonDatos) => {
+        return this.salones.crear(salonDatos);
+    }
 }

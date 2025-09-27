@@ -9,7 +9,7 @@ router.get('/', salonesControlador.obtenerTodos);
 
 router.get('/:salon_id', salonesControlador.obtenerPorId);
 
-// router.post('/', crearSalon);
+router.post('/', salonesControlador.crear);
 
 // router.put('/:salon_id', modificarSalon);
 

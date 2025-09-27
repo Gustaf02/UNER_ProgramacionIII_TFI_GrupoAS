@@ -2,10 +2,13 @@ import { SalonesServicio } from '../servicios/salonesServicio.js'
 
 
 export default class SalonesControlador {
+    
     constructor(){
         this.salonesServicio = new SalonesServicio();
     }
-    obtenerTodos = async (req, res) => {
+    
+    obtenerTodos = async (req, res, next) => {
+        
         try{
             const salones = await this.salonesServicio.obtenerTodos();
             res.json({
@@ -15,10 +18,12 @@ export default class SalonesControlador {
 
         } catch (error){
             console.log('Error en GET /salones', error);
+            next(error);
         }
     }
 
-    obtenerPorId = async (req, res) => {
+    obtenerPorId = async (req, res, next) => {
+        
         try{
             const salon_id = req.params.salon_id;
             const salon = await this.salonesServicio.obtenerPorId(salon_id);
@@ -33,59 +38,39 @@ export default class SalonesControlador {
             res.json({
                 'ok':true, 
                 salon: salon
-            });
+                });
 
         }catch(error){
             console.log('Error en GET /salones/:salon_id',error);
+            next(error);
         }
     }
-}
 
-// export const obtenerSalonPorId = async (req, res, next) => {
-//     try {
-//         const salon_id = req.params.salon_id;
-//         const sql = 'SELECT * FROM salones WHERE activo = 1 AND salon_id = ?';
-//         const [resultados] = await conexion.execute(sql, [salon_id]);
-
-//         if (resultados.length === 0){
-//             return res.status(404).json({
-//                 'ok':false, 
-//                 mensaje: 'salon no encontrado'
-//             });
-//         }
+    crear = async(req, res, next) => {
         
-//         res.json({'ok':true,salon: resultados[0]});
-    
-//     } catch(error){
-//         console.log('Error en GET /salones/:salon_id',error);
-//         next(error);
-//     }
-// };
+        try{
+            const {titulo, direccion, capacidad, importe} = req.body;
 
-export const crearSalon = async (req, res , next) => {
-    try {
-        if(!req.body.titulo || !req.body.direccion || !req.body.capacidad || !req.body.importe){
-            return res.status(404).json({
-                'ok':false, 
-                mensaje: 'faltan campos requeridos'
+            if(!req.body.titulo || !req.body.direccion || !req.body.capacidad || !req.body.importe){
+                return res.status(400).json({
+                    'ok':false, 
+                    mensaje: 'faltan campos requeridos'
+                });
+            }
+        
+        
+            const salonDatos = {titulo, direccion, capacidad, importe};
+            const salonCreado = await this.salonesServicio.crear(salonDatos);
+            res.status(201).json({
+                estado: true,
+                mensaje: 'Salon creado con exito'
             });
+        
+            }catch(error){
+                console.log('Error en POST /salones',error);
+                next(error);
+            }
         }
-        const {titulo, direccion, capacidad, importe} = req.body;
-        const valores = [titulo, direccion, capacidad, importe];
-        const sql = 'INSERT INTO salones (titulo, direccion, capacidad, importe) VALUES (?,?,?,?)';
-
-        const [resultados] = await conexion.execute(sql, valores);
-        console.log(resultados);
-
-        res.status(201).json({
-            estado: true,
-            mensaje: 'Salon creado'
-        })
-
-    } catch(error){
-        console.log('Error en POST /salones',error);
-        next(error);
-    }
 }
 
 export const modificarSalon = async (req, res, next) => {
