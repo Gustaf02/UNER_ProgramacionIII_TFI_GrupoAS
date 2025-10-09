@@ -51,13 +51,6 @@ export default class SalonesControlador {
         try{
             const {titulo, direccion, capacidad, importe} = req.body;
 
-            // if(!req.body.titulo || !req.body.direccion || !req.body.capacidad || !req.body.importe){
-            //     return res.status(400).json({
-            //         'ok':false, 
-            //         mensaje: 'faltan campos requeridos'
-            //     });
-            // }
-
             const salonDatos = {titulo, direccion, capacidad, importe};
             const salonCreado = await this.salonesServicio.crear(salonDatos);
             res.status(201).json({
@@ -85,14 +78,7 @@ export default class SalonesControlador {
 
             const {titulo, direccion, capacidad, importe} = req.body;
 
-            // if(!req.body.titulo || !req.body.direccion || !req.body.capacidad || !req.body.importe){
-            //     return res.status(404).json({
-            //         'ok':false, 
-            //         mensaje: 'faltan campos requeridos'
-            //     });
-            // }
-
-            // Se queda con el valor original si el nuevo es vacio o indefinido
+            // Se queda con el valor original si no se define uno nuevo
             const salonDatos = {
                 titulo: titulo ?? salon.titulo, 
                 direccion: direccion ?? salon.direccion, 
