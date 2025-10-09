@@ -28,7 +28,7 @@ export default class SalonesControlador {
             const salon_id = req.params.salon_id;
             const salon = await this.salonesServicio.obtenerPorId(salon_id);
             
-            if (salon.length === 0){
+            if (!salon){
                 return res.status(404).json({
                     'ok':false, 
                     mensaje: 'salon no encontrado'
@@ -51,12 +51,12 @@ export default class SalonesControlador {
         try{
             const {titulo, direccion, capacidad, importe} = req.body;
 
-            if(!req.body.titulo || !req.body.direccion || !req.body.capacidad || !req.body.importe){
-                return res.status(400).json({
-                    'ok':false, 
-                    mensaje: 'faltan campos requeridos'
-                });
-            }
+            // if(!req.body.titulo || !req.body.direccion || !req.body.capacidad || !req.body.importe){
+            //     return res.status(400).json({
+            //         'ok':false, 
+            //         mensaje: 'faltan campos requeridos'
+            //     });
+            // }
 
             const salonDatos = {titulo, direccion, capacidad, importe};
             const salonCreado = await this.salonesServicio.crear(salonDatos);
@@ -76,7 +76,7 @@ export default class SalonesControlador {
             const salon_id = req.params.salon_id;
             const salon = await this.salonesServicio.obtenerPorId(salon_id);
             
-            if (salon.length === 0){
+            if (!salon){
                 return res.status(404).json({
                     'ok':false, 
                     mensaje: 'salon no encontrado'
@@ -85,14 +85,21 @@ export default class SalonesControlador {
 
             const {titulo, direccion, capacidad, importe} = req.body;
 
-            if(!req.body.titulo || !req.body.direccion || !req.body.capacidad || !req.body.importe){
-                return res.status(404).json({
-                    'ok':false, 
-                    mensaje: 'faltan campos requeridos'
-                });
-            }
-            const salonDatos = {titulo, direccion, capacidad, importe, salon_id};
-            const salonModificado = await this.salonesServicio.modificar(salonDatos);
+            // if(!req.body.titulo || !req.body.direccion || !req.body.capacidad || !req.body.importe){
+            //     return res.status(404).json({
+            //         'ok':false, 
+            //         mensaje: 'faltan campos requeridos'
+            //     });
+            // }
+
+            // Se queda con el valor original si el nuevo es vacio o indefinido
+            const salonDatos = {
+                titulo: titulo ?? salon.titulo, 
+                direccion: direccion ?? salon.direccion, 
+                capacidad: capacidad ?? salon.capacidad, 
+                importe: importe ?? salon.importe, 
+                salon_id};
+            await this.salonesServicio.modificar(salonDatos);
             res.status(200).json({
                 estado: true,
                 mensaje: 'Salon modificado'
@@ -109,7 +116,7 @@ export default class SalonesControlador {
             const salon_id = req.params.salon_id;
             const salon = await this.salonesServicio.obtenerPorId(salon_id);
             
-            if (salon.length === 0){
+            if (!salon){
                 return res.status(404).json({
                     'ok':false, 
                     mensaje: 'salon no encontrado'

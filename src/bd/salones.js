@@ -11,7 +11,7 @@ export default class Salones {
     obtenerPorId = async(salon_id) => {
         const sql = 'SELECT * FROM salones WHERE activo = 1 AND salon_id = ?';
         const [resultado] = await conexion.execute(sql, [salon_id]);
-        return resultado;
+        return resultado[0];
     }
 
     crear = async(salonDatos) => {
