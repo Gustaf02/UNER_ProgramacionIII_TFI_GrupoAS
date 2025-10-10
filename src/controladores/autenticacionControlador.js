@@ -1,6 +1,6 @@
-const autenticacionModelo = require('../modelos/autenticacionModelo');
-const { generarToken } = require('../utilidades/jwtUtilidades');
-const { verificarContrasenia, encriptarContrasenia } = require('../utilidades/contraseniaUtilidades');
+import autenticacionModelo from "../bd/autenticacion";
+import { generarToken } from "../token/jwtCrear";
+import { verificarContrasenia, encriptarContrasenia} from "../token/contraseniaEncriptada"
 
 const autenticacionControlador = {
     async iniciarSesion(req, res) {
