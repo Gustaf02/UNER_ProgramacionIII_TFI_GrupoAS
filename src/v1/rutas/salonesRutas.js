@@ -1,7 +1,7 @@
 import express from 'express';
-import SalonesControlador from '../controladores/salonesControlador.js';
+import SalonesControlador from '../../controladores/salonesControlador.js';
 import { check } from 'express-validator';
-import { validarCampos } from '../middlewares/validarCampos.js';
+import { validarCampos } from '../../middlewares/validarCampos.js';
 
 const salonesControlador = new SalonesControlador();
 
