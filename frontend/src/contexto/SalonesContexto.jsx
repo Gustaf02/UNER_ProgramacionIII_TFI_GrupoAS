@@ -57,7 +57,7 @@ export const SalonesProvider = ({ children }) => {
         });
 
         if (!response.ok) {
-          throw new Error(`Error en API de salones: ${response.status}`);
+          throw new Error(`Error en API de salones: ${response.status}`); 
         }
 
         const data = await response.json();
