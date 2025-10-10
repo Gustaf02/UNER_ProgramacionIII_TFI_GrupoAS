@@ -1,5 +1,6 @@
 import express from 'express';
 import { router as v1SalonesRutas} from './v1/rutas/salonesRutas.js';
+import v1AutenticacionRutas from './v1/rutas/autenticacionRutas.js';
 import { manejadorErrores } from './middlewares/manejadorErrores.js';
 import dotenv from 'dotenv';
 
@@ -16,6 +17,7 @@ app.listen(process.env.PUERTO, () => {
 
 //rutas
 app.use('/api/v1/salones', v1SalonesRutas);
+app.use('/api/v1/autenticacion', v1AutenticacionRutas);
 
 //ruta de estado
 app.get('/estado', (req, res) => {

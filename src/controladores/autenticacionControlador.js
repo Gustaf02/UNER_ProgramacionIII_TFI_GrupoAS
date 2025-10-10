@@ -1,6 +1,6 @@
-import autenticacionModelo from "../bd/autenticacion";
-import { generarToken } from "../token/jwtCrear";
-import { verificarContrasenia, encriptarContrasenia} from "../token/contraseniaEncriptada"
+import autenticacionModelo from '../bd/autenticacion.js';
+import { generarToken } from "../token/jwtCrear.js";
+import { verificarContrasenia, encriptarContrasenia } from "../token/contraseniaEncriptada.js";
 
 const autenticacionControlador = {
     async iniciarSesion(req, res) {
@@ -43,8 +43,6 @@ const autenticacionControlador = {
                     mensaje: 'Credenciales inválidas'
                 });
             }
-
-            
 
             // Generar token
             const token = generarToken(usuario);
@@ -139,4 +137,4 @@ const autenticacionControlador = {
     }
 };
 
-module.exports = autenticacionControlador;
+export default autenticacionControlador;

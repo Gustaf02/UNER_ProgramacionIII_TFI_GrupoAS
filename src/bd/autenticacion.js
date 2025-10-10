@@ -1,4 +1,4 @@
-import { conexion } from './conexion'
+import { conexion } from './conexion.js'
 
 const autenticacionModelo = {
     async buscarPorUsuario(nombreUsuario) {
