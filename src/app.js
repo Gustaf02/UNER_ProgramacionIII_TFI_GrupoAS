@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors'
 import { router as v1SalonesRutas} from './v1/rutas/salonesRutas.js';
 import { router as v1ServiciosRutas} from './v1/rutas/serviciosRutas.js';
 import v1AutenticacionRutas from './v1/rutas/autenticacionRutas.js';
@@ -9,6 +10,15 @@ dotenv.config(); // carga el .env
 
 const app = express();
 app.use(express.json());    //habilita el middleware que convierte automáticamente el cuerpo de las solicitudes HTTP en formato JSON en un objeto JavaScript accesible desde req.body
+
+// Configuración de CORS
+const corsOptions = {
+  origin: 'http://localhost:5173', // Tu URL de frontend
+  credentials: true, // Permitir credenciales
+  optionsSuccessStatus: 200 // Para navegadores más antiguos
+};
+
+app.use(cors(corsOptions));
 
 
 //levanto server
