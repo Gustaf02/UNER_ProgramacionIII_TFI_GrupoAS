@@ -33,16 +33,13 @@ export const SalonesProvider = ({ children }) => {
   /**
    * Efecto para cargar datos al montar el componente
    */
-  useEffect(() => {
+useEffect(() => {
     const fetchSalones = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        // Obtener el token del almacenamiento (localStorage, sessionStorage, etc.)
         const token = localStorage.getItem("authToken"); 
-
-        // Configurar headers con el token
         const headers = {
           "Content-Type": "application/json",
         };
@@ -51,20 +48,32 @@ export const SalonesProvider = ({ children }) => {
           headers["Authorization"] = `Bearer ${token}`;
         }
 
-        // Fetch de salones desde tu API con headers
-        const response = await fetch(API_URL, {
-          headers: headers,
-        });
+        const response = await fetch(API_URL, { headers });
 
         if (!response.ok) {
           throw new Error(`Error en API de salones: ${response.status}`); 
         }
 
         const data = await response.json();
-        const salonesArray = data.success ? data.data : data;
+        
+        // Validación robusta del array
+        const salonesArray = Array.isArray(data) 
+          ? data 
+          : Array.isArray(data?.data) 
+          ? data.data 
+          : Array.isArray(data?.salones) 
+          ? data.salones 
+          : Array.isArray(data?.result) 
+          ? data.result 
+          : [];
+
+        if (salonesArray.length === 0) {
+          console.warn("No se encontraron salones en la respuesta:", data);
+        }
+
         const salonesConImagen = salonesArray.map((salon) => ({
           ...salon,
-          imagen: "https://via.placeholder.com/300x200?text=Salón",
+          imagen: salon.imagen || "https://via.placeholder.com/300x200?text=Salón",
         }));
 
         setSalones(salonesConImagen);

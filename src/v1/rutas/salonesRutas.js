@@ -2,12 +2,14 @@ import express from 'express';
 import SalonesControlador from '../../controladores/salonesControlador.js';
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
+import autorizar from '../../middlewares/autorizarMiddleware.js';
+import { verificarAutenticacion } from '../../middlewares/autenticacionMiddleware.js';
 
 const salonesControlador = new SalonesControlador();
 
 const router = express.Router();
 
-router.get('/', salonesControlador.obtenerTodos);
+router.get('/', salonesControlador.obtenerTodos, verificarAutenticacion, autorizar([1, 2, 3]));
 
 router.get('/:salon_id', salonesControlador.obtenerPorId);
 
