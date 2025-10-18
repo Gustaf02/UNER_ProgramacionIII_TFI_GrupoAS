@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 
-const API_URL = "http://localhost:3000/api/salones/";
+const API_URL = "http://localhost:3000/api/v1/salones";
 
 /**
  * Contexto para manejar el estado global de los salones

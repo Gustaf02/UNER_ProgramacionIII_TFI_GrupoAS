@@ -63,7 +63,7 @@ export const UsuarioProvider = ({ children }) => {
 
       console.log('📤 Request body:', requestBody);
 
-      const response = await fetch('http://localhost:3000/api/autenticacion/login', {
+      const response = await fetch('http://localhost:3000/api/v1/autenticacion/login', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
