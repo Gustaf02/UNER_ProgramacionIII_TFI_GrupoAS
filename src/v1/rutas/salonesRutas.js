@@ -13,7 +13,7 @@ router.get('/', salonesControlador.obtenerTodos, verificarAutenticacion, autoriz
 
 router.get('/:salon_id', salonesControlador.obtenerPorId);
 
-router.post('/', 
+router.post('/', verificarAutenticacion, autorizar([1, 2]),
     [
         check('titulo', 'El titulo es necesario').notEmpty(),
         
