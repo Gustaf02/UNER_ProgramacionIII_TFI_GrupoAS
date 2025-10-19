@@ -241,7 +241,7 @@ export const UsuarioProvider = ({ children }) => {
         headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const response = await fetch('http://localhost:3000/api/autenticacion/registro', {
+      const response = await fetch('http://localhost:3000/api/v1/autenticacion/registro', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(datosUsuario)
