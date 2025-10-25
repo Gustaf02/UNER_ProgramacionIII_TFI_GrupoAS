@@ -17,7 +17,7 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Programación III',
+      title: 'API Cooperadora Escolar - Programación III',
       version: '1.0.0',
       description: 'Documentación de la API para gestión de salones y servicios',
     },
@@ -28,7 +28,7 @@ const swaggerOptions = {
       }
     ],
   },
-  apis: ['./src/v1/rutas/salonesRutas.js'], 
+  apis: ['./v1/rutas/*.js'], // Ruta a tus archivos de rutas
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
@@ -70,17 +70,3 @@ app.get('/estado', (req, res) => {
 });
 
 app.use(manejadorErrores);
-
-/**
- * UPDATE tpintegrador_db.usuarios 
-SET password = MD5('nuevaContraseña') 
-WHERE email = 'oscram@correo.com';
-
-con este comando se actualiza la contrasenia para hacer login
-
-tipo_usuario 1 = oscram@correo.com
-tipo_usuario 2 = wilcor@correo.com
-tipo_usuario 3 = alblop@correo.com
-
-
- */

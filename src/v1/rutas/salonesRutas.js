@@ -9,6 +9,17 @@ const salonesControlador = new SalonesControlador();
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /api/v1/salones:
+ *   get:
+ *     summary: Obtener todos los salones
+ *     tags: [Salones]
+ *     responses:
+ *       200:
+ *         description: Lista de salones
+ */
+
 router.get('/', salonesControlador.obtenerTodos, verificarAutenticacion, autorizar([1, 2, 3]));
 
 router.get('/:salon_id', salonesControlador.obtenerPorId);
