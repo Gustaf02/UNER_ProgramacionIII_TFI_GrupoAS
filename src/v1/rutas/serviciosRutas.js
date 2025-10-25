@@ -7,11 +7,11 @@ const serviciosControlador = new ServiciosControlador();
 
 const router = express.Router();
 
-router.get('/', serviciosControlador.obtenerTodos);
+router.get('/', verificarAutenticacion, autorizar([1, 2, 3]), serviciosControlador.obtenerTodos);
 
-router.get('/:servicio_id', serviciosControlador.obtenerPorId);
+router.get('/:servicio_id', verificarAutenticacion, autorizar([1, 2, 3]), serviciosControlador.obtenerPorId);
 
-router.post('/', 
+router.post('/', verificarAutenticacion, autorizar([1, 2]),
     [
         check('descripcion', 'La descripcion es necesaria').notEmpty(),
         
@@ -23,7 +23,7 @@ router.post('/',
     ],
     serviciosControlador.crear);
 
-router.put('/:servicio_id', 
+router.put('/:servicio_id', verificarAutenticacion, autorizar([1, 2]),
     [
         check('descripcion')
             .optional()
@@ -38,6 +38,6 @@ router.put('/:servicio_id',
     ],
     serviciosControlador.modificar);
 
-router.delete('/:servicio_id', serviciosControlador.eliminar);
+router.delete('/:servicio_id', verificarAutenticacion, autorizar([1, 2]), serviciosControlador.eliminar);
 
 export { router };
