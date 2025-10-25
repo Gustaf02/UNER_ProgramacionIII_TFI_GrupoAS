@@ -20,9 +20,9 @@ const router = express.Router();
  *         description: Lista de salones
  */
 
-router.get('/', salonesControlador.obtenerTodos, verificarAutenticacion, autorizar([1, 2, 3]));
+router.get('/', , verificarAutenticacion, autorizar([1, 2, 3]), salonesControlador.obtenerTodos);
 
-router.get('/:salon_id', salonesControlador.obtenerPorId);
+router.get('/:salon_id', verificarAutenticacion, autorizar([1, 2, 3]), salonesControlador.obtenerPorId);
 
 router.post('/', verificarAutenticacion, autorizar([1, 2]),
     [
@@ -43,7 +43,7 @@ router.post('/', verificarAutenticacion, autorizar([1, 2]),
     ],
     salonesControlador.crear);
 
-router.put('/:salon_id', 
+router.put('/:salon_id', verificarAutenticacion, autorizar([1, 2]),
     [
         check('titulo')
             .optional()
@@ -68,7 +68,7 @@ router.put('/:salon_id',
     ],
     salonesControlador.modificar);
 
-router.delete('/:salon_id', salonesControlador.eliminar);
+router.delete('/:salon_id', verificarAutenticacion, autorizar([1, 2]), salonesControlador.eliminar);
 
 /**
  * @swagger
