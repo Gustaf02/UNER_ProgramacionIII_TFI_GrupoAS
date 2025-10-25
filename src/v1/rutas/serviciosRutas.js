@@ -2,6 +2,8 @@ import express from 'express';
 import ServiciosControlador from '../../controladores/serviciosControlador.js';
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
+import autorizar from '../../middlewares/autorizarMiddleware.js';
+import { verificarAutenticacion } from '../../middlewares/autenticacionMiddleware.js';
 
 const serviciosControlador = new ServiciosControlador();
 

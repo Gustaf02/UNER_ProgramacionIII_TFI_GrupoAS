@@ -34,7 +34,7 @@ router.post('/', verificarAutenticacion, autorizar([1, 2]),
             .notEmpty().withMessage('La capacidad es necesaria')
             .isNumeric().withMessage('La capacidad debe ser numerica')
             .custom(valor => valor > 0).withMessage('La capacidad debe ser mayor a 0'),
-        ~
+    
         check('importe')
             .notEmpty().withMessage('El importe es necesario')
             .isNumeric().withMessage('El importe debe ser numerico')
