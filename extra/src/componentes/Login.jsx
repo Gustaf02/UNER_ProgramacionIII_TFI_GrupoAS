@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+  import React, { useState } from 'react';
 import { useUsuario } from '../contexto/UsuarioContexto'; // Ajusta la ruta según tu estructura
 
 const Login = () => {
@@ -111,7 +111,17 @@ const Login = () => {
             </p>
           </div>
         )}
+        <div className="mt-4 text-center">
+  <a 
+    href="/recuperar-contrasenia" 
+    className="text-blue-500 hover:text-blue-700 text-sm font-medium transition duration-200"
+  >
+    ¿Olvidaste tu contraseña?
+  </a>
+</div>
       </div>
+    
+
     </div>
   );
 };

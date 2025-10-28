@@ -10,6 +10,7 @@ import ResgistroUsuarioPages from "./pages/RegistroUsuarioPages.jsx";
 import LoginPages from "./pages/LoginPages.jsx";
 import RutaProtegida from "./autenticacion/RutaProtegida.jsx";
 import UsuarioPerfilPages from "./pages/UsuarioPerfilPages.jsx";
+import RecuperarContraseniaPages from "./pages/RecuperarContraseniaPages.jsx";
 //import AdminPages from "./pages/AdminPages.jsx";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path="/registro" element={<ResgistroUsuarioPages />}/>  
         <Route path="*" element={<NoFoundPages />} />
         <Route path="/login" element={<LoginPages login={login} />} />
+        <Route path="/recuperar-contrasenia" element={<RecuperarContraseniaPages/>}/>
         <Route path="/perfil" element={<UsuarioPerfilPages/>} />
 
       </Routes>
