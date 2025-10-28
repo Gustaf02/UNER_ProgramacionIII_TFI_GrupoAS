@@ -20,6 +20,7 @@
     "i": "^0.3.7",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.14.5",
+    "nodemailer": "^7.0.10",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   }

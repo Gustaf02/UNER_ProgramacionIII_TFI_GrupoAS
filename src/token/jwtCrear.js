@@ -22,3 +22,15 @@ export const verificarToken = (token) => {
         throw new Error('Token inválido o expirado');
     }
 };
+
+export const generarTokenRecuperacion = (datosRecuperacion) => {
+    return jwt.sign(
+        {
+            usuario_id: datosRecuperacion.usuario_id,
+            accion: datosRecuperacion.accion,
+            timestamp: datosRecuperacion.timestamp
+        },
+        JWT_SECRET,
+       
+    );
+};

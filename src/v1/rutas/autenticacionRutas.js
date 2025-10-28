@@ -7,7 +7,8 @@ console.log('Función iniciarSesion existe:', !!autenticacionControlador.iniciar
 console.log('Función crearUsuario existe:', !!autenticacionControlador.crearUsuario);
 
 router.post('/registro', autenticacionControlador.crearUsuario);
-// Ruta pública para inicio de sesión
 router.post('/login', autenticacionControlador.iniciarSesion);
+router.post('/recuperar-contrasenia', autenticacionControlador.recuperarContrasenia);
+router.post('/restablecer-contrasenia', autenticacionControlador.restablecerContrasenia);
 
 export default router;

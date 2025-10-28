@@ -33,7 +33,21 @@ const autenticacionModelo = {
             console.error('Error en crearUsuario:', error);
             throw new Error('Error al crear usuario en la base de datos');
         }
+    },
+
+    async actualizarContrasenia(usuarioId, nuevaContraseniaHash) {
+        try {
+            const [resultado] = await conexion.execute(
+                `UPDATE usuarios SET contrasenia = ? WHERE usuario_id = ?`,
+                [nuevaContraseniaHash, usuarioId]
+            );
+            return resultado.affectedRows > 0;
+        } catch (error) {
+            console.error('Error en actualizarContrasenia:', error);
+            throw new Error('Error al actualizar contraseña en la base de datos');
+        }
     }
 };
+
 
 export default autenticacionModelo;

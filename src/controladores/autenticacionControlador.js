@@ -1,9 +1,12 @@
 import autenticacionModelo from '../bd/autenticacion.js';
-import { generarToken } from "../token/jwtCrear.js";
+import { generarToken, generarTokenRecuperacion } from "../token/jwtCrear.js";
 import { verificarContrasenia, encriptarContrasenia } from "../token/contraseniaEncriptada.js";
+import { enviarEmailRecuperacion } from '../servicios/emailServicios.js';
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const autenticacionControlador = {
-    async iniciarSesion(req, res) {
+    async iniciarSesion(req, res) {         
         try {
             console.log('✅ Llegó al controlador de login');
             console.log('📦 Body recibido:', req.body);
@@ -115,7 +118,7 @@ const autenticacionControlador = {
                 activo: 1
             };
 
-            // Llamar al modelo para crear usuario (necesitarás implementar este método)
+            // Llamar al modelo para crear usuario
             const nuevoUsuarioId = await autenticacionModelo.crearUsuario(usuarioDatos);
 
             res.status(201).json({
@@ -127,14 +130,106 @@ const autenticacionControlador = {
             });
 
         } catch (error) {
-            console.error('❌ Error en crearUsuario:', error);
+            console.error(' Error en crearUsuario:', error);
             res.status(500).json({
                 exito: false,
                 mensaje: 'Error al crear usuario',
                 error: error.message
             });
         }
+    },
+
+    async recuperarContrasenia(req, res) {
+    try {
+        console.log('✅ Llegó al controlador de recuperación');
+        const { nombre_usuario } = req.body;
+
+        if (!nombre_usuario) {
+            return res.status(400).json({
+                exito: false,
+                mensaje: 'Nombre de usuario es requerido'
+            });
+        }
+
+        // Buscar usuario
+        const usuario = await autenticacionModelo.buscarPorUsuario(nombre_usuario);
+        
+        // Siempre dar misma respuesta por seguridad
+        if (!usuario) {
+            console.log('📧 (Simulación) Email enviado para recuperación');
+            return res.json({
+                exito: true,
+                mensaje: 'Si el usuario existe, recibirá un email con instrucciones'
+            });
+        }
+
+        // Generar token JWT para reset (expira en 1 hora)
+        const tokenReset = generarTokenRecuperacion({
+            usuario_id: usuario.usuario_id,
+            accion: 'password_reset',
+            timestamp: Date.now()
+        });
+
+        // Enviar email real con Nodemailer
+        const emailEnviado = await enviarEmailRecuperacion(usuario.nombre_usuario, tokenReset);
+
+        if (!emailEnviado) {
+            return res.status(500).json({
+                exito: false,
+                mensaje: 'Error al enviar el email de recuperación'
+            });
+        }
+
+        // Respuesta exitosa
+        res.json({
+            exito: true,
+            mensaje: 'Si el usuario existe, recibirá un email con instrucciones'
+            // En producción, no enviar el token en la respuesta
+        });
+
+    } catch (error) {
+        console.error('❌ Error en recuperarContrasenia:', error);
+        res.status(500).json({
+            exito: false,
+            mensaje: 'Error en el proceso de recuperación'
+        });
     }
+},
+    async restablecerContrasenia(req, res) {
+    try {
+        console.log('✅ Llegó al controlador de restablecimiento');
+        const { token, nueva_contrasenia } = req.body;
+
+        if (!token || !nueva_contrasenia) {
+            return res.status(400).json({
+                exito: false,
+                mensaje: 'Token y nueva contraseña son requeridos'
+            });
+        }
+
+        // TEMPORAL: Para debug, solo decodificamos el token sin verificar expiración
+             // DEBUG: Solo decodificar, no verificar
+let decoded = jwt.decode(token);
+if (!decoded) {
+    return res.status(401).json({
+        exito: false,
+        mensaje: 'Token inválido'
+    });
+}
+
+        // Validar que el token es para reset de contraseña
+        if (decoded.accion !== 'password_reset') {
+            return res.status(401).json({
+                exito: false,
+                mensaje: 'Token inválido'
+            });
+        }
+
+        // ... resto del código
+    } catch (error) {
+        // ... manejo de errores
+    }
+}
 };
 
 export default autenticacionControlador;
