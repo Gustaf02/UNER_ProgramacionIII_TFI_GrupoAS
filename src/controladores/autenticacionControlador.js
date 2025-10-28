@@ -2,11 +2,15 @@ import autenticacionModelo from '../bd/autenticacion.js';
 import { generarToken, generarTokenRecuperacion } from "../token/jwtCrear.js";
 import { verificarContrasenia, encriptarContrasenia } from "../token/contraseniaEncriptada.js";
 import { enviarEmailRecuperacion } from '../servicios/emailServicios.js';
+import jwt from 'jsonwebtoken';
+//import autenticacionModelo from '../bd/autenticacion.js';
+
+
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const autenticacionControlador = {
-    async iniciarSesion(req, res) {         
+    async iniciarSesion(req, res) {
         try {
             console.log('✅ Llegó al controlador de login');
             console.log('📦 Body recibido:', req.body);
@@ -24,7 +28,7 @@ const autenticacionControlador = {
 
             // Buscar usuario
             const usuario = await autenticacionModelo.buscarPorUsuario(nombre_usuario);
-            
+
             if (!usuario) {
                 return res.status(401).json({
                     exito: false,
@@ -34,12 +38,12 @@ const autenticacionControlador = {
             console.log('🔐 Contraseña recibida:', contrasenia);
             console.log('🔐 Contraseña en BD:', usuario.contrasenia);
             //console.log('🔐 Contraseña encriptada input:', encriptarContrasenia(contrasenia));
-            
+
 
             // Verificar contraseña
             const contraseniaValida = verificarContrasenia(contrasenia, usuario.contrasenia);
             console.log('✅ Contraseña válida:', contraseniaValida);
-            
+
             if (!contraseniaValida) {
                 return res.status(401).json({
                     exito: false,
@@ -140,96 +144,133 @@ const autenticacionControlador = {
     },
 
     async recuperarContrasenia(req, res) {
-    try {
-        console.log('✅ Llegó al controlador de recuperación');
-        const { nombre_usuario } = req.body;
+        try {
+            console.log('✅ Llegó al controlador de recuperación');
+            const { nombre_usuario } = req.body;
 
-        if (!nombre_usuario) {
-            return res.status(400).json({
-                exito: false,
-                mensaje: 'Nombre de usuario es requerido'
+            if (!nombre_usuario) {
+                return res.status(400).json({
+                    exito: false,
+                    mensaje: 'Nombre de usuario es requerido'
+                });
+            }
+
+            // Buscar usuario
+            const usuario = await autenticacionModelo.buscarPorUsuario(nombre_usuario);
+
+            // Siempre dar misma respuesta por seguridad
+            if (!usuario) {
+                console.log('📧 (Simulación) Email enviado para recuperación');
+                return res.json({
+                    exito: true,
+                    mensaje: 'Si el usuario existe, recibirá un email con instrucciones'
+                });
+            }
+
+            // Generar token JWT para reset (expira en 1 hora)
+            const tokenReset = generarTokenRecuperacion({
+                usuario_id: usuario.usuario_id,
+                accion: 'password_reset',
+                timestamp: Date.now()
             });
-        }
+            console.log('🔑 TOKEN GENERADO (COMPLETO):', tokenReset);
+            console.log('🔑 Longitud del token:', tokenReset.length);
 
-        // Buscar usuario
-        const usuario = await autenticacionModelo.buscarPorUsuario(nombre_usuario);
-        
-        // Siempre dar misma respuesta por seguridad
-        if (!usuario) {
-            console.log('📧 (Simulación) Email enviado para recuperación');
-            return res.json({
+            // Enviar email real con Nodemailer
+            const emailEnviado = await enviarEmailRecuperacion(usuario.nombre_usuario, tokenReset);
+
+            if (!emailEnviado) {
+                return res.status(500).json({
+                    exito: false,
+                    mensaje: 'Error al enviar el email de recuperación'
+                });
+            }
+
+            // Respuesta exitosa
+            res.json({
                 exito: true,
                 mensaje: 'Si el usuario existe, recibirá un email con instrucciones'
+                // En producción, no enviar el token en la respuesta
             });
-        }
 
-        // Generar token JWT para reset (expira en 1 hora)
-        const tokenReset = generarTokenRecuperacion({
-            usuario_id: usuario.usuario_id,
-            accion: 'password_reset',
-            timestamp: Date.now()
-        });
-
-        // Enviar email real con Nodemailer
-        const emailEnviado = await enviarEmailRecuperacion(usuario.nombre_usuario, tokenReset);
-
-        if (!emailEnviado) {
-            return res.status(500).json({
+        } catch (error) {
+            console.error('❌ Error en recuperarContrasenia:', error);
+            res.status(500).json({
                 exito: false,
-                mensaje: 'Error al enviar el email de recuperación'
+                mensaje: 'Error en el proceso de recuperación'
             });
         }
+    },
 
-        // Respuesta exitosa
-        res.json({
-            exito: true,
-            mensaje: 'Si el usuario existe, recibirá un email con instrucciones'
-            // En producción, no enviar el token en la respuesta
-        });
-
-    } catch (error) {
-        console.error('❌ Error en recuperarContrasenia:', error);
-        res.status(500).json({
-            exito: false,
-            mensaje: 'Error en el proceso de recuperación'
-        });
-    }
-},
     async restablecerContrasenia(req, res) {
-    try {
-        console.log('✅ Llegó al controlador de restablecimiento');
-        const { token, nueva_contrasenia } = req.body;
+        try {
+            console.log('✅ Llegó al controlador de restablecimiento');
+            const { token, nueva_contrasenia } = req.body;
 
-        if (!token || !nueva_contrasenia) {
-            return res.status(400).json({
-                exito: false,
-                mensaje: 'Token y nueva contraseña son requeridos'
-            });
-        }
+            if (!token || !nueva_contrasenia) {
+                return res.status(400).json({
+                    exito: false,
+                    mensaje: 'Token y nueva contraseña son requeridos'
+                });
+            }
 
-        // TEMPORAL: Para debug, solo decodificamos el token sin verificar expiración
-             // DEBUG: Solo decodificar, no verificar
-let decoded = jwt.decode(token);
-if (!decoded) {
+            // Validar longitud de contraseña
+            if (nueva_contrasenia.length < 8) {
+                return res.status(400).json({
+                    exito: false,
+                    mensaje: 'La contraseña debe tener al menos 8 caracteres'
+                });
+            }
+
+            // VERIFICAR token
+            let decoded;
+            try {
+                console.log('🔐 Longitud JWT_SECRET:', process.env.JWT_SECRET.length);
+                console.log('📧 Token recibido:', token.length);
+                console.log('🕒 Momento de verificación:', new Date().toISOString());
+                decoded = jwt.verify(token, process.env.JWT_SECRET);
+                 console.log('✅ Token verificado exitosamente');
+            } catch (error) {
+    console.log('❌ Error ESPECÍFICO en jwt.verify:', error.message);
+    console.log('❌ Tipo de error:', error.name);
     return res.status(401).json({
         exito: false,
-        mensaje: 'Token inválido'
+        mensaje: 'Token inválido o expirado'
     });
 }
 
-        // Validar que el token es para reset de contraseña
-        if (decoded.accion !== 'password_reset') {
-            return res.status(401).json({
+            // Validar que el token es para reset de contraseña
+            if (decoded.accion !== 'password_reset') {
+                return res.status(401).json({
+                    exito: false,
+                    mensaje: 'Token inválido para esta acción'
+                });
+            }
+
+            // ✅ CORREGIDO: Usar decoded.usuario_id en lugar de decoded.userId
+            const nuevaContraseniaHash = encriptarContrasenia(nueva_contrasenia);
+            const actualizado = await autenticacionModelo.actualizarContrasenia(decoded.usuario_id, nuevaContraseniaHash);
+            
+            if (!actualizado) {
+                return res.status(500).json({
+                    exito: false,
+                    mensaje: 'Error al actualizar la contraseña'
+                });
+            }
+
+            return res.json({
+                exito: true,
+                mensaje: 'Contraseña restablecida exitosamente'
+            });
+
+        } catch (error) {
+            console.error('Error en restablecerContrasenia:', error);
+            return res.status(500).json({
                 exito: false,
-                mensaje: 'Token inválido'
+                mensaje: 'Error interno del servidor'
             });
         }
-
-        // ... resto del código
-    } catch (error) {
-        // ... manejo de errores
     }
-}
 };
 
 export default autenticacionControlador;

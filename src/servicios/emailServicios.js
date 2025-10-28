@@ -22,9 +22,9 @@ export const enviarEmailRecuperacion = async (email, token) => {
     <p>Hemos recibido una solicitud para restablecer tu contraseña.</p>
     
     <p><strong>Tu token de verificación:</strong></p>
-    <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 16px; word-break: break-all;">
-        ${token}
-    </div>
+    <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 16px; word-wrap: break-word; white-space: pre-wrap;">
+    ${token}
+</div>
     
     <p style="margin-top: 20px;">O haz clic en el siguiente enlace:</p>
     <a href="${enlace}" 

@@ -31,6 +31,7 @@ export const generarTokenRecuperacion = (datosRecuperacion) => {
             timestamp: datosRecuperacion.timestamp
         },
         JWT_SECRET,
+         { expiresIn: '1h' }
        
     );
 };
