@@ -1,7 +1,7 @@
 import "./index.css";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useSalones } from "./contexto/SalonesContexto.jsx";
+//import { useSalones } from "./contexto/SalonesContexto.jsx";
 import { useUsuario } from "./contexto/UsuarioContexto.jsx";
 import HomePages from "./pages/HomePages.jsx";
 import ListaPages from "./pages/ListaPages.jsx";
@@ -11,13 +11,11 @@ import LoginPages from "./pages/LoginPages.jsx";
 import RutaProtegida from "./autenticacion/RutaProtegida.jsx";
 import UsuarioPerfilPages from "./pages/UsuarioPerfilPages.jsx";
 import RecuperarContraseniaPages from "./pages/RecuperarContraseniaPages.jsx";
-import RecuperarContraseniaPages from "./pages/RecuperarContraseniaPages.jsx"
+import RestablecerContraseniaPages from "./pages/RestablecerContraseniaPages.jsx";
 //import AdminPages from "./pages/AdminPages.jsx";
 
 function App() {
-  const { loading } =
-    useSalones();
-  const { login, isAuthenticated } = useUsuario();
+  const { login } = useUsuario();
 
   return (
     <Router>
@@ -34,7 +32,7 @@ function App() {
         <Route path="*" element={<NoFoundPages />} />
         <Route path="/login" element={<LoginPages login={login} />} />
         <Route path="/recuperar-contrasenia" element={<RecuperarContraseniaPages/>}/>
-        <Route path="/restablecer-contrasenia" element={<}
+        <Route path="/restablecer-contrasenia" element={<RestablecerContraseniaPages/>}/>
         <Route path="/perfil" element={<UsuarioPerfilPages/>} />
 
       </Routes>

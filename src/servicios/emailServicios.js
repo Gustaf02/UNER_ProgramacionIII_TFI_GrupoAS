@@ -10,7 +10,8 @@ const transporter = nodemailer.createTransport({
 });
 
 export const enviarEmailRecuperacion = async (email, token) => {
-  const enlace = `http://localhost:3000/api/v1/autenticacion/restablecer-contrasenia?token=${token}`;
+  //const enlace = `http://localhost:3000/api/v1/autenticacion/restablecer-contrasenia?token=${token}`;
+  const enlace = `http://localhost:5173/restablecer-contrasenia?token=${token}`;
   
   const mailOptions = {
     from: process.env.EMAIL_USER,
