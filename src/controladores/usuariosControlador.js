@@ -60,6 +60,12 @@ export default class UsuariosControlador {
         
         }catch(error){
             console.log('Error en POST /usuarios',error);
+            if (error.code === 'usuario_existe') {
+                return res.status(409).json({
+                    ok: false,
+                    mensaje: error.message
+                });
+            }
             next(error);
         }
     }
@@ -83,11 +89,13 @@ export default class UsuariosControlador {
                 nombre: nombre ?? usuario.nombre, 
                 apellido: apellido ?? usuario.apellido, 
                 nombre_usuario: nombre_usuario ?? usuario.nombre_usuario, 
-                contrasenia: contrasenia ?? usuario.contrasenia,
                 tipo_usuario: tipo_usuario ?? usuario.tipo_usuario,
                 celular: celular ?? usuario.celular,
                 foto: foto ?? usuario.foto,
                 usuario_id};
+            if (contrasenia){
+                usuarioDatos.contrasenia = contrasenia;
+            }
             await this.usuariosServicio.modificar(usuarioDatos);
             res.status(200).json({
                 estado: true,
@@ -96,6 +104,12 @@ export default class UsuariosControlador {
 
         }catch(error){
             console.log('Error en PUT /usuarios',error);
+            if (error.code === 'usuario_existe') {
+                return res.status(409).json({
+                    ok: false,
+                    mensaje: error.message
+                });
+            }
             next(error);
         }
     }

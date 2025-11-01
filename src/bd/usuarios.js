@@ -1,5 +1,4 @@
 import { conexion } from "./conexion.js";
-import { encriptarContrasenia } from "../token/contraseniaEncriptada.js";
 
 export default class Usuarios {
 
@@ -17,19 +16,37 @@ export default class Usuarios {
 
     crear = async(usuarioDatos) => {
         const {nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto} = usuarioDatos;
-        const contrasenia_encriptada = encriptarContrasenia(contrasenia);
         const sql = 'INSERT INTO usuarios (nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto) VALUES (?,?,?,?,?,?,?)';
-        await conexion.execute(sql, [nombre, apellido, nombre_usuario, contrasenia_encriptada, tipo_usuario, celular, foto]);
+        await conexion.execute(sql, [nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto]);
     }
 
     modificar = async(usuarioDatos) => {
         const {nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto, usuario_id} = usuarioDatos;
-        const sql = 'UPDATE usuarios SET nombre = ?, apellido = ?, nombre_usuario = ?, contrasenia = ?, tipo_usuario = ?, celular = ?, foto =? WHERE usuario_id = ?';
-        await conexion.execute(sql, [nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto, usuario_id]);
+        let sql, valores;
+        if (contrasenia){
+            sql = 'UPDATE usuarios SET nombre = ?, apellido = ?, nombre_usuario = ?, contrasenia = ?, tipo_usuario = ?, celular = ?, foto =? WHERE usuario_id = ?';
+            valores = [nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto, usuario_id];
+        }else{
+            sql = 'UPDATE usuarios SET nombre = ?, apellido = ?, nombre_usuario = ?, tipo_usuario = ?, celular = ?, foto =? WHERE usuario_id = ?';
+            valores = [nombre, apellido, nombre_usuario, tipo_usuario, celular, foto, usuario_id];
+        }
+        
+        await conexion.execute(sql, valores);
     }
 
     eliminar = async(usuario_id) => {
         const sql = 'UPDATE usuarios SET activo = 0 WHERE usuario_id = ?';
         await conexion.execute(sql, [usuario_id]);
+    }
+
+    existeNombreUsuario = async(nombre_usuario, id_propio = null) => {
+        let sql = 'SELECT * FROM usuarios WHERE nombre_usuario = ?';
+        let valores = [nombre_usuario];
+        if (id_propio){
+            sql += ' AND usuario_id != ?';
+            valores.push(id_propio);
+        }
+        const [resultado] = await conexion.execute(sql, valores);
+        return resultado.length > 0;
     }
 }
