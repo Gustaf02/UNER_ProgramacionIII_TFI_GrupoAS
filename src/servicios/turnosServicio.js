@@ -1,0 +1,27 @@
+import Turnos from "../bd/turnos.js";
+
+export class TurnosServicio {
+    constructor(){
+        this.turnos = new Turnos();
+    }
+    
+    obtenerTodos = () => {
+        return this.turnos.obtenerTodos();
+    }
+    
+    obtenerPorId = (turno_id) => {
+        return this.turnos.obtenerPorId(turno_id);
+    }
+    
+    crear = (turnoDatos) => {
+        return this.turnos.crear(turnoDatos);
+    }
+    
+    modificar = (turnoDatos) => {
+        return this.turnos.modificar(turnoDatos);
+    }
+    
+    eliminar = (turno_id) => {
+        return this.turnos.eliminar(turno_id);
+    }
+}

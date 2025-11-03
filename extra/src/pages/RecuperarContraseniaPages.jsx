@@ -4,7 +4,6 @@ import RecuperarContrasenia from "../componentes/RecuperarContrasenia";
 
 
 const RecuperarContraseniaPages = () => {
-  const { salones } = useSalones()
   return (
     <>
       <Header />
