@@ -1,0 +1,34 @@
+meta {
+  name: creada
+  type: http
+  seq: 15
+}
+
+post {
+  url: http://localhost:3000/api/v1/reservas
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTUyOTM2MiwiZXhwIjoxNzYxNTU4MTYyfQ.UdQgBVh1zrto6Z_2Tcj2Iq0Ogo427KHUrJVjD80Ynu8
+}
+
+body:json {
+  {
+    "fecha_reserva": "2025-10-25", 
+    "salon_id": 1,
+    "usuario_id": 1,
+    "turno_id": 2,
+    "foto_cumpleaniero": "URL_de_foto.jpg",
+    "tematica": "Los Vengadores",
+    "importe_salon": 500000,  
+    "importe_total": 550000,
+    "activo": 1
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
