@@ -13,8 +13,8 @@ export class SalonesServicio {
     crear = (salonDatos) => {
         return this.salones.crear(salonDatos);
     }
-    modificar = (salonDatos) => {
-        return this.salones.modificar(salonDatos);
+    modificar = (salon_id, datos) => {
+        return this.salones.modificar(salon_id, datos);
     }
     eliminar = (salon_id) => {
         return this.salones.eliminar(salon_id);

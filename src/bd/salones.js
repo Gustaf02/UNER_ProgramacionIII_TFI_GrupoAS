@@ -20,11 +20,23 @@ export default class Salones {
         const [resultado] = await conexion.execute(sql, [titulo, direccion, capacidad, importe]);
     }
 
-    modificar = async(salonDatos) => {
-        const {titulo, direccion, capacidad, importe, salon_id} = salonDatos;
-        const sql = 'UPDATE salones SET titulo = ?, direccion = ?, capacidad = ?, importe = ? WHERE salon_id = ?';
-        const [resultado] = await conexion.execute(sql, [titulo, direccion, capacidad, importe, salon_id]);
+
+    modificar = async(salon_id, datos) => {
+        const camposEditar = Object.keys(datos);
+        const valoresEditar = Object.values(datos);
+        
+        const setValores = camposEditar.map(campo => `${campo} = ?`).join(', ');
+        const parametros = [...valoresEditar, salon_id];
+
+        const sql = `UPDATE salones SET ${setValores} WHERE salon_id =?`;
+
+        await conexion.execute(sql, parametros);
     }
+    // modificar = async(salonDatos) => {
+    //     const {titulo, direccion, capacidad, importe, salon_id} = salonDatos;
+    //     const sql = 'UPDATE salones SET titulo = ?, direccion = ?, capacidad = ?, importe = ? WHERE salon_id = ?';
+    //     const [resultado] = await conexion.execute(sql, [titulo, direccion, capacidad, importe, salon_id]);
+    // }
 
     eliminar = async(salon_id) => {
         const sql = 'UPDATE salones SET activo = 0 WHERE salon_id = ?';
