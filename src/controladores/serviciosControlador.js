@@ -64,9 +64,12 @@ export default class ServiciosControlador {
         }
     }
 
+
     modificar = async(req, res, next) => {
         try{
             const servicio_id = req.params.servicio_id;
+            const datos = req.body;
+
             const servicio = await this.serviciosServicio.obtenerPorId(servicio_id);
             
             if (!servicio){
@@ -76,24 +79,47 @@ export default class ServiciosControlador {
                 });
             }
 
-            const {descripcion, importe} = req.body;
-
-            // Se queda con el valor original si no se define uno nuevo
-            const servicioDatos = { 
-                descripcion: descripcion ?? servicio.descripcion, 
-                importe: importe ?? servicio.importe, 
-                servicio_id};
-            await this.serviciosServicio.modificar(servicioDatos);
+            await this.serviciosServicio.modificar(servicio_id, datos);
             res.status(200).json({
                 estado: true,
                 mensaje: 'Servicio modificado'
             });
 
         }catch(error){
-            console.log('Error en PUT /servicios',error);
+            console.log('Error en PUT /servicio',error);
             next(error);
         }
     }
+    // modificar = async(req, res, next) => {
+    //     try{
+    //         const servicio_id = req.params.servicio_id;
+    //         const servicio = await this.serviciosServicio.obtenerPorId(servicio_id);
+            
+    //         if (!servicio){
+    //             return res.status(404).json({
+    //                 'ok':false, 
+    //                 mensaje: 'servicio no encontrado'
+    //             });
+    //         }
+
+    //         const {descripcion, importe} = req.body;
+
+    //         // Se queda con el valor original si no se define uno nuevo
+    //         const servicioDatos = { 
+    //             descripcion: descripcion ?? servicio.descripcion, 
+    //             importe: importe ?? servicio.importe, 
+    //             servicio_id};
+    //         await this.serviciosServicio.modificar(servicioDatos);
+    //         res.status(200).json({
+    //             estado: true,
+    //             mensaje: 'Servicio modificado'
+    //         });
+
+    //     }catch(error){
+    //         console.log('Error en PUT /servicios',error);
+    //         next(error);
+    //     }
+    // }
 
     eliminar = async(req, res, next) => {
         try{

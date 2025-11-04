@@ -20,11 +20,22 @@ export default class Servicios {
         await conexion.execute(sql, [descripcion, importe]);
     }
 
-    modificar = async(servicioDatos) => {
-        const {descripcion, importe, servicio_id} = servicioDatos;
-        const sql = 'UPDATE servicios SET descripcion = ?, importe = ? WHERE servicio_id = ?';
-        await conexion.execute(sql, [descripcion, importe, servicio_id]);
+    modificar = async(servicio_id, datos) => {
+        const camposEditar = Object.keys(datos);
+        const valoresEditar = Object.values(datos);
+        
+        const setValores = camposEditar.map(campo => `${campo} = ?`).join(', ');
+        const parametros = [...valoresEditar, servicio_id];
+
+        const sql = `UPDATE servicios SET ${setValores} WHERE servicio_id =?`;
+
+        await conexion.execute(sql, parametros);
     }
+    // modificar = async(servicioDatos) => {
+    //     const {descripcion, importe, servicio_id} = servicioDatos;
+    //     const sql = 'UPDATE servicios SET descripcion = ?, importe = ? WHERE servicio_id = ?';
+    //     await conexion.execute(sql, [descripcion, importe, servicio_id]);
+    // }
 
     eliminar = async(servicio_id) => {
         const sql = 'UPDATE servicios SET activo = 0 WHERE servicio_id = ?';
