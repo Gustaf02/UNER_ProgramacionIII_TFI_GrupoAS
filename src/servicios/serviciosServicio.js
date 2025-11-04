@@ -13,8 +13,8 @@ export class ServiciosServicio {
     crear = (servicioDatos) => {
         return this.servicios.crear(servicioDatos);
     }
-    modificar = (servicioDatos) => {
-        return this.servicios.modificar(servicioDatos);
+    modificar = (servicio_id, datos) => {
+        return this.servicios.modificar(servicio_id, datos);
     }
     eliminar = (servicio_id) => {
         return this.servicios.eliminar(servicio_id);
