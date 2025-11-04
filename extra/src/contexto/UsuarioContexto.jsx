@@ -295,15 +295,16 @@ export const UsuarioProvider = ({ children }) => {
     }
   }, []);
 
-  // Valor del contexto (agregar crearUsuario)
+  // Valor del contexto 
   const value = {
+    //token,
     usuario,
     isAuthenticated,
     isLoading,
     error,
     login,
     logout,
-    crearUsuario, // ← Nueva función agregada
+    crearUsuario,
     clearAuth,
     actualizarUsuario: (nuevosDatos) => {
       const updatedUser = { ...usuario, ...nuevosDatos };
