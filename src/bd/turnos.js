@@ -26,17 +26,21 @@ export default class Turnos {
         return resultado.insertId;
     }
 
-    // Método para modificar un turno existente
-    modificar = async(turnoDatos) => {
-        const {orden, hora_desde, hora_hasta, turno_id} = turnoDatos;
-        const sql = `UPDATE turnos 
-                     SET orden = ?, hora_desde = ?, hora_hasta = ? 
-                     WHERE turno_id = ?`;
-        const [resultado] = await conexion.execute(sql, [orden, hora_desde, hora_hasta, turno_id]);
+    // Método para modificar un turno existente 
+    modificar = async(turno_id, datos) => {
+        // Lógica que acepta campos dinámicos
+        const camposEditar = Object.keys(datos);
+        const valoresEditar = Object.values(datos);
+        
+        const setValores = camposEditar.map(campo => `${campo} = ?`).join(', ');
+        // Los parámetros son los valores a editar, seguidos del ID
+        const parametros = [...valoresEditar, turno_id]; 
+        
+        const sql = `UPDATE turnos SET ${setValores} WHERE turno_id = ?`;
 
-        return resultado.affectedRows;
+        await conexion.execute(sql, parametros);
     }
-
+    
     // Método para eliminar un turno con soft delete
     eliminar = async(turno_id) => {
         // UPDATE cambia 'activo' a 0

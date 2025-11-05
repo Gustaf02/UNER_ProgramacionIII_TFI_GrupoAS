@@ -6,83 +6,193 @@ import autorizar from '../../middlewares/autorizarMiddleware.js';
 import { verificarAutenticacion } from '../../middlewares/autenticacionMiddleware.js';
 
 const usuariosControlador = new UsuariosControlador();
-
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ * name: Usuarios
+ * description: Gestión de usuarios del sistema (CRUD solo para Administradores)
+ */
+
+/**
+ * @swagger
+ * /api/v1/usuarios:
+ * get:
+ * summary: Obtener todos los usuarios activos
+ * description: Retorna una lista de todos los usuarios activos. [cite_start]Requiere rol Administrador (1)[cite: 68].
+ * tags: [Usuarios]
+ * security:
+ * - bearerAuth: []
+ * responses:
+ * 200:
+ * description: Lista de usuarios
+ * 403:
+ * description: Acceso denegado (Rol no autorizado)
+ */
 router.get('/', verificarAutenticacion, autorizar([1]), usuariosControlador.obtenerTodos);
 
-
+/**
+ * @swagger
+ * /api/v1/usuarios/{usuario_id}:
+ * get:
+ * summary: Obtener un usuario por ID
+ * description: Retorna la información de un usuario específico. [cite_start]Requiere rol Administrador (1)[cite: 68].
+ * tags: [Usuarios]
+ * security:
+ * - bearerAuth: []
+ * parameters:
+ * - in: path
+ * name: usuario_id
+ * required: true
+ * schema:
+ * type: integer
+ * description: ID del usuario a consultar
+ * responses:
+ * 200:
+ * description: Usuario encontrado
+ * 404:
+ * description: Usuario no encontrado
+ * 403:
+ * description: Acceso denegado
+ */
 router.get('/:usuario_id', verificarAutenticacion, autorizar([1]), usuariosControlador.obtenerPorId);
 
-
+/**
+ * @swagger
+ * /api/v1/usuarios:
+ * post:
+ * summary: Crear un nuevo usuario (solo Admin)
+ * description: Crea un nuevo usuario en el sistema con un rol específico. [cite_start]Requiere rol Administrador (1)[cite: 68].
+ * tags: [Usuarios]
+ * security:
+ * - bearerAuth: []
+ * requestBody:
+ * required: true
+ * content:
+ * application/json:
+ * schema:
+ * type: object
+ * required:
+ * - nombre
+ * - apellido
+ * - nombre_usuario
+ * - contrasenia
+ * - tipo_usuario
+ * properties:
+ * [cite_start]nombre: { type: string, description: Nombre del usuario [cite: 679] }
+ * [cite_start]apellido: { type: string, description: Apellido del usuario [cite: 679] }
+ * [cite_start]nombre_usuario: { type: string, description: Email/Nombre de usuario único [cite: 679] }
+ * [cite_start]contrasenia: { type: string, format: password, description: Contraseña [cite: 679] }
+ * [cite_start]tipo_usuario: { type: integer, description: Tipo de usuario (1, 2 o 3) [cite: 680] }
+ * [cite_start]celular: { type: string, description: Número de celular [cite: 681] }
+ * [cite_start]foto: { type: string, description: URL o ruta de la foto[cite: 681], nullable: true }
+ * responses:
+ * 201:
+ * description: Usuario creado exitosamente
+ * 400:
+ * description: Datos de entrada inválidos
+ * 409:
+ * description: El nombre de usuario ya existe
+ */
 router.post('/', verificarAutenticacion, autorizar([1]),
     [
         check('nombre', 'El nombre es necesario').notEmpty(),
-        
         check('apellido', 'El apellido es necesario').notEmpty(),
-
-        check('nombre_usuario', 'El nombre de usuario es necesario').notEmpty(),
-
-        check('contrasenia', 'La contrasenia es necesaria').notEmpty(),
-
+        check('nombre_usuario', 'El nombre de usuario es necesario').notEmpty().isEmail().withMessage('El nombre de usuario debe ser un email válido'),
+        check('contrasenia', 'La contrasenia es necesaria').notEmpty().isLength({ min: 8 }).withMessage('La contraseña debe tener al menos 8 caracteres'),
         check('tipo_usuario')
             .notEmpty().withMessage('El tipo de usuario es necesario')
             .isNumeric().withMessage('El tipo de usuario debe ser numerico')
-            .custom(valor => 
-                    Number.isInteger(Number(valor)) && (valor == '1' || valor == '2' || valor == '3'))
-                    .withMessage('El tipo de usuario debe ser 1, 2 o 3'),
-        
+            .custom(valor => Number.isInteger(Number(valor)) && (valor == '1' || valor == '2' || valor == '3')).withMessage('El tipo de usuario debe ser 1, 2 o 3'),
         check('celular')
-            .notEmpty().withMessage('El celular es necesario')
+            .optional() // El modelo de datos indica que es NULLABLE, pero la validación pide que sea numerico si se envia.
             .isNumeric().withMessage('El celular debe ser numerico'),
-    
-        check('foto')
-            .optional(),
-        
+        check('foto').optional(),
         validarCampos
     ],
     usuariosControlador.crear);
 
-
+/**
+ * @swagger
+ * /api/v1/usuarios/{usuario_id}:
+ * put:
+ * summary: Modificar un usuario existente
+ * description: Actualiza la información de un usuario. Los campos son opcionales. [cite_start]Requiere rol Administrador (1)[cite: 68].
+ * tags: [Usuarios]
+ * security:
+ * - bearerAuth: []
+ * parameters:
+ * - in: path
+ * name: usuario_id
+ * required: true
+ * schema:
+ * type: integer
+ * description: ID del usuario a modificar
+ * requestBody:
+ * required: true
+ * content:
+ * application/json:
+ * schema:
+ * type: object
+ * properties:
+ * nombre: { type: string }
+ * apellido: { type: string }
+ * [cite_start]nombre_usuario: { type: string, description: Nuevo email único [cite: 683] }
+ * [cite_start]contrasenia: { type: string, format: password, description: Nueva contraseña (se encripta) [cite: 683] }
+ * [cite_start]tipo_usuario: { type: integer, description: Nuevo tipo de usuario [cite: 684] }
+ * celular: { type: string }
+ * foto: { type: string, nullable: true }
+ * responses:
+ * 200:
+ * description: Usuario modificado exitosamente
+ * 400:
+ * description: Datos de entrada inválidos
+ * 404:
+ * description: Usuario no encontrado
+ * 409:
+ * description: El nombre de usuario ya está en uso
+ */
 router.put('/:usuario_id', verificarAutenticacion, autorizar([1]),
     [
-        check('nombre', 'El nombre es necesario')
-            .optional()
-            .notEmpty(),
-        
-        check('apellido', 'El apellido es necesario')
-            .optional()
-            .notEmpty(),
-
-        check('nombre_usuario', 'El nombre de usuario es necesario')
-            .optional()
-            .notEmpty(),
-
-        check('contrasenia', 'La contrasenia es necesaria')
-            .optional()
-            .notEmpty(),
-
+        check('nombre').optional().notEmpty().withMessage('El nombre no puede ser vacío'),
+        check('apellido').optional().notEmpty().withMessage('El apellido no puede ser vacío'),
+        check('nombre_usuario').optional().notEmpty().withMessage('El nombre de usuario no puede ser vacío').isEmail().withMessage('Debe ser un email válido'),
+        check('contrasenia').optional().notEmpty().withMessage('La contraseña no puede ser vacía').isLength({ min: 8 }).withMessage('La contraseña debe tener al menos 8 caracteres'),
         check('tipo_usuario')
             .optional()
-            .notEmpty().withMessage('El tipo de usuario es necesario')
-            .isNumeric().withMessage('El tipo de usuario debe ser numerico')
-            .custom(valor => 
-                    Number.isInteger(Number(valor)) && (valor == '1' || valor == '2' || valor == '3'))
-                    .withMessage('El tipo de usuario debe ser 1, 2 o 3'),
-        
-        check('celular')
-            .optional()
-            .notEmpty().withMessage('El celular es necesario')
-            .isNumeric().withMessage('El celular debe ser numerico'),
-    
-        check('foto')
-            .optional(),
+            .isNumeric().withMessage('El tipo de usuario debe ser numérico')
+            .custom(valor => Number.isInteger(Number(valor)) && (valor == '1' || valor == '2' || valor == '3')).withMessage('El tipo de usuario debe ser 1, 2 o 3'),
+        check('celular').optional().isNumeric().withMessage('El celular debe ser numérico'),
+        check('foto').optional(),
         validarCampos
     ],
     usuariosControlador.modificar);
 
-
+/**
+ * @swagger
+ * /api/v1/usuarios/{usuario_id}:
+ * delete:
+ * summary: Eliminar (Soft Delete) un usuario
+ * [cite_start]description: Marca un usuario como inactivo (soft delete)[cite: 84]. [cite_start]Requiere rol Administrador (1)[cite: 68].
+ * tags: [Usuarios]
+ * security:
+ * - bearerAuth: []
+ * parameters:
+ * - in: path
+ * name: usuario_id
+ * required: true
+ * schema:
+ * type: integer
+ * description: ID del usuario a eliminar
+ * responses:
+ * 200:
+ * description: Usuario eliminado exitosamente
+ * 404:
+ * description: Usuario no encontrado
+ * 403:
+ * description: Acceso denegado
+ */
 router.delete('/:usuario_id', verificarAutenticacion, autorizar([1]), usuariosControlador.eliminar);
-
 
 export { router };

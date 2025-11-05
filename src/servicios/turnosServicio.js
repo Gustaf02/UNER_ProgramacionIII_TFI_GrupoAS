@@ -17,8 +17,8 @@ export class TurnosServicio {
         return this.turnos.crear(turnoDatos);
     }
     
-    modificar = (turnoDatos) => {
-        return this.turnos.modificar(turnoDatos);
+    modificar = (turno_id, datos) => {
+        return this.turnos.modificar(turno_id, datos);
     }
     
     eliminar = (turno_id) => {
