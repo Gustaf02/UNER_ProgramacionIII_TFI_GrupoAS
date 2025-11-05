@@ -138,21 +138,34 @@ export class ReservasModelo {
   }
 
   /**
-   * Actualiza la reserva principal.
+   * Actualiza la reserva de forma dinámica
    */
+
   async actualizarReserva(reservaId, datosReserva) {
-    const sql = `UPDATE reservas SET fecha_reserva = ?, salon_id = ?, usuario_id = ?, turno_id = ?, foto_cumpleaniero = ?, tematica = ?, importe_salon = ?, importe_total = ?, modificado = CURRENT_TIMESTAMP() WHERE reserva_id = ? AND activo = 1`;
-    const values = [
-      datosReserva.fecha_reserva,
-      datosReserva.salon_id,
-      datosReserva.usuario_id,
-      datosReserva.turno_id,
-      datosReserva.foto_cumpleaniero,
-      datosReserva.tematica,
-      datosReserva.importe_salon,
-      datosReserva.importe_total,
-      reservaId,
-    ];
+    const fieldsToUpdate = [];
+    const values = [];
+
+    for (const key in datosReserva) {
+      if (
+        Object.hasOwnProperty.call(datosReserva, key) &&
+        key !== "servicios" &&
+        key !== "reserva_id"
+      ) {
+        fieldsToUpdate.push(`${key} = ?`);
+        values.push(datosReserva[key]);
+      }
+    }
+
+    if (fieldsToUpdate.length === 0) {
+      return 1;
+    }
+
+    fieldsToUpdate.push(`modificado = CURRENT_TIMESTAMP()`);
+
+    const sql = `UPDATE reservas SET ${fieldsToUpdate.join(
+      ", "
+    )} WHERE reserva_id = ? AND activo = 1`;
+    values.push(reservaId);
 
     const [result] = await conexion.query(sql, values);
     return result.affectedRows;

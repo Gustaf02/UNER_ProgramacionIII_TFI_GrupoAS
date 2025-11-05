@@ -1,0 +1,20 @@
+meta {
+  name: borra reserva
+  type: http
+  seq: 37
+}
+
+delete {
+  url: http://localhost:3000/api/v1/reservas/11
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXN1YXJpbyI6IndpbGNvckBjb3JyZW8uY29tIiwidGlwbyI6Miwibm9tYnJlIjoiV2lsbGlhbSIsImlhdCI6MTc2MTY1ODY0MiwiZXhwIjoxNzYxNjg3NDQyfQ.3PBxXT_cAvn1Oj6yCdIevQG41CZf6kKbK2rydz8h3as
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

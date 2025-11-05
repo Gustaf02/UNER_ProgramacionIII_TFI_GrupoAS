@@ -1,0 +1,46 @@
+meta {
+  name: modificar
+  type: http
+  seq: 34
+}
+
+put {
+  url: http://localhost:3000/api/v1/reservas/1
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXN1YXJpbyI6IndpbGNvckBjb3JyZW8uY29tIiwidGlwbyI6Miwibm9tYnJlIjoiV2lsbGlhbSIsImlhdCI6MTc2MTY1ODY0MiwiZXhwIjoxNzYxNjg3NDQyfQ.3PBxXT_cAvn1Oj6yCdIevQG41CZf6kKbK2rydz8h3as
+}
+
+body:json {
+  {
+      "fecha_reserva": "2025-10-09", // Cambiamos la fecha
+      "salon_id": 1, 
+      "turno_id": 2, // Cambiamos el turno (ej. de 1 a 2)
+      "tematica": "Fiesta de Graduación", // Cambiamos la temática
+      "importe_total": 450000, // Actualizamos el importe total (debe coincidir con la suma)
+      
+      "servicios": [
+          {
+              "servicio_id": 1,          // Servicio 1 (Ej: Fotografía)
+              "importe": 250000
+          },
+          {
+              "servicio_id": 3,          // AGREGAMOS un nuevo servicio (Ej: Catering, si existe el ID 3)
+              "importe": 200000
+          }
+          // Nota: Eliminamos el servicio ID 2 (Mesa Dulce) para probar la eliminación
+      ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
