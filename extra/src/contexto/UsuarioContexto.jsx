@@ -20,22 +20,36 @@ export const UsuarioProvider = ({ children }) => {
     setError(null);
   };
 
-  // Función que se ejecuta al inicio
-  const initializeAuth = () => {
-    const userData = localStorage.getItem('usuarioData');
-    const token = localStorage.getItem('authToken');
-    
-    if (userData && token) {
-      try {
-        const parsedData = JSON.parse(userData);
-        setUsuario(parsedData);
-        setIsAuthenticated(true);
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-        clearAuth();
-      }
+// Función que se ejecuta al inicio - CORREGIDA
+const initializeAuth = () => {
+  const userData = localStorage.getItem('usuarioData');
+  const token = localStorage.getItem('authToken');
+  
+  console.log('🔄 Inicializando auth...');
+  console.log('📁 UserData en localStorage:', userData);
+  console.log('🔑 Token en localStorage:', token);
+  
+  if (userData && token) {
+    try {
+      const parsedData = JSON.parse(userData);
+      // Asegurarnos de que el token esté en el objeto usuario
+      const usuarioCompleto = {
+        ...parsedData,
+        token: token // ¡IMPORTANTE! Asegurar que el token esté aquí
+      };
+      
+      console.log('👤 Usuario final para contexto:', usuarioCompleto);
+      
+      setUsuario(usuarioCompleto);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+      clearAuth();
     }
-  };
+  } else {
+    console.log('❌ No hay datos de usuario o token en localStorage');
+  }
+};
 
   // Ejecutar al montar el contexto
   useEffect(() => {

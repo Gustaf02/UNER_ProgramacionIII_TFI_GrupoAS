@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useUsuario } from '../contexto/UsuarioContexto'; // Ajusta la ruta según tu estructura
+import { useUsuario } from '../contexto/UsuarioContexto';
 
 const Reservas = () => {
   const { usuario, isAuthenticated } = useUsuario();
@@ -24,7 +24,10 @@ const Reservas = () => {
       setIsLoading(true);
       setError(null);
       
-      const token = usuario.token;
+      // ✅ USAR localStorage DIRECTAMENTE como en el contexto de salones
+      const token = localStorage.getItem("authToken");
+      console.log('Token utilizado:', token);
+      
       if (!token) {
         throw new Error('No hay token de autenticación');
       }
@@ -35,13 +38,17 @@ const Reservas = () => {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
-        
       });
+      
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
-        throw new Error(`Error ${response.status}: No se pudieron obtener las reservas`);
+        const errorText = await response.text();
+        throw new Error(`Error ${response.status}: ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('Datos recibidos:', data);
       
       if (data.ok) {
         setReservas(data.data || []);
@@ -58,7 +65,7 @@ const Reservas = () => {
 
   const eliminarReserva = async (reservaId) => {
     try {
-      const token = usuario?.token;
+      const token = localStorage.getItem("authToken");
       
       const response = await fetch(`http://localhost:3000/api/v1/reservas/${reservaId}`, {
         method: 'DELETE',
@@ -98,7 +105,11 @@ const Reservas = () => {
   };
 
   const formatearFecha = (fechaString) => {
-    return new Date(fechaString).toLocaleDateString('es-ES');
+    return new Date(fechaString).toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
 
   const formatearMoneda = (monto) => {
@@ -114,6 +125,12 @@ const Reservas = () => {
     const coincideEstado = !filtroEstado || reserva.activo === (filtroEstado === 'activas');
     return coincideFecha && coincideEstado;
   });
+
+  // ✅ NUEVA FUNCIÓN: Manejar nueva reserva
+  const handleNuevaReserva = () => {
+    // Redirigir a la página de salones para hacer una reserva
+    window.location.href = '/salones';
+  };
 
   if (!isAuthenticated) {
     return (
@@ -149,7 +166,7 @@ const Reservas = () => {
             
             {puedeEditar() && (
               <button 
-                onClick={() => setMostrarModal(true)}
+                onClick={handleNuevaReserva}
                 className="mt-4 md:mt-0 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-6 rounded-md hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
               >
                 Nueva Reserva
@@ -235,17 +252,52 @@ const Reservas = () => {
           </div>
         )}
 
-        {/* Lista de Reservas */}
+        {/* ✅ MEJORADO: Lista de Reservas con mensaje cuando no hay reservas */}
         {!isLoading && !error && (
           <div className="bg-white rounded-lg shadow-xl overflow-hidden">
-            {reservasFiltradas.length === 0 ? (
+            {reservas.length === 0 ? (
+              <div className="p-12 text-center">
+                <div className="max-w-md mx-auto">
+                  <div className="text-6xl mb-4">📅</div>
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                    Aún no tienes reservas
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    No se encontraron reservas activas en tu cuenta. 
+                    ¡Empieza a reservar tus salones favoritos!
+                  </p>
+                  {puedeEditar() && (
+                    <button
+                      onClick={handleNuevaReserva}
+                      className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-8 rounded-lg hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 text-lg font-medium"
+                    >
+                      Hacer mi primera reserva
+                    </button>
+                  )}
+                </div>
+              </div>
+            ) : reservasFiltradas.length === 0 ? (
               <div className="p-8 text-center">
-                <p className="text-gray-600 text-lg">
-                  {reservas.length === 0 ? 'No hay reservas registradas.' : 'No se encontraron reservas con los filtros aplicados.'}
+                <p className="text-gray-600 text-lg mb-4">
+                  No se encontraron reservas con los filtros aplicados.
                 </p>
+                <button
+                  onClick={() => {
+                    setFiltroFecha('');
+                    setFiltroEstado('');
+                  }}
+                  className="bg-gray-500 text-white py-2 px-6 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200"
+                >
+                  Limpiar filtros
+                </button>
               </div>
             ) : (
               <div className="overflow-x-auto">
+                <div className="p-4 bg-gray-50 border-b">
+                  <p className="text-gray-700">
+                    Mostrando <strong>{reservasFiltradas.length}</strong> de <strong>{reservas.length}</strong> reservas
+                  </p>
+                </div>
                 <table className="w-full">
                   <thead className="bg-gray-50">
                     <tr>
@@ -343,12 +395,18 @@ const Reservas = () => {
                 {reservaEditando ? 'Editar Reserva' : 'Nueva Reserva'}
               </h2>
               
-              {/* Aquí iría el formulario de reserva */}
               <div className="space-y-4">
                 <p className="text-gray-600">
-                  Formulario para {reservaEditando ? 'editar' : 'crear'} reserva...
+                  {reservaEditando 
+                    ? `Editando reserva #${reservaEditando.reserva_id}` 
+                    : 'Crear nueva reserva'}
                 </p>
-                {/* Implementar formulario completo aquí */}
+                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+                  <p className="text-yellow-700 text-sm">
+                    ⚠️ El formulario de reservas está en desarrollo. 
+                    Por ahora, usa la página de salones para crear reservas.
+                  </p>
+                </div>
               </div>
 
               <div className="flex justify-end space-x-3 mt-6">
@@ -362,14 +420,10 @@ const Reservas = () => {
                   Cancelar
                 </button>
                 <button
-                  onClick={() => {
-                    // Lógica para guardar reserva
-                    setMostrarModal(false);
-                    setReservaEditando(null);
-                  }}
+                  onClick={handleNuevaReserva}
                   className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-md hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
                 >
-                  {reservaEditando ? 'Actualizar' : 'Crear'} Reserva
+                  Ir a Salones
                 </button>
               </div>
             </div>
