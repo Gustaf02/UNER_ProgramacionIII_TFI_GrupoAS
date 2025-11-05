@@ -1,4 +1,7 @@
 import { reservaServicio } from "../servicios/reservaServicio.js"; // El servicio manejará la lógica de negocio y la DB
+import { emailServicio } from '../servicios/emailServicios.js';
+
+import { UsuariosServicio } from '../servicios/usuariosServicio.js';
 
 export const crearReserva = async (req, res, next) => {
   try {
@@ -6,9 +9,36 @@ export const crearReserva = async (req, res, next) => {
 
     const reservaId = await reservaServicio.crear(nuevaReservaData, servicios);
 
+    // Obtener el usuario para conseguir su email (nombre_usuario)
+    const usuariosServicio = new UsuariosServicio();
+    const usuario = await usuariosServicio.obtenerPorId(nuevaReservaData.usuario_id);
+
+    if (!usuario) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Usuario no encontrado'
+      });
+    }
+
+    const emailEnviado = await emailServicio.enviarCorreoConfirmacionReserva(
+      usuario.nombre_usuario,
+      {
+        reserva_id: reservaId,
+        ...nuevaReservaData,
+        servicios: servicios
+      }
+    );
+
+    if (!emailEnviado) {
+      return res.status(500).json({
+        ok: false,
+        mensaje: 'Error al enviar el email de confirmación'
+      });
+    }
+
     return res.status(201).json({
       ok: true,
-      mensaje: "Reserva creada exitosamente.",
+      mensaje: "Reserva creada exitosamente y notificación enviada por mail.",
       data: { reserva_id: reservaId },
     });
   } catch (error) {
@@ -30,7 +60,6 @@ export const crearReserva = async (req, res, next) => {
     });
   }
 };
-
 /**
  * [R] READ: Obtiene todas las reservas activas (Listado).
  */
