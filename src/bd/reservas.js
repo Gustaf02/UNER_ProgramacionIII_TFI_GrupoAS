@@ -86,7 +86,7 @@ export class ReservasModelo {
   }
 
   // ====================================================================
-  // 2. CONSULTAS DE LECTURA (GET) - MANTENIDOS
+  // 2. CONSULTAS DE LECTURA (GET)
   // ====================================================================
 
   async obtenerTodas() {
@@ -133,7 +133,7 @@ export class ReservasModelo {
   }
 
   // ====================================================================
-  // 3. CONSULTAS DE ESCRITURA (CREATE, UPDATE, DELETE) - MANTENIDOS
+  // 3. CONSULTAS DE ESCRITURA (CREATE, UPDATE, DELETE) 
   // ====================================================================
 
   async insertarReserva(datosReserva) {
@@ -225,7 +225,7 @@ export class ReservasModelo {
   }
 
   // ====================================================================
-  // 4. MÉTODOS DE TRANSACCIÓN - MANTENIDOS
+  // 4. MÉTODOS DE TRANSACCIÓN 
   // ====================================================================
 
   async beginTransaction() {

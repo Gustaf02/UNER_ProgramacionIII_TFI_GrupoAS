@@ -1,5 +1,5 @@
 import express from 'express';
-import UsuariosControlador from '../../controladores/usuariosControlador.js';
+import UsuariosControlador from '../../controladores/usuariosControlador.js'; 
 import { check } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
 import autorizar from '../../middlewares/autorizarMiddleware.js';
@@ -8,6 +8,9 @@ import { verificarAutenticacion } from '../../middlewares/autenticacionMiddlewar
 const usuariosControlador = new UsuariosControlador();
 const router = express.Router();
 
+// =======================================================
+// SWAGGER TAGS
+// =======================================================
 /**
  * @swagger
  * tags:
@@ -15,12 +18,16 @@ const router = express.Router();
  * description: Gestión de usuarios del sistema (CRUD solo para Administradores)
  */
 
+// =======================================================
+// [R] READ: Obtener todos los usuarios (BROWSE)
+// Roles: [1]
+// =======================================================
 /**
  * @swagger
  * /api/v1/usuarios:
  * get:
  * summary: Obtener todos los usuarios activos
- * description: Retorna una lista de todos los usuarios activos. [cite_start]Requiere rol Administrador (1)[cite: 68].
+ * description: Retorna una lista de todos los usuarios activos. Requiere rol Administrador (1).
  * tags: [Usuarios]
  * security:
  * - bearerAuth: []
@@ -32,12 +39,16 @@ const router = express.Router();
  */
 router.get('/', verificarAutenticacion, autorizar([1]), usuariosControlador.obtenerTodos);
 
+// =======================================================
+// [R] READ: Obtener un usuario por ID
+// Roles: [1]
+// =======================================================
 /**
  * @swagger
  * /api/v1/usuarios/{usuario_id}:
  * get:
  * summary: Obtener un usuario por ID
- * description: Retorna la información de un usuario específico. [cite_start]Requiere rol Administrador (1)[cite: 68].
+ * description: Retorna la información de un usuario específico. Requiere rol Administrador (1).
  * tags: [Usuarios]
  * security:
  * - bearerAuth: []
@@ -56,14 +67,24 @@ router.get('/', verificarAutenticacion, autorizar([1]), usuariosControlador.obte
  * 403:
  * description: Acceso denegado
  */
-router.get('/:usuario_id', verificarAutenticacion, autorizar([1]), usuariosControlador.obtenerPorId);
+router.get('/:usuario_id', verificarAutenticacion, autorizar([1]), 
+    [
+        check('usuario_id', 'El ID de usuario es obligatorio y debe ser numérico').isInt({ gt: 0 }),
+        validarCampos
+    ],
+    usuariosControlador.obtenerPorId
+);
 
+// =======================================================
+// [C] CREATE: Crear un nuevo usuario (ADD)
+// Roles: [1]
+// =======================================================
 /**
  * @swagger
  * /api/v1/usuarios:
  * post:
  * summary: Crear un nuevo usuario (solo Admin)
- * description: Crea un nuevo usuario en el sistema con un rol específico. [cite_start]Requiere rol Administrador (1)[cite: 68].
+ * description: Crea un nuevo usuario en el sistema con un rol específico. Requiere rol Administrador (1).
  * tags: [Usuarios]
  * security:
  * - bearerAuth: []
@@ -80,13 +101,13 @@ router.get('/:usuario_id', verificarAutenticacion, autorizar([1]), usuariosContr
  * - contrasenia
  * - tipo_usuario
  * properties:
- * [cite_start]nombre: { type: string, description: Nombre del usuario [cite: 679] }
- * [cite_start]apellido: { type: string, description: Apellido del usuario [cite: 679] }
- * [cite_start]nombre_usuario: { type: string, description: Email/Nombre de usuario único [cite: 679] }
- * [cite_start]contrasenia: { type: string, format: password, description: Contraseña [cite: 679] }
- * [cite_start]tipo_usuario: { type: integer, description: Tipo de usuario (1, 2 o 3) [cite: 680] }
- * [cite_start]celular: { type: string, description: Número de celular [cite: 681] }
- * [cite_start]foto: { type: string, description: URL o ruta de la foto[cite: 681], nullable: true }
+ * nombre: { type: string, description: Nombre del usuario, requerido [cite: 710] }
+ * apellido: { type: string, description: Apellido del usuario, requerido [cite: 710] }
+ * nombre_usuario: { type: string, description: Email/Nombre de usuario único, formato email, requerido [cite: 710] }
+ * contrasenia: { type: string, format: password, description: Contraseña (mínimo 8 caracteres), requerido [cite: 710] }
+ * tipo_usuario: { type: integer, description: Tipo de usuario (1:Admin, 2:Empleado, 3:Cliente), requerido [cite: 711] }
+ * celular: { type: string, description: Número de celular, opcional [cite: 712] }
+ * foto: { type: string, description: URL o ruta de la foto, opcional/nullable }
  * responses:
  * 201:
  * description: Usuario creado exitosamente
@@ -106,19 +127,23 @@ router.post('/', verificarAutenticacion, autorizar([1]),
             .isNumeric().withMessage('El tipo de usuario debe ser numerico')
             .custom(valor => Number.isInteger(Number(valor)) && (valor == '1' || valor == '2' || valor == '3')).withMessage('El tipo de usuario debe ser 1, 2 o 3'),
         check('celular')
-            .optional() // El modelo de datos indica que es NULLABLE, pero la validación pide que sea numerico si se envia.
+            .optional() 
             .isNumeric().withMessage('El celular debe ser numerico'),
         check('foto').optional(),
         validarCampos
     ],
     usuariosControlador.crear);
 
+// =======================================================
+// [U] UPDATE: Modificar un usuario (EDIT)
+// Roles: [1]
+// =======================================================
 /**
  * @swagger
  * /api/v1/usuarios/{usuario_id}:
  * put:
  * summary: Modificar un usuario existente
- * description: Actualiza la información de un usuario. Los campos son opcionales. [cite_start]Requiere rol Administrador (1)[cite: 68].
+ * description: Actualiza la información de un usuario. Los campos son opcionales. Requiere rol Administrador (1).
  * tags: [Usuarios]
  * security:
  * - bearerAuth: []
@@ -136,13 +161,13 @@ router.post('/', verificarAutenticacion, autorizar([1]),
  * schema:
  * type: object
  * properties:
- * nombre: { type: string }
- * apellido: { type: string }
- * [cite_start]nombre_usuario: { type: string, description: Nuevo email único [cite: 683] }
- * [cite_start]contrasenia: { type: string, format: password, description: Nueva contraseña (se encripta) [cite: 683] }
- * [cite_start]tipo_usuario: { type: integer, description: Nuevo tipo de usuario [cite: 684] }
- * celular: { type: string }
- * foto: { type: string, nullable: true }
+ * nombre: { type: string, description: Nombre del usuario, opcional }
+ * apellido: { type: string, description: Apellido del usuario, opcional }
+ * nombre_usuario: { type: string, description: Nuevo email único, opcional [cite: 716] }
+ * contrasenia: { type: string, format: password, description: Nueva contraseña (mínimo 8 caracteres, se encripta con bcrypt), opcional [cite: 716] }
+ * tipo_usuario: { type: integer, description: Nuevo tipo de usuario (1, 2 o 3), opcional [cite: 717] }
+ * celular: { type: string, description: Número de celular, opcional [cite: 717] }
+ * foto: { type: string, description: URL o ruta de la foto, opcional/nullable }
  * responses:
  * 200:
  * description: Usuario modificado exitosamente
@@ -169,12 +194,16 @@ router.put('/:usuario_id', verificarAutenticacion, autorizar([1]),
     ],
     usuariosControlador.modificar);
 
+// =======================================================
+// [D] DELETE: Eliminar un usuario (Soft Delete)
+// Roles: [1]
+// =======================================================
 /**
  * @swagger
  * /api/v1/usuarios/{usuario_id}:
  * delete:
  * summary: Eliminar (Soft Delete) un usuario
- * [cite_start]description: Marca un usuario como inactivo (soft delete)[cite: 84]. [cite_start]Requiere rol Administrador (1)[cite: 68].
+ * description: Marca un usuario como inactivo (soft delete). Requiere rol Administrador (1).
  * tags: [Usuarios]
  * security:
  * - bearerAuth: []
@@ -193,6 +222,11 @@ router.put('/:usuario_id', verificarAutenticacion, autorizar([1]),
  * 403:
  * description: Acceso denegado
  */
-router.delete('/:usuario_id', verificarAutenticacion, autorizar([1]), usuariosControlador.eliminar);
+router.delete('/:usuario_id', verificarAutenticacion, autorizar([1]), 
+    [
+        check('usuario_id', 'El ID de usuario es obligatorio y debe ser numérico').isInt({ gt: 0 }),
+        validarCampos
+    ],
+    usuariosControlador.eliminar);
 
 export { router };
