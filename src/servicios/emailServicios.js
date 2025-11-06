@@ -1,16 +1,15 @@
 import nodemailer from 'nodemailer';
 
-// Configurar el transportador (ejemplo con Gmail)
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER, 
     pass: process.env.EMAIL_PASS 
-    }
+  } 
 });
 
 export const enviarEmailRecuperacion = async (email, token) => {
-  //const enlace = `http://localhost:3000/api/v1/autenticacion/restablecer-contrasenia?token=${token}`;
   const enlace = `http://localhost:5173/restablecer-contrasenia?token=${token}`;
   
   const mailOptions = {
@@ -53,6 +52,17 @@ export const enviarEmailRecuperacion = async (email, token) => {
 
 export const emailServicio = {
   async enviarCorreoConfirmacionReserva(email, reservaData) {
+    // DEBUG
+    console.log('🔍 Verificando datos del email:');
+    console.log('📧 Email destino:', email);
+    console.log('📦 Datos reserva:', reservaData);
+
+    // VERIFICAR QUE EL EMAIL NO SEA UNDEFINED
+    if (!email) {
+      console.error('ERROR: Email es undefined o vacío');
+      return false;
+    }
+
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
@@ -73,14 +83,16 @@ export const emailServicio = {
             <p><strong>Total:</strong> $${reservaData.importe_total}</p>
           </div>
 
+          ${reservaData.servicios && reservaData.servicios.length > 0 ? `
           <p style="margin-top: 20px;"><strong>Servicios contratados:</strong></p>
           <div style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
             <ul style="margin: 0; padding-left: 20px;">
               ${reservaData.servicios.map(servicio => `
-                <li>Servicio ${servicio.servicio_id} - $${servicio.importe}</li>
+                <li>Servicio ${servicio.servicio_id, servicio.descripcion} - $${servicio.importe}</li>
               `).join('')}
             </ul>
           </div>
+          ` : ''}
 
           <p style="margin-top: 20px;">Si tienes alguna pregunta, contáctanos.</p>
           
@@ -91,10 +103,22 @@ export const emailServicio = {
     };
 
     try {
-      await transporter.sendMail(mailOptions);
+      console.log('📨 Enviando email con opciones:', {
+        from: mailOptions.from,
+        to: mailOptions.to,
+        subject: mailOptions.subject
+      });
+
+      const result = await transporter.sendMail(mailOptions);
+      console.log('Email de confirmación enviado exitosamente a:', email);
       return true;
     } catch (error) {
-      console.error('Error enviando email:', error);
+      console.error('Error enviando email de confirmación:', error);
+      console.error('Detalles del error:', {
+        code: error.code,
+        command: error.command,
+        message: error.message
+      });
       return false;
     }
   },
