@@ -19,7 +19,9 @@ export const crearReserva = async (req, res) => {
     } = req.body;
 
   // Obtener el usuario completo usando el servicio
-const usuario = await UsuariosServicio.obtenerPorId(req.usuario_id); 
+// Obtener el usuario completo usando el servicio
+const usuariosServicio = new UsuariosServicio();
+const usuario = await usuariosServicio.obtenerPorId(req.usuario.id); // Cambiado de req.usuario_id a req.usuario.id
 const usuario_id = usuario.usuario_id;
 
     // 2. Validaciones básicas de campos obligatorios
@@ -134,7 +136,7 @@ const usuario_id = usuario.usuario_id;
 
     // 13. Enviar email de confirmación (código que ya funciona)
     const emailEnviado = await emailServicio.enviarCorreoConfirmacionReserva(
-      req.user.nombre_usuario, // email del usuario desde el token
+      req.usuario.nombre_usuario, // email del usuario desde el token
       {
         reserva_id: reservaId,
         ...nuevaReservaData,

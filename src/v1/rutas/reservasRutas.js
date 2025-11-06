@@ -49,7 +49,7 @@ router.post('/', verificarAutenticacion, autorizar([1, 2, 3]),
         // check('servicios.*.servicio_id', 'El ID del servicio es obligatorio y debe ser numérico').if(check('servicios').exists()).isInt({ gt: 0 }),
         // check('servicios.*.importe', 'El importe del servicio debe ser numérico y mayor o igual a 0').if(check('servicios').exists()).isFloat({ min: 0 }),
 
-        validarCampos
+        //validarCampos
     ],
     crearReserva
 );
