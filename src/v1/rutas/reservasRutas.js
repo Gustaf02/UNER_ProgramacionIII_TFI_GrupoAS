@@ -26,6 +26,218 @@ const router = Router();
 // URL: POST /api/v1/reservas
 // Roles: [1, 2, 3]
 // =======================================================
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Reserva:
+ *       type: object
+ *       required:
+ *         - fecha_reserva
+ *         - salon_id
+ *         - turno_id
+ *       properties:
+ *         fecha_reserva:
+ *           type: string
+ *           format: date
+ *           description: Fecha de la reserva en formato YYYY-MM-DD
+ *           example: "2024-12-15"
+ *         salon_id:
+ *           type: integer
+ *           description: ID del salón a reservar
+ *           example: 1
+ *         turno_id:
+ *           type: integer
+ *           description: ID del turno seleccionado
+ *           example: 2
+ *         foto_cumpleaniero:
+ *           type: string
+ *           nullable: true
+ *           description: URL de la foto del cumpleañero
+ *           example: "https://ejemplo.com/foto.jpg"
+ *         tematica:
+ *           type: string
+ *           nullable: true
+ *           description: Temática de la fiesta
+ *           example: "Cumpleaños de 15"
+ *         servicios:
+ *           type: array
+ *           description: Array de IDs de servicios (opcional)
+ *           items:
+ *             type: integer
+ *             example: 1
+ * 
+ *     RespuestaReservaCreada:
+ *       type: object
+ *       properties:
+ *         ok:
+ *           type: boolean
+ *           example: true
+ *         mensaje:
+ *           type: string
+ *         data:
+ *           type: object
+ *           properties:
+ *             reserva_id:
+ *               type: integer
+ *               example: 74
+ * 
+ *     Error:
+ *       type: object
+ *       properties:
+ *         ok:
+ *           type: boolean
+ *           example: false
+ *         mensaje:
+ *           type: string
+ */
+
+/**
+ * @swagger
+ * /api/v1/reservas:
+ *   post:
+ *     summary: Crear una nueva reserva
+ *     description: |
+ *       Crea una reserva de salón con servicios opcionales.
+ *       - El usuario_id se obtiene automáticamente del token de autenticación
+ *       - Los importes se calculan automáticamente con precios actuales
+ *       - Se valida disponibilidad del salón
+ *       - Se envía email de confirmación al usuario
+ *     tags: [Reservas]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Reserva'
+ *           examples:
+ *             ejemploCompleto:
+ *               summary: Reserva con servicios
+ *               value:
+ *                 fecha_reserva: "2024-12-15"
+ *                 salon_id: 1
+ *                 turno_id: 2
+ *                 tematica: "Cumpleaños de 15"
+ *                 foto_cumpleaniero: "https://ejemplo.com/foto.jpg"
+ *                 servicios: [1, 3]
+ *             ejemploSinServicios:
+ *               summary: Reserva básica
+ *               value:
+ *                 fecha_reserva: "2024-12-15"
+ *                 salon_id: 1
+ *                 turno_id: 2
+ *                 tematica: "Fiesta simple"
+ *     responses:
+ *       201:
+ *         description: Reserva creada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RespuestaReservaCreada'
+ *             examples:
+ *               exitoConEmail:
+ *                 value:
+ *                   ok: true
+ *                   mensaje: "Reserva creada exitosamente y notificación enviada por mail."
+ *                   data:
+ *                     reserva_id: 74
+ *               exitoSinEmail:
+ *                 value:
+ *                   ok: true
+ *                   mensaje: "Reserva creada exitosamente, pero hubo un problema al enviar la confirmación por email."
+ *                   data:
+ *                     reserva_id: 75
+ *       400:
+ *         description: Faltan campos obligatorios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               ok: false
+ *               mensaje: "Faltan campos obligatorios: fecha_reserva, salon_id, turno_id"
+ *       404:
+ *         description: Recurso no encontrado o inactivo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             examples:
+ *               salonNoEncontrado:
+ *                 value:
+ *                   ok: false
+ *                   mensaje: "El salón no existe o no está activo"
+ *               turnoNoEncontrado:
+ *                 value:
+ *                   ok: false
+ *                   mensaje: "El turno no existe o no está activo"
+ *               serviciosNoEncontrados:
+ *                 value:
+ *                   ok: false
+ *                   mensaje: "Uno o más servicios no existen o no están activos"
+ *       409:
+ *         description: Conflicto - El salón ya está reservado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               ok: false
+ *               mensaje: "El salón ya está reservado para esta fecha y turno"
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               ok: false
+ *               mensaje: "Error interno del servidor al crear la reserva"
+ * 
+ *   get:
+ *     summary: Obtener todas las reservas
+ *     description: Retorna la lista completa de reservas del sistema
+ *     tags: [Reservas]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de reservas obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               ok: false
+ *               mensaje: "Error interno del servidor al obtener las reservas"
+ */
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
 router.post('/', verificarAutenticacion, autorizar([1, 2, 3]),
     [
         // Validación de campos principales de la reserva
