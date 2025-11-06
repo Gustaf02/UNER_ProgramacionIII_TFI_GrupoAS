@@ -6,6 +6,7 @@ import { router as v1TurnosRutas } from "./v1/rutas/turnosRutas.js";
 import { v1ReservaRutas } from "./v1/rutas/reservasRutas.js";
 import { router as v1UsuariosRutas } from "./v1/rutas/usuariosRutas.js";
 import v1AutenticacionRutas from "./v1/rutas/autenticacionRutas.js";
+import { router as v1ReportesRutas } from "./v1/rutas/reportesRutas.js";
 import { manejadorErrores } from "./middlewares/manejadorErrores.js";
 import dotenv from "dotenv";
 import swaggerJSDoc from "swagger-jsdoc";
@@ -86,7 +87,8 @@ app.use("/api/v1/servicios", v1ServiciosRutas);
 app.use("/api/v1/autenticacion", v1AutenticacionRutas);
 app.use("/api/v1/reservas", v1ReservaRutas); 
 app.use("/api/v1/turnos", v1TurnosRutas);  
-app.use("/api/v1/usuarios", v1UsuariosRutas);  
+app.use("/api/v1/usuarios", v1UsuariosRutas); 
+app.use("/api/v1/reportes", v1ReportesRutas); 
 // Ruta de estado
 app.get("/estado", (req, res) => {
   res.json({ ok: true });
