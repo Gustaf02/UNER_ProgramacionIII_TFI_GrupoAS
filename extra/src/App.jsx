@@ -13,6 +13,7 @@ import UsuarioPerfilPages from "./pages/UsuarioPerfilPages.jsx";
 import RecuperarContraseniaPages from "./pages/RecuperarContraseniaPages.jsx";
 import RestablecerContraseniaPages from "./pages/RestablecerContraseniaPages.jsx";
 import ReservasPages from "./pages/ReservasPages.jsx";
+import ServiciosPages from "./pages/ServiciosPages.jsx"
 //import AdminPages from "./pages/AdminPages.jsx";
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
         <Route path="/restablecer-contrasenia" element={<RestablecerContraseniaPages/>}/>
         <Route path="/perfil" element={<UsuarioPerfilPages/>} />
         <Route path="/reservas" element={<ReservasPages/>} />
+        <Route path="/servicios" element={<ServiciosPages/>} />
 
       </Routes>
     </Router>
