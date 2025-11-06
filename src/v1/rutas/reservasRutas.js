@@ -29,25 +29,25 @@ const router = Router();
 router.post('/', verificarAutenticacion, autorizar([1, 2, 3]),
     [
         // Validación de campos principales de la reserva
-        check('fecha_reserva', 'La fecha de reserva es necesaria y debe ser válida (YYYY-MM-DD)').isISO8601().toDate(),
-        check('salon_id', 'El ID del salón es obligatorio y debe ser un número entero positivo').isInt({ gt: 0 }),
-        check('usuario_id', 'El ID del usuario es obligatorio y debe ser un número entero positivo').isInt({ gt: 0 }),
-        check('turno_id', 'El ID del turno es obligatorio y debe ser un número entero positivo').isInt({ gt: 0 }),
+        // check('fecha_reserva', 'La fecha de reserva es necesaria y debe ser válida (YYYY-MM-DD)').isISO8601().toDate(),
+        // check('salon_id', 'El ID del salón es obligatorio y debe ser un número entero positivo').isInt({ gt: 0 }),
+        // check('usuario_id', 'El ID del usuario es obligatorio y debe ser un número entero positivo').isInt({ gt: 0 }),
+        // check('turno_id', 'El ID del turno es obligatorio y debe ser un número entero positivo').isInt({ gt: 0 }),
         
         // Campos opcionales
-        check('foto_cumpleaniero', 'El campo foto_cumpleaniero debe ser una cadena').optional({ nullable: true }).isString(),
-        check('tematica', 'La temática debe ser una cadena').optional().isString(),
+        // check('foto_cumpleaniero', 'El campo foto_cumpleaniero debe ser una cadena').optional({ nullable: true }).isString(),
+        // check('tematica', 'La temática debe ser una cadena').optional().isString(),
 
         // Validación de importes
-        check('importe_salon', 'El importe del salón debe ser numérico y mayor o igual a 0').isFloat({ min: 0 }),
-        check('importe_total', 'El importe total debe ser numérico y mayor o igual a 0').isFloat({ min: 0 }),
+        // check('importe_salon', 'El importe del salón debe ser numérico y mayor o igual a 0').isFloat({ min: 0 }),
+        // check('importe_total', 'El importe total debe ser numérico y mayor o igual a 0').isFloat({ min: 0 }),
 
         // Validación del array de servicios
-        check('servicios', 'Los servicios deben ser un array de objetos').optional().isArray(),
+        // check('servicios', 'Los servicios deben ser un array de objetos').optional().isArray(),
         
         // Validación de la estructura de cada servicio si se proporciona el array
-        check('servicios.*.servicio_id', 'El ID del servicio es obligatorio y debe ser numérico').if(check('servicios').exists()).isInt({ gt: 0 }),
-        check('servicios.*.importe', 'El importe del servicio debe ser numérico y mayor o igual a 0').if(check('servicios').exists()).isFloat({ min: 0 }),
+        // check('servicios.*.servicio_id', 'El ID del servicio es obligatorio y debe ser numérico').if(check('servicios').exists()).isInt({ gt: 0 }),
+        // check('servicios.*.importe', 'El importe del servicio debe ser numérico y mayor o igual a 0').if(check('servicios').exists()).isFloat({ min: 0 }),
 
         validarCampos
     ],

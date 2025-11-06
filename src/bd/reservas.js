@@ -2,23 +2,76 @@ import { conexion } from "./conexion.js";
 
 export class ReservasModelo {
   // ====================================================================
-  // 1. CONSULTAS DE LECTURA (GET)
+  // 1. MÉTODOS DE VALIDACIÓN Y CONSULTA DE PRECIOS
   // ====================================================================
 
   /**
-   * Verifica si el slot de fecha, salón y turno ya está reservado.
-   * @param {string} fecha_reserva
-   * @param {number} salon_id
-   * @param {number} turno_id
-   * @param {number|null} excluirReservaId
-   * @returns {Promise<Array>}
+   * Obtiene el precio actual de un salón activo
    */
-  async verificarDisponibilidad(
-    fecha_reserva,
-    salon_id,
-    turno_id,
-    excluirReservaId = null
-  ) {
+  async obtenerPrecioSalon(salon_id) {
+    const sql = `SELECT salon_id, titulo, importe 
+                 FROM salones 
+                 WHERE salon_id = ? AND activo = 1`;
+    const [results] = await conexion.query(sql, [salon_id]);
+    return results[0];
+  }
+
+  /**
+   * Obtiene precios de múltiples servicios activos
+   */
+  async obtenerPreciosServicios(servicios_ids) {
+    if (!servicios_ids || servicios_ids.length === 0) {
+      return [];
+    }
+    
+    const placeholders = servicios_ids.map(() => '?').join(',');
+    const sql = `SELECT servicio_id, descripcion, importe 
+                 FROM servicios 
+                 WHERE servicio_id IN (${placeholders}) AND activo = 1`;
+    
+    const [results] = await conexion.query(sql, servicios_ids);
+    return results;
+  }
+
+  /**
+   * Verifica que un salón exista y esté activo
+   */
+  async verificarSalonActivo(salon_id) {
+    const sql = `SELECT salon_id FROM salones WHERE salon_id = ? AND activo = 1`;
+    const [results] = await conexion.query(sql, [salon_id]);
+    return results.length > 0;
+  }
+
+  /**
+   * Verifica que todos los servicios existan y estén activos
+   */
+  async verificarServiciosActivos(servicios_ids) {
+    if (!servicios_ids || servicios_ids.length === 0) {
+      return true;
+    }
+
+    const placeholders = servicios_ids.map(() => '?').join(',');
+    const sql = `SELECT COUNT(*) as count 
+                 FROM servicios 
+                 WHERE servicio_id IN (${placeholders}) AND activo = 1`;
+    
+    const [results] = await conexion.query(sql, servicios_ids);
+    return results[0].count === servicios_ids.length;
+  }
+
+  /**
+   * Verifica que el turno exista y esté activo
+   */
+  async verificarTurnoActivo(turno_id) {
+    const sql = `SELECT turno_id FROM turnos WHERE turno_id = ? AND activo = 1`;
+    const [results] = await conexion.query(sql, [turno_id]);
+    return results.length > 0;
+  }
+
+  /**
+   * Verifica si el slot de fecha, salón y turno ya está reservado.
+   */
+  async verificarDisponibilidad(fecha_reserva, salon_id, turno_id, excluirReservaId = null) {
     let sql = `SELECT reserva_id FROM reservas 
                WHERE fecha_reserva = ? AND salon_id = ? AND turno_id = ? AND activo = 1`;
     const values = [fecha_reserva, salon_id, turno_id];
@@ -32,9 +85,10 @@ export class ReservasModelo {
     return results;
   }
 
-  /**
-   * Obtiene todas las reservas activas con datos de salones, turnos y usuarios.
-   */
+  // ====================================================================
+  // 2. CONSULTAS DE LECTURA (GET) - MANTENIDOS
+  // ====================================================================
+
   async obtenerTodas() {
     const sql = `SELECT 
                     r.reserva_id, r.fecha_reserva, r.tematica, r.importe_total,
@@ -51,11 +105,6 @@ export class ReservasModelo {
     return reservas;
   }
 
-  /**
-   * Obtiene el detalle de una reserva por su ID, incluyendo todos los servicios asociados.
-   
-   * @param {number} reservaId
-   */
   async obtenerPorId(reservaId) {
     const sql = `SELECT
                     r.reserva_id, r.fecha_reserva, r.salon_id, r.usuario_id, 
@@ -84,13 +133,9 @@ export class ReservasModelo {
   }
 
   // ====================================================================
-  // 2. CONSULTAS DE ESCRITURA (CREATE, UPDATE, DELETE)
-  // Estas requieren el uso de Transacciones en la capa de Servicio.
+  // 3. CONSULTAS DE ESCRITURA (CREATE, UPDATE, DELETE) - MANTENIDOS
   // ====================================================================
 
-  /**
-   * Inserta una nueva reserva principal.
-   */
   async insertarReserva(datosReserva) {
     const {
       fecha_reserva,
@@ -124,10 +169,11 @@ export class ReservasModelo {
     return reservaResult.insertId;
   }
 
-  /**
-   * Inserta múltiples servicios para una reserva.
-   */
   async insertarServicios(reservaId, servicios) {
+    if (!servicios || servicios.length === 0) {
+      return;
+    }
+    
     const sql = `INSERT INTO reservas_servicios (reserva_id, servicio_id, importe) VALUES ?`;
     const serviciosValues = servicios.map((s) => [
       reservaId,
@@ -136,10 +182,6 @@ export class ReservasModelo {
     ]);
     await conexion.query(sql, [serviciosValues]);
   }
-
-  /**
-   * Actualiza la reserva de forma dinámica
-   */
 
   async actualizarReserva(reservaId, datosReserva) {
     const fieldsToUpdate = [];
@@ -171,30 +213,29 @@ export class ReservasModelo {
     return result.affectedRows;
   }
 
-  /**
-   * Elimina todos los servicios asociados a una reserva.
-   */
   async eliminarServicios(reservaId) {
     const sql = "DELETE FROM reservas_servicios WHERE reserva_id = ?";
     await conexion.query(sql, [reservaId]);
   }
 
-  /**
-   * Realiza el borrado lógico de una reserva.
-   */
   async eliminarReserva(reservaId) {
     const sql = `UPDATE reservas SET activo = 0, modificado = CURRENT_TIMESTAMP() WHERE reserva_id = ? AND activo = 1`;
     const [result] = await conexion.query(sql, [reservaId]);
     return result.affectedRows;
   }
 
-  // Métodos de Transacción (pueden ser llamados desde el Servicio)
+  // ====================================================================
+  // 4. MÉTODOS DE TRANSACCIÓN - MANTENIDOS
+  // ====================================================================
+
   async beginTransaction() {
     return conexion.beginTransaction();
   }
+
   async commit() {
     return conexion.commit();
   }
+
   async rollback() {
     return conexion.rollback();
   }

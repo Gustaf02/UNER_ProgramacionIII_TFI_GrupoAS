@@ -1,0 +1,22 @@
+#### Ejemplos para test ######
+
+POST http://localhost:3000/api/v1/autenticacion/registro
+
+{
+    "nombre":"walter",
+    "apellido":"frias",
+    "nombre_usuario":"531xtsulyts@gmail.com",
+    "contrasenia":"admin",
+    "tipo_usuario":"1"
+}
+
+Respuesta
+
+{
+    "exito": true,
+    "mensaje": "Usuario creado exitosamente",
+    "datos": {
+        "usuario_id": 28
+    }
+}
+

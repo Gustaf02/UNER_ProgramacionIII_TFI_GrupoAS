@@ -1,81 +1,242 @@
 import { reservaServicio } from "../servicios/reservaServicio.js"; // El servicio manejará la lógica de negocio y la DB
 import { emailServicio } from '../servicios/emailServicios.js';
-
 import { UsuariosServicio } from '../servicios/usuariosServicio.js';
+import { reservasModelo } from '../bd/reservas.js';
 
-export const crearReserva = async (req, res, next) => {
+
+export const crearReserva = async (req, res) => {
+  let connection;
+  
   try {
-    const { servicios, ...nuevaReservaData } = req.body;
+    // 1. Obtener datos del body y usuario del token
+    const {
+      fecha_reserva,
+      salon_id,
+      turno_id,
+      foto_cumpleaniero,
+      tematica,
+      servicios = []
+    } = req.body;
 
-    const reservaId = await reservaServicio.crear(nuevaReservaData, servicios);
+  // Obtener el usuario completo usando el servicio
+const usuario = await UsuariosServicio.obtenerPorId(req.usuario_id); 
+const usuario_id = usuario.usuario_id;
 
-    // Obtener el usuario para conseguir su email (nombre_usuario)
-    const usuariosServicio = new UsuariosServicio();
-    const usuario = await usuariosServicio.obtenerPorId(nuevaReservaData.usuario_id);
-
-    if (!usuario) {
-      return res.status(404).json({
+    // 2. Validaciones básicas de campos obligatorios
+    if (!fecha_reserva || !salon_id || !turno_id) {
+      return res.status(400).json({
         ok: false,
-        mensaje: 'Usuario no encontrado'
+        mensaje: 'Faltan campos obligatorios: fecha_reserva, salon_id, turno_id'
       });
     }
 
+    // 3. Iniciar transacción
+    connection = await reservasModelo.beginTransaction();
+
+    // 4. Validar que los recursos existan y estén activos
+    const salonActivo = await reservasModelo.verificarSalonActivo(salon_id);
+    if (!salonActivo) {
+      await reservasModelo.rollback();
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'El salón no existe o no está activo'
+      });
+    }
+
+    const turnoActivo = await reservasModelo.verificarTurnoActivo(turno_id);
+    if (!turnoActivo) {
+      await reservasModelo.rollback();
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'El turno no existe o no está activo'
+      });
+    }
+
+    if (servicios.length > 0) {
+      const serviciosActivos = await reservasModelo.verificarServiciosActivos(servicios);
+      if (!serviciosActivos) {
+        await reservasModelo.rollback();
+        return res.status(404).json({
+          ok: false,
+          mensaje: 'Uno o más servicios no existen o no están activos'
+        });
+      }
+    }
+
+    // 5. Verificar disponibilidad del salón
+    const reservasExistentes = await reservasModelo.verificarDisponibilidad(
+      fecha_reserva,
+      salon_id,
+      turno_id
+    );
+
+    if (reservasExistentes.length > 0) {
+      await reservasModelo.rollback();
+      return res.status(409).json({
+        ok: false,
+        mensaje: 'El salón ya está reservado para esta fecha y turno'
+      });
+    }
+
+    // 6. Obtener precios actuales
+    const salonData = await reservasModelo.obtenerPrecioSalon(salon_id);
+    const importeSalon = parseFloat(salonData.importe);
+    
+    let serviciosData = [];
+    let importeTotalServicios = 0;
+
+    if (servicios.length > 0) {
+      serviciosData = await reservasModelo.obtenerPreciosServicios(servicios);
+      importeTotalServicios = serviciosData.reduce((total, servicio) => {
+        return total + parseFloat(servicio.importe);
+      }, 0);
+    }
+
+    // 7. Calcular totales
+    const importeTotal = importeSalon + importeTotalServicios;
+
+    // 8. Preparar datos para la reserva
+    const datosReserva = {
+      fecha_reserva,
+      salon_id,
+      usuario_id,
+      turno_id,
+      foto_cumpleaniero: foto_cumpleaniero || null,
+      tematica: tematica || null,
+      importe_salon: importeSalon,
+      importe_total: importeTotal
+    };
+
+    // 9. Crear reserva en la base de datos
+    const reservaId = await reservasModelo.insertarReserva(datosReserva);
+
+    // 10. Insertar servicios si existen
+    if (serviciosData.length > 0) {
+      const serviciosParaInsertar = serviciosData.map(servicio => ({
+        servicio_id: servicio.servicio_id,
+        importe: parseFloat(servicio.importe)
+      }));
+      
+      await reservasModelo.insertarServicios(reservaId, serviciosParaInsertar);
+    }
+
+    // 11. Confirmar transacción
+    await reservasModelo.commit();
+
+    // 12. Preparar datos para el email
+    const nuevaReservaData = {
+      fecha_reserva,
+      salon_titulo: salonData.titulo,
+      importe_salon: importeSalon,
+      importe_total: importeTotal,
+      tematica: tematica || 'Sin temática específica'
+    };
+
+    // 13. Enviar email de confirmación (código que ya funciona)
     const emailEnviado = await emailServicio.enviarCorreoConfirmacionReserva(
-      usuario.nombre_usuario,
+      req.user.nombre_usuario, // email del usuario desde el token
       {
         reserva_id: reservaId,
         ...nuevaReservaData,
-        servicios: servicios
+        servicios: serviciosData
       }
     );
 
     if (!emailEnviado) {
-      return res.status(500).json({
-        ok: false,
-        mensaje: 'Error al enviar el email de confirmación'
+      // Aunque el email falle, la reserva ya se creó exitosamente
+      console.warn('Reserva creada pero falló el envío de email');
+      return res.status(201).json({
+        ok: true,
+        mensaje: "Reserva creada exitosamente, pero hubo un problema al enviar la confirmación por email.",
+        data: { reserva_id: reservaId },
       });
     }
 
+    // 14. Respuesta exitosa
     return res.status(201).json({
       ok: true,
       mensaje: "Reserva creada exitosamente y notificación enviada por mail.",
       data: { reserva_id: reservaId },
     });
+
   } catch (error) {
-    console.error("Error en crearReserva (Controlador):", error);
-
-    if (
-      error.message.includes("reservado para la fecha") ||
-      error.message.includes("ya está reservada")
-    ) {
-      return res.status(409).json({
-        ok: false,
-        mensaje: error.message,
-      });
+    // 15. Manejo de errores
+    if (connection) {
+      await reservasModelo.rollback();
     }
-
+    
+    console.error('Error en crearReserva:', error);
     return res.status(500).json({
       ok: false,
-      mensaje: "Error interno del servidor al crear reserva.",
+      mensaje: 'Error interno del servidor al crear la reserva',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
-/**
- * [R] READ: Obtiene todas las reservas activas (Listado).
- */
+
 export const obtenerReservas = async (req, res) => {
   try {
-    const reservas = await reservaServicio.obtenerTodos();
+    const reservas = await reservasModelo.obtenerTodas();
+    
+    return res.status(200).json({
+      ok: true,
+      data: reservas
+    });
+    
+  } catch (error) {
+    console.error('Error en obtenerReservas:', error);
+    return res.status(500).json({
+      ok: false,
+      mensaje: 'Error interno del servidor al obtener las reservas'
+    });
+  }
+};
+
+export const obtenerReservaPorId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    if (!id || isNaN(id)) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'ID de reserva inválido'
+      });
+    }
+
+    const reserva = await reservasModelo.obtenerPorId(parseInt(id));
+    
+    if (!reserva || reserva.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Reserva no encontrada'
+      });
+    }
+
+    // Estructurar los datos para una respuesta más organizada
+    const reservaData = {
+      ...reserva[0],
+      servicios: reserva.filter(item => item.servicio_id).map(item => ({
+        servicio_id: item.servicio_id,
+        descripcion: item.servicio_descripcion,
+        importe: item.servicio_importe
+      }))
+    };
+
+    // Eliminar duplicados de servicios en el objeto principal
+    delete reservaData.servicio_id;
+    delete reservaData.servicio_descripcion;
+    delete reservaData.servicio_importe;
 
     return res.status(200).json({
       ok: true,
-      data: reservas,
+      data: reservaData
     });
+    
   } catch (error) {
-    console.error("Error en obtenerReservas (Controlador):", error);
+    console.error('Error en obtenerReservaPorId:', error);
     return res.status(500).json({
       ok: false,
-      mensaje: "Error interno del servidor al obtener el listado de reservas.",
+      mensaje: 'Error interno del servidor al obtener la reserva'
     });
   }
 };
@@ -83,31 +244,7 @@ export const obtenerReservas = async (req, res) => {
 /**
  * [R] READ: Obtiene una reserva específica por su ID.
  */
-export const obtenerReservaPorId = async (req, res) => {
-  try {
-    const { reserva_id } = req.params;
 
-    const reserva = await reservaServicio.obtenerPorId(reserva_id);
-
-    if (!reserva) {
-      return res.status(404).json({
-        ok: false,
-        mensaje: `Reserva con ID ${reserva_id} no encontrada.`,
-      });
-    }
-
-    return res.status(200).json({
-      ok: true,
-      data: reserva,
-    });
-  } catch (error) {
-    console.error("Error en obtenerReservaPorId (Controlador):", error);
-    return res.status(500).json({
-      ok: false,
-      mensaje: "Error interno del servidor al obtener la reserva.",
-    });
-  }
-};
 
 /**
  * [U] UPDATE: Actualiza una reserva existente.
