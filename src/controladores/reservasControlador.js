@@ -197,16 +197,16 @@ export const obtenerReservas = async (req, res) => {
 
 export const obtenerReservaPorId = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { reserva_id } = req.params;
     
-    if (!id || isNaN(id)) {
+    if (!reserva_id || isNaN(reserva_id)) {
       return res.status(400).json({
         ok: false,
         mensaje: 'ID de reserva inválido'
       });
     }
 
-    const reserva = await reservasModelo.obtenerPorId(parseInt(id));
+    const reserva = await reservasModelo.obtenerPorId(parseInt(reserva_id));
     
     if (!reserva || reserva.length === 0) {
       return res.status(404).json({
