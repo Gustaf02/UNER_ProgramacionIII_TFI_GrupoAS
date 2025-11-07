@@ -13,7 +13,8 @@ import {
   obtenerReservas,
   obtenerReservaPorId,
   actualizarReserva,
-  eliminarReserva
+  eliminarReserva,
+  verMisReservas
 } from "../../controladores/reservasControlador.js"; 
 
 const router = Router();
@@ -141,6 +142,8 @@ router.post('/', verificarAutenticacion, autorizar([1, 2, 3]),
  *         description: Acceso denegado — Rol no autorizado
  */
 router.get('/', verificarAutenticacion, autorizar([1, 2]), obtenerReservas);
+
+router.get('/mis-reservas', verificarAutenticacion, verMisReservas);
 
 /**
  * @swagger

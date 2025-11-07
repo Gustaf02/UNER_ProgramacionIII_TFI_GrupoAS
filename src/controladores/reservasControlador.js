@@ -244,6 +244,45 @@ export const obtenerReservaPorId = async (req, res) => {
   }
 };
 
+export const verMisReservas = async (req, res) => {
+  try {
+    // 1. Obtener el usuario_id del JWT (igual que en crearReserva)
+    const usuariosServicio = new UsuariosServicio();
+    const usuario = await usuariosServicio.obtenerPorId(req.usuario.id);
+    const usuario_id = usuario.usuario_id;
+
+    // 2. Obtener las reservas del usuario desde el modelo
+    const reservas = await reservasModelo.obtenerReservasPorUsuario(usuario_id);
+
+    // 3. Formatear la respuesta según lo solicitado
+    const reservasFormateadas = reservas.map(reserva => ({
+      fecha: reserva.fecha_reserva,
+      turno: `${reserva.hora_desde} - ${reserva.hora_hasta}`,
+      nombre_salon: reserva.salon_nombre,
+      precio_salon: reserva.importe_salon,
+      servicios: reserva.servicios_nombres ? 
+        reserva.servicios_nombres.split(',').map((nombre, index) => ({
+          nombre: nombre.trim(),
+          precio: parseFloat(reserva.servicios_importes.split(',')[index])
+        })) : [],
+      importe_total: reserva.importe_total
+    }));
+
+    // 4. Enviar respuesta
+    return res.status(200).json({
+      ok: true,
+      data: reservasFormateadas
+    });
+
+  } catch (error) {
+    console.error('Error en verMisReservas:', error);
+    return res.status(500).json({
+      ok: false,
+      mensaje: 'Error interno del servidor al obtener las reservas'
+    });
+  }
+};
+
 /**
  * [R] READ: Obtiene una reserva específica por su ID.
  */

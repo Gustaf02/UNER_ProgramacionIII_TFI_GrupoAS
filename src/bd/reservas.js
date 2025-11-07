@@ -239,6 +239,36 @@ export class ReservasModelo {
   async rollback() {
     return conexion.rollback();
   }
+
+
+/**
+ * Obtiene todas las reservas de un usuario específico con información completa
+ */
+async obtenerReservasPorUsuario(usuario_id) {
+  const sql = `
+    SELECT 
+      r.reserva_id,
+      r.fecha_reserva,
+      r.importe_salon,
+      r.importe_total,
+      s.titulo as salon_nombre,
+      t.hora_desde,
+      t.hora_hasta,
+      GROUP_CONCAT(DISTINCT sv.descripcion) as servicios_nombres,
+      GROUP_CONCAT(DISTINCT rs.importe) as servicios_importes
+    FROM reservas r
+    INNER JOIN salones s ON r.salon_id = s.salon_id
+    INNER JOIN turnos t ON r.turno_id = t.turno_id
+    LEFT JOIN reservas_servicios rs ON r.reserva_id = rs.reserva_id
+    LEFT JOIN servicios sv ON rs.servicio_id = sv.servicio_id
+    WHERE r.usuario_id = ? AND r.activo = 1
+    GROUP BY r.reserva_id
+    ORDER BY r.fecha_reserva DESC, r.creado DESC
+  `;
+  
+  const [results] = await conexion.query(sql, [usuario_id]);
+  return results;
+}
 }
 
 export const reservasModelo = new ReservasModelo();
