@@ -40,18 +40,6 @@ export class UsuariosServicio {
         }
         return this.usuarios.modificar(usuario_id, datos);
     }
-    // modificar = async (usuarioDatos) => {
-    //     const existe = await this.usuarios.existeNombreUsuario(usuarioDatos.nombre_usuario, usuarioDatos.usuario_id);
-    //     if (existe) {
-    //         const error = new Error('El nombre de usuario esta en uso');
-    //         error.code = 'usuario_existe';
-    //         throw error;
-    //     }
-    //     if (usuarioDatos.contrasenia) {
-    //         usuarioDatos.contrasenia = encriptarContrasenia(usuarioDatos.contrasenia);
-    //     }
-    //     return this.usuarios.modificar(usuarioDatos);
-    // }
 
     eliminar = (usuario_id) => {
         return this.usuarios.eliminar(usuario_id);

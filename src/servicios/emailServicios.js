@@ -52,12 +52,7 @@ export const enviarEmailRecuperacion = async (email, token) => {
 
 export const emailServicio = {
   async enviarCorreoConfirmacionReserva(email, reservaData) {
-    // DEBUG
-    console.log('🔍 Verificando datos del email:');
-    console.log('📧 Email destino:', email);
-    console.log('📦 Datos reserva:', reservaData);
 
-    // VERIFICAR QUE EL EMAIL NO SEA UNDEFINED
     if (!email) {
       console.error('ERROR: Email es undefined o vacío');
       return false;
@@ -105,7 +100,7 @@ export const emailServicio = {
     };
 
     try {
-      console.log('📨 Enviando email con opciones:', {
+      console.log('Enviando email con opciones:', {
         from: mailOptions.from,
         to: mailOptions.to,
         subject: mailOptions.subject
