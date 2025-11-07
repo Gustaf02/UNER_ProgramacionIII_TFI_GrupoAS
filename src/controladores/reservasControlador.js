@@ -128,7 +128,8 @@ const usuario_id = usuario.usuario_id;
     const nuevaReservaData = {
       fecha_reserva,
       salon_titulo: salonData.titulo,
-      turno: salonData.turno,
+      salon_id: salon_id,  
+      turno_id: turno_id, 
       importe_salon: importeSalon,
       importe_total: importeTotal,
       tematica: tematica || 'Sin temática específica'
@@ -137,7 +138,7 @@ const usuario_id = usuario.usuario_id;
     // 13. Enviar email de confirmación
     console.log('Enviando email a:', usuario.nombre_usuario);
     const emailEnviado = await emailServicio.enviarCorreoConfirmacionReserva(
-      usuario.nombre_usuario, // email del usuario desde el token
+      usuario.nombre_usuario, // email del usuario desde el token [cite: 231]
       {
         reserva_id: reservaId,
         ...nuevaReservaData,

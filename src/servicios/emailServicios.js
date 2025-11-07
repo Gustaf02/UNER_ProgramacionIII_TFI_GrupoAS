@@ -76,8 +76,10 @@ export const emailServicio = {
           <div style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
             <p><strong>Número de reserva:</strong> #${reservaData.reserva_id}</p>
             <p><strong>Fecha:</strong> ${reservaData.fecha_reserva}</p>
-            <p><strong>Salón ID:</strong> ${reservaData.salon_id}</p>
+            
+            <p><strong>Salón:</strong> ${reservaData.salon_titulo} (ID: ${reservaData.salon_id})</p>
             <p><strong>Turno ID:</strong> ${reservaData.turno_id}</p>
+            
             <p><strong>Temática:</strong> ${reservaData.tematica}</p>
             <p><strong>Importe salón:</strong> $${reservaData.importe_salon}</p>
             <p><strong>Total:</strong> $${reservaData.importe_total}</p>
@@ -88,7 +90,7 @@ export const emailServicio = {
           <div style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
             <ul style="margin: 0; padding-left: 20px;">
               ${reservaData.servicios.map(servicio => `
-                <li>Servicio ${servicio.servicio_id, servicio.descripcion} - $${servicio.importe}</li>
+                <li>${servicio.descripcion} - $${servicio.importe}</li>
               `).join('')}
             </ul>
           </div>

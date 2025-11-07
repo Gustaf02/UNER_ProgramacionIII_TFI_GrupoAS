@@ -50,6 +50,7 @@ const swaggerOptions = {
     "./src/v1/rutas/reservasRutas.js", 
     "./src/v1/rutas/turnosRutas.js",
     "./src/v1/rutas/autenticacionRutas.js",
+    "./src/v1/rutas/reportesRutas.js"
   ],
 };
 

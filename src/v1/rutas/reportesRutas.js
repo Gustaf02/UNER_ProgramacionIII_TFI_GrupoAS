@@ -1,78 +1,100 @@
+// src/v1/rutas/reportesRutas.js
 import { Router } from "express";
-import { verificarAutenticacion } from "../../middlewares/autenticacionMiddleware.js";
-import autorizar from "../../middlewares/autorizarMiddleware.js";
-import { reporteReservasPDF, obtenerEstadisticas } from "../../controladores/reportesControlador.js"
+import { reporteReservasPDF, obtenerEstadisticas } from "../../controladores/reportesControlador.js";
 
 const router = Router();
 
-// =======================================================
-// SWAGGER TAGS
-// =======================================================
 /**
  * @swagger
  * tags:
- * name: Reportes y Estadísticas
- * description: Generación de informes (PDF, CSV, etc.) y acceso a estadísticas. Acceso exclusivo para Administrador.
+ *   - name: Reportes
+ *     description: Endpoints para la generación de reportes y estadísticas del sistema
  */
 
-// =======================================================
-// [R] READ: Generar Reporte de Reservas en PDF
-// Roles: [1]
-// =======================================================
 /**
  * @swagger
- * /api/v1/reportes/informe:
- * get:
- * summary: Generar Reporte de Reservas en PDF
- * description: Descarga un informe detallado de todas las reservas activas en formato PDF. Requiere rol Administrador (1).
- * tags: [Reportes y Estadísticas]
- * security:
- * - bearerAuth: []
- * responses:
- * 200:
- * description: Reporte PDF generado y listo para descargar.
- * content:
- * application/pdf:
- * schema:
- * type: string
- * format: binary
- * 403:
- * description: Acceso denegado (No es Administrador)
+ * /api/v1/reportes/pdf:
+ *   get:
+ *     summary: Generar y descargar reporte PDF de reservas
+ *     tags: [Reportes]
+ *     description: Genera un archivo PDF con el listado de reservas registradas.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Archivo PDF generado correctamente.
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       500:
+ *         description: Error interno del servidor al generar el reporte PDF.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Error interno del servidor al generar el reporte PDF."
  */
-router.get("/informe", verificarAutenticacion, autorizar([1]), reporteReservasPDF);
+router.get("/pdf", reporteReservasPDF);
 
-// =======================================================
-// [R] READ: Obtener Estadísticas
-// Roles: [1]
-// =======================================================
 /**
  * @swagger
  * /api/v1/reportes/estadisticas:
- * get:
- * summary: Obtener estadísticas generales
- * description: Retorna un informe estadístico generado mediante un procedimiento almacenado. Requiere rol Administrador (1).
- * tags: [Reportes y Estadísticas]
- * security:
- * - bearerAuth: []
- * responses:
- * 200:
- * description: Informe estadístico obtenido exitosamente.
- * content:
- * application/json:
- * schema:
- * type: object
- * properties:
- * ok: { type: boolean }
- * informe: 
- * type: object
- * description: Datos estadísticos del sp_reportes.
- * properties:
- * total_usuarios_activos: { type: integer, example: 5 }
- * total_reservas: { type: integer, example: 3 }
- * salon_mas_reservado: { type: string, example: "Principal" }
- * 403:
- * description: Acceso denegado
+ *   get:
+ *     summary: Obtener estadísticas generales del sistema
+ *     tags: [Reportes]
+ *     description: Retorna estadísticas globales como reservas totales, salones más utilizados y servicios más contratados.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Estadísticas obtenidas correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ *                 informe:
+ *                   type: object
+ *                   properties:
+ *                     reservasTotales:
+ *                       type: integer
+ *                       example: 120
+ *                     salonMasReservado:
+ *                       type: string
+ *                       example: "Salón Principal"
+ *                     servicioMasContratado:
+ *                       type: string
+ *                       example: "Catering Premium"
+ *                     ingresosTotales:
+ *                       type: number
+ *                       format: float
+ *                       example: 1250000.50
+ *       500:
+ *         description: Error interno del servidor al obtener estadísticas.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: false
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Error interno al obtener estadísticas."
  */
-router.get("/estadisticas", verificarAutenticacion, autorizar([1]), obtenerEstadisticas);
+router.get("/estadisticas", obtenerEstadisticas);
 
 export { router };
+
