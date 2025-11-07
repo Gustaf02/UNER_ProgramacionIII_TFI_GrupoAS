@@ -24,7 +24,7 @@ const router = Router();
  * /api/v1/reportes/informe:
  * get:
  * summary: Generar Reporte de Reservas en PDF
- * description: Descarga un informe detallado de todas las reservas activas en formato PDF. Requiere rol Administrador.
+ * description: Descarga un informe detallado de todas las reservas activas en formato PDF. Requiere rol Administrador (1).
  * tags: [Reportes y Estadísticas]
  * security:
  * - bearerAuth: []
@@ -50,7 +50,7 @@ router.get("/informe", verificarAutenticacion, autorizar([1]), reporteReservasPD
  * /api/v1/reportes/estadisticas:
  * get:
  * summary: Obtener estadísticas generales
- * description: Retorna un informe estadístico generado mediante un procedimiento almacenado. Requiere rol Administrador.
+ * description: Retorna un informe estadístico generado mediante un procedimiento almacenado. Requiere rol Administrador (1).
  * tags: [Reportes y Estadísticas]
  * security:
  * - bearerAuth: []

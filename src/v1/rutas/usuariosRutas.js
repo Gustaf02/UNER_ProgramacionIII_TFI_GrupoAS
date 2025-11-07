@@ -101,12 +101,12 @@ router.get('/:usuario_id', verificarAutenticacion, autorizar([1]),
  * - contrasenia
  * - tipo_usuario
  * properties:
- * nombre: { type: string, description: Nombre del usuario, requerido [cite: 710] }
- * apellido: { type: string, description: Apellido del usuario, requerido [cite: 710] }
- * nombre_usuario: { type: string, description: Email/Nombre de usuario único, formato email, requerido [cite: 710] }
- * contrasenia: { type: string, format: password, description: Contraseña (mínimo 8 caracteres), requerido [cite: 710] }
- * tipo_usuario: { type: integer, description: Tipo de usuario (1:Admin, 2:Empleado, 3:Cliente), requerido [cite: 711] }
- * celular: { type: string, description: Número de celular, opcional [cite: 712] }
+ * nombre: { type: string, description: Nombre del usuario, requerido }
+ * apellido: { type: string, description: Apellido del usuario, requerido }
+ * nombre_usuario: { type: string, description: Email/Nombre de usuario único, formato email, requerido }
+ * contrasenia: { type: string, format: password, description: Contraseña (mínimo 8 caracteres), requerido }
+ * tipo_usuario: { type: integer, description: Tipo de usuario (1:Admin, 2:Empleado, 3:Cliente), requerido }
+ * celular: { type: string, description: Número de celular, opcional }
  * foto: { type: string, description: URL o ruta de la foto, opcional/nullable }
  * responses:
  * 201:
@@ -163,10 +163,10 @@ router.post('/', verificarAutenticacion, autorizar([1]),
  * properties:
  * nombre: { type: string, description: Nombre del usuario, opcional }
  * apellido: { type: string, description: Apellido del usuario, opcional }
- * nombre_usuario: { type: string, description: Nuevo email único, opcional [cite: 716] }
- * contrasenia: { type: string, format: password, description: Nueva contraseña (mínimo 8 caracteres, se encripta con bcrypt), opcional [cite: 716] }
- * tipo_usuario: { type: integer, description: Nuevo tipo de usuario (1, 2 o 3), opcional [cite: 717] }
- * celular: { type: string, description: Número de celular, opcional [cite: 717] }
+ * nombre_usuario: { type: string, description: Nuevo email único, opcional }
+ * contrasenia: { type: string, format: password, description: Nueva contraseña (mínimo 8 caracteres, se encripta con bcrypt), opcional }
+ * tipo_usuario: { type: integer, description: Nuevo tipo de usuario (1, 2 o 3), opcional }
+ * celular: { type: string, description: Número de celular, opcional }
  * foto: { type: string, description: URL o ruta de la foto, opcional/nullable }
  * responses:
  * 200:

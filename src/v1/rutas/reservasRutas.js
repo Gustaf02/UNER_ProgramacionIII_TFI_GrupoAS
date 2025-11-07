@@ -18,14 +18,12 @@ import {
 
 const router = Router();
 
-// Se define los roles permitidos para las distintas operaciones:
-// 1: Admin, 2: Empleado, 3: Cliente (Usuario estándar)
-
-// =======================================================
-// [C] CREATE: Crear una nueva reserva
-// URL: POST /api/v1/reservas
-// Roles: [1, 2, 3]
-// =======================================================
+/**
+ * @swagger
+ * tags:
+ *   name: Reservas
+ *   description: Endpoints para gestionar reservas de salones
+ */
 
 /**
  * @swagger
@@ -41,56 +39,54 @@ const router = Router();
  *         fecha_reserva:
  *           type: string
  *           format: date
- *           description: Fecha de la reserva en formato YYYY-MM-DD
- *           example: "2024-12-15"
+ *           description: Fecha de la reserva (YYYY-MM-DD)
+ *           example: "2025-12-25"
  *         salon_id:
  *           type: integer
- *           description: ID del salón a reservar
+ *           description: ID del salón reservado
  *           example: 1
+ *         usuario_id:
+ *           type: integer
+ *           description: ID del usuario que realiza la reserva
+ *           example: 3
  *         turno_id:
  *           type: integer
- *           description: ID del turno seleccionado
+ *           description: ID del turno
  *           example: 2
  *         foto_cumpleaniero:
  *           type: string
  *           nullable: true
- *           description: URL de la foto del cumpleañero
  *           example: "https://ejemplo.com/foto.jpg"
  *         tematica:
  *           type: string
  *           nullable: true
- *           description: Temática de la fiesta
- *           example: "Cumpleaños de 15"
+ *           example: "Plim Plim"
+ *         importe_salon:
+ *           type: number
+ *           format: float
+ *           example: 95000.00
+ *         importe_total:
+ *           type: number
+ *           format: float
+ *           example: 155000.00
  *         servicios:
  *           type: array
- *           description: Array de IDs de servicios (opcional)
+ *           description: Servicios adicionales
  *           items:
- *             type: integer
- *             example: 1
- * 
- *     RespuestaReservaCreada:
- *       type: object
- *       properties:
- *         ok:
- *           type: boolean
- *           example: true
- *         mensaje:
- *           type: string
- *         data:
- *           type: object
- *           properties:
- *             reserva_id:
- *               type: integer
- *               example: 74
- * 
- *     Error:
- *       type: object
- *       properties:
- *         ok:
- *           type: boolean
- *           example: false
- *         mensaje:
- *           type: string
+ *             type: object
+ *             properties:
+ *               servicio_id:
+ *                 type: integer
+ *                 example: 1
+ *               importe:
+ *                 type: number
+ *                 format: float
+ *                 example: 15000.00
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  */
 
 /**
@@ -98,12 +94,7 @@ const router = Router();
  * /api/v1/reservas:
  *   post:
  *     summary: Crear una nueva reserva
- *     description: |
- *       Crea una reserva de salón con servicios opcionales.
- *       - El usuario_id se obtiene automáticamente del token de autenticación
- *       - Los importes se calculan automáticamente con precios actuales
- *       - Se valida disponibilidad del salón
- *       - Se envía email de confirmación al usuario
+ *     description: Permite crear una nueva reserva incluyendo servicios opcionales.
  *     tags: [Reservas]
  *     security:
  *       - bearerAuth: []
@@ -113,171 +104,70 @@ const router = Router();
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Reserva'
- *           examples:
- *             ejemploCompleto:
- *               summary: Reserva con servicios
- *               value:
- *                 fecha_reserva: "2024-12-15"
- *                 salon_id: 1
- *                 turno_id: 2
- *                 tematica: "Cumpleaños de 15"
- *                 foto_cumpleaniero: "https://ejemplo.com/foto.jpg"
- *                 servicios: [1, 3]
- *             ejemploSinServicios:
- *               summary: Reserva básica
- *               value:
- *                 fecha_reserva: "2024-12-15"
- *                 salon_id: 1
- *                 turno_id: 2
- *                 tematica: "Fiesta simple"
  *     responses:
  *       201:
  *         description: Reserva creada exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/RespuestaReservaCreada'
- *             examples:
- *               exitoConEmail:
- *                 value:
- *                   ok: true
- *                   mensaje: "Reserva creada exitosamente y notificación enviada por mail."
- *                   data:
- *                     reserva_id: 74
- *               exitoSinEmail:
- *                 value:
- *                   ok: true
- *                   mensaje: "Reserva creada exitosamente, pero hubo un problema al enviar la confirmación por email."
- *                   data:
- *                     reserva_id: 75
  *       400:
- *         description: Faltan campos obligatorios
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *             example:
- *               ok: false
- *               mensaje: "Faltan campos obligatorios: fecha_reserva, salon_id, turno_id"
- *       404:
- *         description: Recurso no encontrado o inactivo
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *             examples:
- *               salonNoEncontrado:
- *                 value:
- *                   ok: false
- *                   mensaje: "El salón no existe o no está activo"
- *               turnoNoEncontrado:
- *                 value:
- *                   ok: false
- *                   mensaje: "El turno no existe o no está activo"
- *               serviciosNoEncontrados:
- *                 value:
- *                   ok: false
- *                   mensaje: "Uno o más servicios no existen o no están activos"
+ *         description: Datos inválidos o incompletos
+ *       401:
+ *         description: Token faltante o inválido
  *       409:
- *         description: Conflicto - El salón ya está reservado
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *             example:
- *               ok: false
- *               mensaje: "El salón ya está reservado para esta fecha y turno"
+ *         description: El salón ya está reservado para esa fecha y turno
  *       500:
  *         description: Error interno del servidor
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *             example:
- *               ok: false
- *               mensaje: "Error interno del servidor al crear la reserva"
- * 
+ */
+router.post('/', verificarAutenticacion, autorizar([1, 2, 3]),
+    [
+        // Validaciones desactivadas temporalmente
+    ],
+    crearReserva
+);
+
+/**
+ * @swagger
+ * /api/v1/reservas:
  *   get:
  *     summary: Obtener todas las reservas
- *     description: Retorna la lista completa de reservas del sistema
+ *     description: Devuelve la lista completa de reservas registradas en el sistema.
  *     tags: [Reservas]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de reservas obtenida exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 ok:
- *                   type: boolean
- *                   example: true
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *       500:
- *         description: Error interno del servidor
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *             example:
- *               ok: false
- *               mensaje: "Error interno del servidor al obtener las reservas"
+ *       401:
+ *         description: Token inválido
+ *       403:
+ *         description: Acceso denegado — Rol no autorizado
  */
+router.get('/', verificarAutenticacion, autorizar([1, 2]), obtenerReservas);
 
 /**
  * @swagger
- * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
+ * /api/v1/reservas/{reserva_id}:
+ *   get:
+ *     summary: Obtener una reserva por ID
+ *     description: Retorna los detalles de una reserva específica.
+ *     tags: [Reservas]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: reserva_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la reserva a consultar
+ *     responses:
+ *       200:
+ *         description: Reserva encontrada exitosamente
+ *       404:
+ *         description: Reserva no encontrada
+ *       401:
+ *         description: Token inválido
+ *       403:
+ *         description: Rol no autorizado
  */
-router.post('/', verificarAutenticacion, autorizar([1, 2, 3]),
-    [
-        // Validación de campos principales de la reserva
-        // check('fecha_reserva', 'La fecha de reserva es necesaria y debe ser válida (YYYY-MM-DD)').isISO8601().toDate(),
-        // check('salon_id', 'El ID del salón es obligatorio y debe ser un número entero positivo').isInt({ gt: 0 }),
-        // check('usuario_id', 'El ID del usuario es obligatorio y debe ser un número entero positivo').isInt({ gt: 0 }),
-        // check('turno_id', 'El ID del turno es obligatorio y debe ser un número entero positivo').isInt({ gt: 0 }),
-        
-        // Campos opcionales
-        // check('foto_cumpleaniero', 'El campo foto_cumpleaniero debe ser una cadena').optional({ nullable: true }).isString(),
-        // check('tematica', 'La temática debe ser una cadena').optional().isString(),
-
-        // Validación de importes
-        // check('importe_salon', 'El importe del salón debe ser numérico y mayor o igual a 0').isFloat({ min: 0 }),
-        // check('importe_total', 'El importe total debe ser numérico y mayor o igual a 0').isFloat({ min: 0 }),
-
-        // Validación del array de servicios
-        // check('servicios', 'Los servicios deben ser un array de objetos').optional().isArray(),
-        
-        // Validación de la estructura de cada servicio si se proporciona el array
-        // check('servicios.*.servicio_id', 'El ID del servicio es obligatorio y debe ser numérico').if(check('servicios').exists()).isInt({ gt: 0 }),
-        // check('servicios.*.importe', 'El importe del servicio debe ser numérico y mayor o igual a 0').if(check('servicios').exists()).isFloat({ min: 0 }),
-
-        //validarCampos
-    ],
-    crearReserva
-);
-
-// =======================================================
-// [R] READ: Obtener todas las reservas activas (Listado)
-// URL: GET /api/v1/reservas
-// Roles: [1, 2]
-// =======================================================
-router.get('/', verificarAutenticacion, autorizar([1, 2]), obtenerReservas);
-
-// =======================================================
-// [R] READ: Obtener una reserva por su ID
-// URL: GET /api/v1/reservas/:reserva_id
-// Roles: [1, 2, 3]
-// =======================================================
 router.get('/:reserva_id', verificarAutenticacion, autorizar([1, 2, 3]),
     [
         check('reserva_id', 'El ID de la reserva es obligatorio y debe ser numérico').isInt({ gt: 0 }),
@@ -286,17 +176,43 @@ router.get('/:reserva_id', verificarAutenticacion, autorizar([1, 2, 3]),
     obtenerReservaPorId
 );
 
-// =======================================================
-// [U] UPDATE: Actualizar una reserva existente
-// URL: PUT /api/v1/reservas/:reserva_id
-// Roles: [1, 2]
-// =======================================================
+/**
+ * @swagger
+ * /api/v1/reservas/{reserva_id}:
+ *   put:
+ *     summary: Actualizar una reserva existente
+ *     description: Permite modificar una reserva existente (solo Admin o Empleado).
+ *     tags: [Reservas]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: reserva_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la reserva a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Reserva'
+ *     responses:
+ *       200:
+ *         description: Reserva actualizada correctamente
+ *       404:
+ *         description: Reserva no encontrada
+ *       400:
+ *         description: Datos inválidos
+ *       401:
+ *         description: Token inválido
+ *       403:
+ *         description: Acceso denegado
+ */
 router.put('/:reserva_id', verificarAutenticacion, autorizar([1, 2]),
     [
-        // Validación del parámetro de ruta
         check('reserva_id', 'El ID de la reserva es obligatorio y debe ser numérico').isInt({ gt: 0 }),
-        
-        // Validación de campos del body 
         check('fecha_reserva', 'La fecha de reserva debe ser válida').optional().isISO8601().toDate(),
         check('salon_id', 'El ID del salón debe ser numérico').optional().isInt({ gt: 0 }),
         check('usuario_id', 'El ID del usuario debe ser numérico').optional().isInt({ gt: 0 }),
@@ -304,23 +220,40 @@ router.put('/:reserva_id', verificarAutenticacion, autorizar([1, 2]),
         check('foto_cumpleaniero', 'El campo foto_cumpleaniero debe ser una cadena').optional({ nullable: true }).isString(),
         check('tematica', 'La temática debe ser una cadena').optional().isString(),
         check('importe_total', 'El importe total debe ser numérico y mayor o igual a 0').optional().isFloat({ min: 0 }),
-
-        // Validación del array de servicios para el PUT 
         check('servicios', 'Los servicios deben ser un array de objetos').optional().isArray(),
-       
-        check('servicios.*.servicio_id', 'El ID del servicio es obligatorio y debe ser numérico').if(check('servicios').exists()).isInt({ gt: 0 }),
+        check('servicios.*.servicio_id', 'El ID del servicio debe ser numérico').if(check('servicios').exists()).isInt({ gt: 0 }),
         check('servicios.*.importe', 'El importe del servicio debe ser numérico y mayor o igual a 0').if(check('servicios').exists()).isFloat({ min: 0 }),
-
         validarCampos
     ],
     actualizarReserva
 );
 
-// =======================================================
-// [D] DELETE: Eliminar una reserva (Borrado Lógico)
-// URL: DELETE /api/v1/reservas/:reserva_id
-// Roles: [1, 2]
-// =======================================================
+/**
+ * @swagger
+ * /api/v1/reservas/{reserva_id}:
+ *   delete:
+ *     summary: Eliminar una reserva
+ *     description: Elimina una reserva existente (solo Admin o Empleado).
+ *     tags: [Reservas]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: reserva_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la reserva a eliminar
+ *     responses:
+ *       200:
+ *         description: Reserva eliminada exitosamente
+ *       404:
+ *         description: Reserva no encontrada
+ *       401:
+ *         description: Token inválido
+ *       403:
+ *         description: Acceso denegado
+ */
 router.delete('/:reserva_id', verificarAutenticacion, autorizar([1, 2]),
     [
         check('reserva_id', 'El ID de la reserva es obligatorio y debe ser numérico').isInt({ gt: 0 }),
@@ -330,3 +263,4 @@ router.delete('/:reserva_id', verificarAutenticacion, autorizar([1, 2]),
 );
 
 export const v1ReservaRutas = router;
+
