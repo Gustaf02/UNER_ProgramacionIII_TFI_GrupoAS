@@ -255,6 +255,13 @@ export const verMisReservas = async (req, res) => {
     // 2. Obtener las reservas del usuario desde el modelo
     const reservas = await reservasModelo.obtenerReservasPorUsuario(usuario_id);
 
+    if (!reservas || reservas.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'No se encontraron reservas para este usuario'
+      });
+    }
+    
     // 3. Formatear la respuesta según lo solicitado
     const reservasFormateadas = reservas.map(reserva => ({
       fecha: reserva.fecha_reserva,
