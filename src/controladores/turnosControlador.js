@@ -7,7 +7,7 @@ export default class TurnosControlador {
         this.turnosServicio = new TurnosServicio();
     }
     
-    // BROWSE: Obtiene todos los turnos
+ 
     obtenerTodos = async (req, res, next) => {
         try{
             const turnos = await this.turnosServicio.obtenerTodos();
@@ -17,11 +17,11 @@ export default class TurnosControlador {
             });
         } catch (error){
             console.log('Error en GET /turnos', error);
-            next(error); // Pasa el error al manejador de errores global
+            next(error); 
         }
     }
 
-    // READ: Obtiene un turno por ID
+    
     obtenerPorId = async (req, res, next) => {
         try{
             const turno_id = req.params.turno_id;
@@ -44,7 +44,7 @@ export default class TurnosControlador {
         }
     }
 
-    // ADD: Crea un nuevo turno
+    
     crear = async(req, res, next) => {
         try{
             const {orden, hora_desde, hora_hasta} = req.body;
@@ -62,11 +62,11 @@ export default class TurnosControlador {
         }
     }
 
-    // EDIT: Modifica un turno existente 
+    
     modificar = async(req, res, next) => {
         try{
             const turno_id = req.params.turno_id;
-            // Verifica que el ID exista
+            
             const turnoExistente = await this.turnosServicio.obtenerPorId(turno_id);
             
             if (!turnoExistente){
@@ -78,15 +78,15 @@ export default class TurnosControlador {
 
             const {orden, hora_desde, hora_hasta} = req.body;
             
-            // Construye un objeto solo con los campos recibidos en el body
+            
             const datosParaModificar = {};
             
-            // Usamos 'if (campo !== undefined)' para incluir solo los campos que vinieron
+            
             if (orden !== undefined) datosParaModificar.orden = orden;
             if (hora_desde !== undefined) datosParaModificar.hora_desde = hora_desde;
             if (hora_hasta !== undefined) datosParaModificar.hora_hasta = hora_hasta;
 
-            // Valida que al menos un campo sea enviado
+           
             if (Object.keys(datosParaModificar).length === 0) {
                  return res.status(400).json({
                     'ok': false,
@@ -94,7 +94,7 @@ export default class TurnosControlador {
                 });
             }
             
-            // Llam al servicio con el ID y los datos
+            
             await this.turnosServicio.modificar(turno_id, datosParaModificar); 
             
             res.status(200).json({
@@ -107,13 +107,13 @@ export default class TurnosControlador {
         }
     }
 
-    // DELETE: Elimina (sof delete) un turno
+    
     eliminar = async(req, res, next) => {
         try{
             const turno_id = req.params.turno_id;
-            // Verifica que el turno exista
+            
             const turno = await this.turnosServicio.obtenerPorId(turno_id);
-            // Si no lo encuentra, retorna "no encontrado"
+            
             if (!turno){
                 return res.status(404).json({
                     'ok':false, 
@@ -122,12 +122,12 @@ export default class TurnosControlador {
             }
             
             await this.turnosServicio.eliminar(turno_id);
-            // Al encontralo lo elimina
+            
             res.status(200).json({
                 estado: true,
                 mensaje: 'Turno eliminado con exito'
             });
-        // Muestra el error
+        
         }catch(error){
             console.log('Error en DELETE /turnos/:turno_id',error);
             next(error);

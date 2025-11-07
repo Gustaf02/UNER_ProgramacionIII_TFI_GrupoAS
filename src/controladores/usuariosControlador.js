@@ -104,49 +104,6 @@ export default class UsuariosControlador {
             next(error);
         }
     }
-    // modificar = async(req, res, next) => {
-    //     try{
-    //         const usuario_id = req.params.usuario_id;
-    //         const usuario = await this.usuariosServicio.obtenerPorId(usuario_id);
-            
-    //         if (!usuario){
-    //             return res.status(404).json({
-    //                 'ok':false, 
-    //                 mensaje: 'usuario no encontrado'
-    //             });
-    //         }
-
-    //         const {nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto} = req.body;
-
-    //         // Se queda con el valor original si no se define uno nuevo
-    //         const usuarioDatos = {
-    //             nombre: nombre ?? usuario.nombre, 
-    //             apellido: apellido ?? usuario.apellido, 
-    //             nombre_usuario: nombre_usuario ?? usuario.nombre_usuario, 
-    //             tipo_usuario: tipo_usuario ?? usuario.tipo_usuario,
-    //             celular: celular ?? usuario.celular,
-    //             foto: foto ?? usuario.foto,
-    //             usuario_id};
-    //         if (contrasenia){
-    //             usuarioDatos.contrasenia = contrasenia;
-    //         }
-    //         await this.usuariosServicio.modificar(usuarioDatos);
-    //         res.status(200).json({
-    //             estado: true,
-    //             mensaje: 'Usuario modificado'
-    //         });
-
-    //     }catch(error){
-    //         console.log('Error en PUT /usuarios',error);
-    //         if (error.code === 'usuario_existe') {
-    //             return res.status(409).json({
-    //                 ok: false,
-    //                 mensaje: error.message
-    //             });
-    //         }
-    //         next(error);
-    //     }
-    // }
 
     eliminar = async(req, res, next) => {
         try{

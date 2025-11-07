@@ -8,7 +8,7 @@ export const crearReserva = async (req, res) => {
   let connection;
   
   try {
-    // 1. Obtener datos del body y usuario del token
+    
     const {
       fecha_reserva,
       salon_id,
@@ -18,12 +18,12 @@ export const crearReserva = async (req, res) => {
       servicios = []
     } = req.body;
 
-// Obtener el usuario completo usando el servicio
+
 const usuariosServicio = new UsuariosServicio();
 const usuario = await usuariosServicio.obtenerPorId(req.usuario.id);
 const usuario_id = usuario.usuario_id;
 
-    // 2. Validaciones básicas de campos obligatorios
+    
     if (!fecha_reserva || !salon_id || !turno_id) {
       return res.status(400).json({
         ok: false,
@@ -31,10 +31,10 @@ const usuario_id = usuario.usuario_id;
       });
     }
 
-    // 3. Iniciar transacción
+    
     connection = await reservasModelo.beginTransaction();
 
-    // 4. Validar que los recursos existan y estén activos
+    
     const salonActivo = await reservasModelo.verificarSalonActivo(salon_id);
     if (!salonActivo) {
       await reservasModelo.rollback();
@@ -64,7 +64,7 @@ const usuario_id = usuario.usuario_id;
       }
     }
 
-    // 5. Verificar disponibilidad del salón
+    
     const reservasExistentes = await reservasModelo.verificarDisponibilidad(
       fecha_reserva,
       salon_id,
@@ -79,7 +79,7 @@ const usuario_id = usuario.usuario_id;
       });
     }
 
-    // 6. Obtener precios actuales
+    
     const salonData = await reservasModelo.obtenerPrecioSalon(salon_id);
     const importeSalon = parseFloat(salonData.importe);
     
@@ -93,10 +93,10 @@ const usuario_id = usuario.usuario_id;
       }, 0);
     }
 
-    // 7. Calcular totales
+    
     const importeTotal = importeSalon + importeTotalServicios;
 
-    // 8. Preparar datos para la reserva
+    
     const datosReserva = {
       fecha_reserva,
       salon_id,
@@ -108,10 +108,10 @@ const usuario_id = usuario.usuario_id;
       importe_total: importeTotal
     };
 
-    // 9. Crear reserva en la base de datos
+    
     const reservaId = await reservasModelo.insertarReserva(datosReserva);
 
-    // 10. Insertar servicios si existen
+    
     if (serviciosData.length > 0) {
       const serviciosParaInsertar = serviciosData.map(servicio => ({
         servicio_id: servicio.servicio_id,
@@ -121,10 +121,10 @@ const usuario_id = usuario.usuario_id;
       await reservasModelo.insertarServicios(reservaId, serviciosParaInsertar);
     }
 
-    // 11. Confirmar transacción
+    
     await reservasModelo.commit();
 
-    // 12. Preparar datos para el email
+    
     const nuevaReservaData = {
       fecha_reserva,
       salon_titulo: salonData.titulo,
@@ -135,10 +135,10 @@ const usuario_id = usuario.usuario_id;
       tematica: tematica || 'Sin temática específica'
     };
 
-    // 13. Enviar email de confirmación
+    
     console.log('Enviando email a:', usuario.nombre_usuario);
     const emailEnviado = await emailServicio.enviarCorreoConfirmacionReserva(
-      usuario.nombre_usuario, // email del usuario desde el token [cite: 231]
+      usuario.nombre_usuario, 
       {
         reserva_id: reservaId,
         ...nuevaReservaData,
@@ -147,7 +147,7 @@ const usuario_id = usuario.usuario_id;
     );
 
     if (!emailEnviado) {
-      // Aunque el email falle, la reserva ya se creó exitosamente
+      
       console.warn('Reserva creada pero falló el envío de email');
       return res.status(201).json({
         ok: true,
@@ -156,7 +156,7 @@ const usuario_id = usuario.usuario_id;
       });
     }
 
-    // 14. Respuesta exitosa
+    
     return res.status(201).json({
       ok: true,
       mensaje: "Reserva creada exitosamente y notificación enviada por mail.",
@@ -164,7 +164,6 @@ const usuario_id = usuario.usuario_id;
     });
 
   } catch (error) {
-    // 15. Manejo de errores
     if (connection) {
       await reservasModelo.rollback();
     }
@@ -216,7 +215,7 @@ export const obtenerReservaPorId = async (req, res) => {
       });
     }
 
-    // Estructurar los datos para una respuesta más organizada
+    
     const reservaData = {
       ...reserva[0],
       servicios: reserva.filter(item => item.servicio_id).map(item => ({
@@ -226,7 +225,7 @@ export const obtenerReservaPorId = async (req, res) => {
       }))
     };
 
-    // Eliminar duplicados de servicios en el objeto principal
+    
     delete reservaData.servicio_id;
     delete reservaData.servicio_descripcion;
     delete reservaData.servicio_importe;
@@ -247,12 +246,12 @@ export const obtenerReservaPorId = async (req, res) => {
 
 export const verMisReservas = async (req, res) => {
   try {
-    // 1. Obtener el usuario_id del JWT (igual que en crearReserva)
+    
     const usuariosServicio = new UsuariosServicio();
     const usuario = await usuariosServicio.obtenerPorId(req.usuario.id);
     const usuario_id = usuario.usuario_id;
 
-    // 2. Obtener las reservas del usuario desde el modelo
+    
     const reservas = await reservasModelo.obtenerReservasPorUsuario(usuario_id);
 
     if (!reservas || reservas.length === 0) {
@@ -261,8 +260,8 @@ export const verMisReservas = async (req, res) => {
         mensaje: 'No se encontraron reservas para este usuario'
       });
     }
+
     
-    // 3. Formatear la respuesta según lo solicitado
     const reservasFormateadas = reservas.map(reserva => ({
       fecha: reserva.fecha_reserva,
       turno: `${reserva.hora_desde} - ${reserva.hora_hasta}`,
@@ -276,7 +275,7 @@ export const verMisReservas = async (req, res) => {
       importe_total: reserva.importe_total
     }));
 
-    // 4. Enviar respuesta
+    
     return res.status(200).json({
       ok: true,
       data: reservasFormateadas
@@ -291,14 +290,7 @@ export const verMisReservas = async (req, res) => {
   }
 };
 
-/**
- * [R] READ: Obtiene una reserva específica por su ID.
- */
 
-
-/**
- * [U] UPDATE: Actualiza una reserva existente.
- */
 export const actualizarReserva = async (req, res) => {
   try {
     const { reserva_id } = req.params;
@@ -345,9 +337,7 @@ export const actualizarReserva = async (req, res) => {
   }
 };
 
-/**
- * [D] DELETE: Elimina lógicamente una reserva (la marca como inactiva).
- */
+
 export const eliminarReserva = async (req, res) => {
   try {
     const { reserva_id } = req.params;

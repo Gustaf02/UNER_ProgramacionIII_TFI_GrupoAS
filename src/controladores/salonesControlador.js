@@ -89,38 +89,7 @@ export default class SalonesControlador {
             next(error);
         }
     }
-    // modificar = async(req, res, next) => {
-    //     try{
-    //         const salon_id = req.params.salon_id;
-    //         const salon = await this.salonesServicio.obtenerPorId(salon_id);
-            
-    //         if (!salon){
-    //             return res.status(404).json({
-    //                 'ok':false, 
-    //                 mensaje: 'salon no encontrado'
-    //             });
-    //         }
 
-    //         const {titulo, direccion, capacidad, importe} = req.body;
-
-    //         // Se queda con el valor original si no se define uno nuevo
-    //         const salonDatos = {
-    //             titulo: titulo ?? salon.titulo, 
-    //             direccion: direccion ?? salon.direccion, 
-    //             capacidad: capacidad ?? salon.capacidad, 
-    //             importe: importe ?? salon.importe, 
-    //             salon_id};
-    //         await this.salonesServicio.modificar(salonDatos);
-    //         res.status(200).json({
-    //             estado: true,
-    //             mensaje: 'Salon modificado'
-    //         });
-
-    //     }catch(error){
-    //         console.log('Error en PUT /salones',error);
-    //         next(error);
-    //     }
-    // }
 
     eliminar = async(req, res, next) => {
         try{
