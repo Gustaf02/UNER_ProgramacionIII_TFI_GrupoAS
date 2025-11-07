@@ -1,0 +1,1055 @@
+{
+  "name": "Prog3",
+  "version": "1",
+  "items": [
+    {
+      "type": "http",
+      "name": "Crear Salones",
+      "filename": "Crear Salones.bru",
+      "seq": 6,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/salones",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\"titulo\": \"Salón Demo\", \"direccion\": \"Av. Test 100\", \"capacidad\": 60, \"importe\": 80000.00}",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVzdWFyaW8iOiJhenVjZW5hcHJpZXRvNzc3QGdtYWlsLmNvbSIsInRpcG8iOjEsIm5vbWJyZSI6IkF6dWNlbmEiLCJpYXQiOjE3NjI1NTMxNTgsImV4cCI6MTc2MjU4MTk1OH0.V08dRs31dOoHmnJ6Ye1wrmUU0Y7AFvARGXBXJXNuvH0"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Crear Servicios",
+      "filename": "Crear Servicios.bru",
+      "seq": 16,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/servicios",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\"descripcion\": \"Show de Burbujas\", \"importe\": 18000.00}",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Crear Turnos",
+      "filename": "Crear Turnos.bru",
+      "seq": 11,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/turnos",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{ \"orden\": 4, \"hora_desde\": \"21:00:00\", \"hora_hasta\": \"23:00:00\" }\n",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXN1YXJpbyI6ImNsYWp1YUBjb3JyZW8uY29tIiwidGlwbyI6MSwibm9tYnJlIjoiQ2xhdWRpYSIsImlhdCI6MTc2MTc0MDU5MywiZXhwIjoxNzYxNzY5MzkzfQ.-0y68bAD215MdrNt0-ZH7UjjW5ofIeYv7CwuCp11yw0"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Leer Salones",
+      "filename": "Leer Salones.bru",
+      "seq": 4,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1//salones/1",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Listar Servicios",
+      "filename": "Listar Servicios.bru",
+      "seq": 14,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/servicios",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Borrar Salones",
+      "filename": "Borrar Salones.bru",
+      "seq": 8,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/salones/5",
+        "method": "DELETE",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Borrar Servicios",
+      "filename": "Borrar Servicios.bru",
+      "seq": 18,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/servicios/5",
+        "method": "DELETE",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Borrar Turnos",
+      "filename": "Borrar Turnos.bru",
+      "seq": 13,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/turnos/3",
+        "method": "DELETE",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXN1YXJpbyI6ImNsYWp1YUBjb3JyZW8uY29tIiwidGlwbyI6MSwibm9tYnJlIjoiQ2xhdWRpYSIsImlhdCI6MTc2MTcxNjA5NiwiZXhwIjoxNzYxNzQ0ODk2fQ.aKRQmY2nAViWp17vTwVM3aKcjsKCwejYJlw2Uvtz5NM"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Modificar Salones",
+      "filename": "Modificar Salones.bru",
+      "seq": 7,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/salones/5",
+        "method": "PUT",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\"titulo\": \"Salón Modificado\", \"capacidad\": 75}",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Modificar Servicios",
+      "filename": "Modificar Servicios.bru",
+      "seq": 17,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/servicios/5",
+        "method": "PUT",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\"importe\": 20000.00}",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Edit Turnos",
+      "filename": "Edit Turnos.bru",
+      "seq": 12,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/turnos/1",
+        "method": "PUT",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{ \"hora_hasta\": \"20:30:00\" }",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXN1YXJpbyI6ImNsYWp1YUBjb3JyZW8uY29tIiwidGlwbyI6MSwibm9tYnJlIjoiQ2xhdWRpYSIsImlhdCI6MTc2MTcxNjA5NiwiZXhwIjoxNzYxNzQ0ODk2fQ.aKRQmY2nAViWp17vTwVM3aKcjsKCwejYJlw2Uvtz5NM"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Iniciar sesión",
+      "filename": "Iniciar sesión.bru",
+      "seq": 2,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/autenticacion/login",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"nombre_usuario\":\"azucenaprieto777@gmail.com\",\n  \"contrasenia\":\"tpprogramacion3\"\n}\n\n\n\n",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVzdWFyaW8iOiJhenVjZW5hcHJpZXRvNzc3QGdtYWlsLmNvbSIsInRpcG8iOjEsIm5vbWJyZSI6IkF6dWNlbmEiLCJpYXQiOjE3NjI1NTMxMTgsImV4cCI6MTc2MjU4MTkxOH0.2a-Ec4P2vR-JqCmQREKQOVoLT4NSuUtHKQTb78o8_do"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Leer Servicios",
+      "filename": "Leer Servicios.bru",
+      "seq": 15,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/servicios/1",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Leer Turnos",
+      "filename": "Leer Turnos.bru",
+      "seq": 10,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/turnos/3",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Recuperar Contrasenia",
+      "filename": "Recuperar Contrasenia.bru",
+      "seq": 19,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/autenticacion/recuperar-contrasenia",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\"nombre_usuario\": \"azucenaprieto777@gmail.com\"}",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Registro",
+      "filename": "Registro.bru",
+      "seq": 1,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/autenticacion/registro",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"nombre\": \"Azucena\",\n  \"apellido\": \"Prieto\",\n  \"nombre_usuario\": \"azucenaprieto777@gmail.com\",\n  \"contrasenia\": \"miContraseña123\",\n  \"tipo_usuario\": 1,\n  \"celular\": \"+1234567890\",\n  \"foto\": \"fotos/juan.jpg\",\n  \"activo\": 1\n}\n\n\n\n",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Restablecer Contrasenia",
+      "filename": "Restablecer Contrasenia.bru",
+      "seq": 20,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/autenticacion/restablecer-contrasenia",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoxMCwiYWNjaW9uIjoicGFzc3dvcmRfcmVzZXQiLCJ0aW1lc3RhbXAiOjE3NjI0OTUwNjQ1MTksImlhdCI6MTc2MjQ5NTA2NCwiZXhwIjoxNzYyNDk4NjY0fQ.ch-pQbKLfnkQTcxiSPeJzAowHr18imSQiZmQA1bXAPA\",\n\"nueva_contrasenia\": \"tpprogramacion3\"}",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Listar Salones",
+      "filename": "Listar Salones.bru",
+      "seq": 3,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/salones",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Crear Reservas",
+      "filename": "Crear Reservas.bru",
+      "seq": 21,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/reservas",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "\"{\n    \n  \"\"fecha_reserva\"\": \"\"2025-12-25\"\",\n  \"\"salon_id\"\": 1,\n  \"\"turno_id\"\": 2,\n  \"\"foto_cumpleaniero\"\": \"\"https://ejemplo.com/foto.jpg\"\",\n  \"\"tematica\"\": \"\"Plim Plim\"\",\n  \n\n  \"\"servicios\"\": [\n   1, 2\n  ]\n}\"",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "bearer",
+          "bearer": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVzdWFyaW8iOiJhenVjZW5hcHJpZXRvNzc3QGdtYWlsLmNvbSIsInRpcG8iOjEsIm5vbWJyZSI6IkF6dWNlbmEiLCJpYXQiOjE3NjI1NTMxNTgsImV4cCI6MTc2MjU4MTk1OH0.V08dRs31dOoHmnJ6Ye1wrmUU0Y7AFvARGXBXJXNuvH0"
+          }
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Listar Turnos",
+      "filename": "Listar Turnos.bru",
+      "seq": 21,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/turnos",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Listar Reservas",
+      "filename": "Listar Reservas.bru",
+      "seq": 21,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/reservas",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Leer Reservas",
+      "filename": "Leer Reservas.bru",
+      "seq": 22,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/reservas/1",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Modificar Reservas",
+      "filename": "Modificar Reservas.bru",
+      "seq": 23,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/reservas/1",
+        "method": "PUT",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\"fecha_reserva\": \"2026-05-20\", \"tematica\": \"Disney\"}",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Borrar Reservas",
+      "filename": "Borrar Reservas.bru",
+      "seq": 24,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/reservas/1",
+        "method": "DELETE",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Listar Usuarios",
+      "filename": "Listar Usuarios.bru",
+      "seq": 25,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/usuarios",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Leer Usuarios",
+      "filename": "Leer Usuarios.bru",
+      "seq": 26,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/usuarios/2",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Crear usuarios",
+      "filename": "Crear usuarios.bru",
+      "seq": 27,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/usuarios",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\"nombre\": \"Nuevo\", \"apellido\": \"Empleado\", \"nombre_usuario\": \"nuevo.emp@correo.com\", \"contrasenia\": \"password_segura\", \"tipo_usuario\": 2}",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "PUT Modificar Usuarios",
+      "filename": "PUT Modificar Usuarios.bru",
+      "seq": 28,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/usuarios/3",
+        "method": "PUT",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\"tipo_usuario\": 1}",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Borrar Usuarios",
+      "filename": "Borrar Usuarios.bru",
+      "seq": 29,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1/usuarios/3",
+        "method": "DELETE",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Estadísticas",
+      "filename": "Estadísticas.bru",
+      "seq": 30,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1//reportes/estadisticas",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Reportes PDF",
+      "filename": "Reportes PDF.bru",
+      "seq": 31,
+      "settings": {
+        "encodeUrl": true,
+        "timeout": 0
+      },
+      "tags": [],
+      "request": {
+        "url": "http://localhost:3000/api/v1//reportes/informe",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": [],
+          "file": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "docs": "",
+        "auth": {
+          "mode": "inherit"
+        }
+      }
+    }
+  ],
+  "activeEnvironmentUid": "g6v1bvE2VqEav7gLIatkl",
+  "environments": [
+    {
+      "variables": [
+        {
+          "name": "apiurl",
+          "value": "http://localhost:3000/api/v1/",
+          "enabled": true,
+          "secret": false,
+          "type": "text"
+        }
+      ],
+      "name": "{ApiUrl}"
+    }
+  ],
+  "brunoConfig": {
+    "version": "1",
+    "name": "Prog3",
+    "type": "collection",
+    "ignore": [
+      "node_modules",
+      ".git"
+    ],
+    "size": 0.0081634521484375,
+    "filesCount": 21
+  }
+}

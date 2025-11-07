@@ -1,0 +1,1042 @@
+{
+  "info": {
+    "name": "Prog3",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Crear Salones",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVzdWFyaW8iOiJhenVjZW5hcHJpZXRvNzc3QGdtYWlsLmNvbSIsInRpcG8iOjEsIm5vbWJyZSI6IkF6dWNlbmEiLCJpYXQiOjE3NjI1NTMxNTgsImV4cCI6MTc2MjU4MTk1OH0.V08dRs31dOoHmnJ6Ye1wrmUU0Y7AFvARGXBXJXNuvH0",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/salones",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "salones"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"titulo\": \"Salón Demo\", \"direccion\": \"Av. Test 100\", \"capacidad\": 60, \"importe\": 80000.00}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Crear Servicios",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/servicios",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "servicios"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"descripcion\": \"Show de Burbujas\", \"importe\": 18000.00}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Crear Turnos",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXN1YXJpbyI6ImNsYWp1YUBjb3JyZW8uY29tIiwidGlwbyI6MSwibm9tYnJlIjoiQ2xhdWRpYSIsImlhdCI6MTc2MTc0MDU5MywiZXhwIjoxNzYxNzY5MzkzfQ.-0y68bAD215MdrNt0-ZH7UjjW5ofIeYv7CwuCp11yw0",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/turnos",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "turnos"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"orden\": 4, \"hora_desde\": \"21:00:00\", \"hora_hasta\": \"23:00:00\" }\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Leer Salones",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/salones/1",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "salones",
+            "1"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Listar Servicios",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/servicios",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "servicios"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Borrar Salones",
+      "event": [],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/salones/5",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "salones",
+            "5"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Borrar Servicios",
+      "event": [],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/servicios/5",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "servicios",
+            "5"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Borrar Turnos",
+      "event": [],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXN1YXJpbyI6ImNsYWp1YUBjb3JyZW8uY29tIiwidGlwbyI6MSwibm9tYnJlIjoiQ2xhdWRpYSIsImlhdCI6MTc2MTcxNjA5NiwiZXhwIjoxNzYxNzQ0ODk2fQ.aKRQmY2nAViWp17vTwVM3aKcjsKCwejYJlw2Uvtz5NM",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/turnos/3",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "turnos",
+            "3"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Modificar Salones",
+      "event": [],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/salones/5",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "salones",
+            "5"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"titulo\": \"Salón Modificado\", \"capacidad\": 75}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Modificar Servicios",
+      "event": [],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/servicios/5",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "servicios",
+            "5"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"importe\": 20000.00}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Edit Turnos",
+      "event": [],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXN1YXJpbyI6ImNsYWp1YUBjb3JyZW8uY29tIiwidGlwbyI6MSwibm9tYnJlIjoiQ2xhdWRpYSIsImlhdCI6MTc2MTcxNjA5NiwiZXhwIjoxNzYxNzQ0ODk2fQ.aKRQmY2nAViWp17vTwVM3aKcjsKCwejYJlw2Uvtz5NM",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/turnos/1",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "turnos",
+            "1"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"hora_hasta\": \"20:30:00\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Iniciar sesión",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVzdWFyaW8iOiJhenVjZW5hcHJpZXRvNzc3QGdtYWlsLmNvbSIsInRpcG8iOjEsIm5vbWJyZSI6IkF6dWNlbmEiLCJpYXQiOjE3NjI1NTMxMTgsImV4cCI6MTc2MjU4MTkxOH0.2a-Ec4P2vR-JqCmQREKQOVoLT4NSuUtHKQTb78o8_do",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/autenticacion/login",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "autenticacion",
+            "login"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre_usuario\":\"azucenaprieto777@gmail.com\",\n  \"contrasenia\":\"tpprogramacion3\"\n}\n\n\n\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Leer Servicios",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/servicios/1",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "servicios",
+            "1"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Leer Turnos",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/turnos/3",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "turnos",
+            "3"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Recuperar Contrasenia",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/autenticacion/recuperar-contrasenia",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "autenticacion",
+            "recuperar-contrasenia"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre_usuario\": \"azucenaprieto777@gmail.com\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Registro",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/autenticacion/registro",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "autenticacion",
+            "registro"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Azucena\",\n  \"apellido\": \"Prieto\",\n  \"nombre_usuario\": \"azucenaprieto777@gmail.com\",\n  \"contrasenia\": \"miContraseña123\",\n  \"tipo_usuario\": 1,\n  \"celular\": \"+1234567890\",\n  \"foto\": \"fotos/juan.jpg\",\n  \"activo\": 1\n}\n\n\n\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Restablecer Contrasenia",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/autenticacion/restablecer-contrasenia",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "autenticacion",
+            "restablecer-contrasenia"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoxMCwiYWNjaW9uIjoicGFzc3dvcmRfcmVzZXQiLCJ0aW1lc3RhbXAiOjE3NjI0OTUwNjQ1MTksImlhdCI6MTc2MjQ5NTA2NCwiZXhwIjoxNzYyNDk4NjY0fQ.ch-pQbKLfnkQTcxiSPeJzAowHr18imSQiZmQA1bXAPA\",\n\"nueva_contrasenia\": \"tpprogramacion3\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Listar Salones",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImFsYmxvcEBjb3JyZW8uY29tIiwidGlwbyI6Mywibm9tYnJlIjoiQWxiZXJ0byIsImlhdCI6MTc2MTcxMjM0OCwiZXhwIjoxNzYxNzQxMTQ4fQ._4ZsSOHvcWNii-isgPrlnkxeGBrBVDjhlDokPzdljrU",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/salones",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "salones"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Crear Reservas",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVzdWFyaW8iOiJhenVjZW5hcHJpZXRvNzc3QGdtYWlsLmNvbSIsInRpcG8iOjEsIm5vbWJyZSI6IkF6dWNlbmEiLCJpYXQiOjE3NjI1NTMxNTgsImV4cCI6MTc2MjU4MTk1OH0.V08dRs31dOoHmnJ6Ye1wrmUU0Y7AFvARGXBXJXNuvH0",
+            "type": "string"
+          }
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/reservas",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "reservas"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "\"{\n    \n  \"\"fecha_reserva\"\": \"\"2025-12-25\"\",\n  \"\"salon_id\"\": 1,\n  \"\"turno_id\"\": 2,\n  \"\"foto_cumpleaniero\"\": \"\"https://ejemplo.com/foto.jpg\"\",\n  \"\"tematica\"\": \"\"Plim Plim\"\",\n  \n\n  \"\"servicios\"\": [\n   1, 2\n  ]\n}\"",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Listar Turnos",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/turnos",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "turnos"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Listar Reservas",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/reservas",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "reservas"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Leer Reservas",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/reservas/1",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "reservas",
+            "1"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Modificar Reservas",
+      "event": [],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/reservas/1",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "reservas",
+            "1"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"fecha_reserva\": \"2026-05-20\", \"tematica\": \"Disney\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Borrar Reservas",
+      "event": [],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/reservas/1",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "reservas",
+            "1"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Listar Usuarios",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/usuarios",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "usuarios"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Leer Usuarios",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/usuarios/2",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "2"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Crear usuarios",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/usuarios",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "usuarios"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Nuevo\", \"apellido\": \"Empleado\", \"nombre_usuario\": \"nuevo.emp@correo.com\", \"contrasenia\": \"password_segura\", \"tipo_usuario\": 2}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "PUT Modificar Usuarios",
+      "event": [],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/usuarios/3",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "3"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"tipo_usuario\": 1}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Borrar Usuarios",
+      "event": [],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/usuarios/3",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "3"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Estadísticas",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/reportes/estadisticas",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "reportes",
+            "estadisticas"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "Reportes PDF",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/reportes/informe",
+          "protocol": "http",
+          "host": [
+            "localhost:3000"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "reportes",
+            "informe"
+          ],
+          "query": [],
+          "variable": []
+        }
+      }
+    }
+  ],
+  "variable": []
+}
