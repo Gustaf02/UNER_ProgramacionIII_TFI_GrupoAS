@@ -32,19 +32,6 @@ export default class Usuarios {
 
         await conexion.execute(sql, parametros);
     }
-    // modificar = async(usuarioDatos) => {
-    //     const {nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto, usuario_id} = usuarioDatos;
-    //     let sql, valores;
-    //     if (contrasenia){
-    //         sql = 'UPDATE usuarios SET nombre = ?, apellido = ?, nombre_usuario = ?, contrasenia = ?, tipo_usuario = ?, celular = ?, foto =? WHERE usuario_id = ?';
-    //         valores = [nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto, usuario_id];
-    //     }else{
-    //         sql = 'UPDATE usuarios SET nombre = ?, apellido = ?, nombre_usuario = ?, tipo_usuario = ?, celular = ?, foto =? WHERE usuario_id = ?';
-    //         valores = [nombre, apellido, nombre_usuario, tipo_usuario, celular, foto, usuario_id];
-    //     }
-        
-    //     await conexion.execute(sql, valores);
-    // }
 
     eliminar = async(usuario_id) => {
         const sql = 'UPDATE usuarios SET activo = 0 WHERE usuario_id = ?';

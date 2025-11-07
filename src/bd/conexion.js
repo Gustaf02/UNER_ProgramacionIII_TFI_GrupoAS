@@ -8,8 +8,4 @@ export const conexion = await mysql.createConnection({
     user: process.env.DB_USER,
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD
-    /**
-     * en workben solo puedo entrar con pass 
-     * en cada push voy comentando asi lo les jode
-     */
 });

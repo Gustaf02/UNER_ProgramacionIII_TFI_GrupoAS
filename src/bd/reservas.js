@@ -1,13 +1,8 @@
 import { conexion } from "./conexion.js";
 
 export class ReservasModelo {
-  // ====================================================================
-  // 1. MÉTODOS DE VALIDACIÓN Y CONSULTA DE PRECIOS
-  // ====================================================================
 
-  /**
-   * Obtiene el precio actual de un salón activo
-   */
+
   async obtenerPrecioSalon(salon_id) {
     const sql = `SELECT salon_id, titulo, importe 
                  FROM salones 
@@ -16,9 +11,7 @@ export class ReservasModelo {
     return results[0];
   }
 
-  /**
-   * Obtiene precios de múltiples servicios activos
-   */
+
   async obtenerPreciosServicios(servicios_ids) {
     if (!servicios_ids || servicios_ids.length === 0) {
       return [];
@@ -33,9 +26,7 @@ export class ReservasModelo {
     return results;
   }
 
-  /**
-   * Verifica que un salón exista y esté activo
-   */
+
   async verificarSalonActivo(salon_id) {
     const sql = `SELECT salon_id FROM salones WHERE salon_id = ? AND activo = 1`;
     const [results] = await conexion.query(sql, [salon_id]);
@@ -43,7 +34,7 @@ export class ReservasModelo {
   }
 
   /**
-   * Verifica que todos los servicios existan y estén activos
+   * verifica que todos los servicios existan y esten activos
    */
   async verificarServiciosActivos(servicios_ids) {
     if (!servicios_ids || servicios_ids.length === 0) {
@@ -59,18 +50,14 @@ export class ReservasModelo {
     return results[0].count === servicios_ids.length;
   }
 
-  /**
-   * Verifica que el turno exista y esté activo
-   */
+
   async verificarTurnoActivo(turno_id) {
     const sql = `SELECT turno_id FROM turnos WHERE turno_id = ? AND activo = 1`;
     const [results] = await conexion.query(sql, [turno_id]);
     return results.length > 0;
   }
 
-  /**
-   * Verifica si el slot de fecha, salón y turno ya está reservado.
-   */
+
   async verificarDisponibilidad(fecha_reserva, salon_id, turno_id, excluirReservaId = null) {
     let sql = `SELECT reserva_id FROM reservas 
                WHERE fecha_reserva = ? AND salon_id = ? AND turno_id = ? AND activo = 1`;
@@ -84,10 +71,6 @@ export class ReservasModelo {
     const [results] = await conexion.query(sql, values);
     return results;
   }
-
-  // ====================================================================
-  // 2. CONSULTAS DE LECTURA (GET)
-  // ====================================================================
 
   async obtenerTodas() {
     const sql = `SELECT 
@@ -132,9 +115,6 @@ export class ReservasModelo {
     return results;
   }
 
-  // ====================================================================
-  // 3. CONSULTAS DE ESCRITURA (CREATE, UPDATE, DELETE) 
-  // ====================================================================
 
   async insertarReserva(datosReserva) {
     const {
@@ -224,9 +204,6 @@ export class ReservasModelo {
     return result.affectedRows;
   }
 
-  // ====================================================================
-  // 4. MÉTODOS DE TRANSACCIÓN 
-  // ====================================================================
 
   async beginTransaction() {
     return conexion.beginTransaction();
@@ -241,9 +218,7 @@ export class ReservasModelo {
   }
 
 
-/**
- * Obtiene todas las reservas de un usuario específico con información completa
- */
+
 async obtenerReservasPorUsuario(usuario_id) {
   const sql = `
     SELECT 

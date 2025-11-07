@@ -31,11 +31,7 @@ export default class Servicios {
 
         await conexion.execute(sql, parametros);
     }
-    // modificar = async(servicioDatos) => {
-    //     const {descripcion, importe, servicio_id} = servicioDatos;
-    //     const sql = 'UPDATE servicios SET descripcion = ?, importe = ? WHERE servicio_id = ?';
-    //     await conexion.execute(sql, [descripcion, importe, servicio_id]);
-    // }
+
 
     eliminar = async(servicio_id) => {
         const sql = 'UPDATE servicios SET activo = 0 WHERE servicio_id = ?';
